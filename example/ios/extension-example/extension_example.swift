@@ -55,22 +55,6 @@ struct PizzaDeliveryApp: Widget {
       let pizza = PizzaData(JSONData: context.state.data)
       
       return DynamicIsland {
-        DynamicIslandExpandedRegion(.leading) {
-          Label("\(pizza!.quantity) item(s)", systemImage: "bag")
-            .font(.title2)
-        }
-        DynamicIslandExpandedRegion(.trailing) {
-          Label {
-            Text(timerInterval: pizza!.deliverDate, countsDown: true)
-              .multilineTextAlignment(.trailing)
-              .frame(width: 50)
-              .monospacedDigit()
-              .font(.caption2)
-          } icon: {
-            Image(systemName: "timer")
-          }
-          .font(.title2)
-        }
         DynamicIslandExpandedRegion(.center) {
           Text("\(pizza!.deliverName) is on his way!")
             .lineLimit(1)
