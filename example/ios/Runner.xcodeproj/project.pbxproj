@@ -15,6 +15,7 @@
 		27C0558F28E42F5A00BA744B /* extension_example.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 27C0558B28E42F5700BA744B /* extension_example.intentdefinition */; };
 		27C0559028E42F5A00BA744B /* extension_example.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 27C0558B28E42F5700BA744B /* extension_example.intentdefinition */; };
 		27C0559328E42F5A00BA744B /* extension-exampleExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 27C0558228E42F5700BA744B /* extension-exampleExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		27C0559C28E484B000BA744B /* pizza_model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C0559A28E4849F00BA744B /* pizza_model.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -68,6 +69,7 @@
 		27C0558C28E42F5A00BA744B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27C0558E28E42F5A00BA744B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27C0559928E43B8B00BA744B /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		27C0559A28E4849F00BA744B /* pizza_model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pizza_model.swift; sourceTree = "<group>"; };
 		3B24AE7EE01689B8E56CD7A7 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		6C3FF4834BCE668908F85F7F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +125,7 @@
 				27C0558B28E42F5700BA744B /* extension_example.intentdefinition */,
 				27C0558C28E42F5A00BA744B /* Assets.xcassets */,
 				27C0558E28E42F5A00BA744B /* Info.plist */,
+				27C0559A28E4849F00BA744B /* pizza_model.swift */,
 			);
 			path = "extension-example";
 			sourceTree = "<group>";
@@ -365,6 +368,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				27C0558A28E42F5700BA744B /* extension_example.swift in Sources */,
+				27C0559C28E484B000BA744B /* pizza_model.swift in Sources */,
 				27C0558F28E42F5A00BA744B /* extension_example.intentdefinition in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,34 +13,12 @@ import SwiftUI
 struct Widgets: WidgetBundle {
   var body: some Widget {
     if #available(iOS 16.1, *) {
-      GroceryDeliveryApp()
+      PizzaDeliveryApp()
     }
   }
 }
 
-class PizzaData {
-  var name: String
-  var description: String
-  var quantity: Int
-  var price: Double
-  var deliverName: String
-  var deliverStartDate: Date
-  var deliverEndDate: Date
-  var deliverDate: ClosedRange<Date>
-  
-  init?(JSONData data:[String: String]) {
-    self.name = data["name"]!
-    self.description = data["description"]!
-    self.quantity = Int(data["quantity"]!)!
-    self.price = Double(data["price"]!)!
-    self.deliverName = data["deliverName"]!
-    self.deliverStartDate =  Date(timeIntervalSince1970: Double(data["deliverStartDate"]!)!)
-    self.deliverEndDate =  Date(timeIntervalSince1970: Double(data["deliverEndDate"]!)!)
-    
-    deliverDate = self.deliverStartDate...self.deliverEndDate
-  }
-}
-
+// We need to redefined live activities pipe
 struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
   public typealias LiveDeliveryData = ContentState
   
@@ -52,7 +30,7 @@ struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
 }
 
 @available(iOSApplicationExtension 16.1, *)
-struct GroceryDeliveryApp: Widget {
+struct PizzaDeliveryApp: Widget {
   
   // TODO: Try to display a Flutter Engine to display a flutter view
   var body: some WidgetConfiguration {
@@ -111,7 +89,7 @@ struct GroceryDeliveryApp: Widget {
       
       return DynamicIsland {
         DynamicIslandExpandedRegion(.leading) {
-          Label("\(pizza!.quantity) Pizzas", systemImage: "bag")
+          Label("\(pizza!.quantity) item(s)", systemImage: "bag")
             .font(.title2)
         }
         DynamicIslandExpandedRegion(.trailing) {
@@ -133,14 +111,13 @@ struct GroceryDeliveryApp: Widget {
         }
         DynamicIslandExpandedRegion(.bottom) {
           Button {
-            // Deep link into the app.
           } label: {
             Label("Contact driver", systemImage: "phone")
           }
         }
       } compactLeading: {
         Label {
-          Text("\(pizza!.quantity) Pizzas")
+          Text("\(pizza!.quantity) item(s)")
         } icon: {
           Image(systemName: "bag")
         }
