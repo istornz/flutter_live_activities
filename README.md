@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="flutter ios 16 live activities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/logo.png" />
+  <img alt="flutter ios 16 live activities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/logo.png" width="200px" />
 </div>
 
 # Live Activities
@@ -16,7 +16,7 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
 > It will simply do nothing on other platform & < iOS 16.1
 
 <div align="center">
-  <img alt="flutter ios 16 live activities logo" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview.gif" />
+  <img alt="flutter ios 16 live activities logo" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview.gif" width="200px" />
 </div>
 
 ## 👻 Getting started
