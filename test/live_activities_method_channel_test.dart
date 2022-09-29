@@ -10,7 +10,11 @@ void main() {
 
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
+      switch (methodCall.method) {
+        case 'createActivity':
+          return 'ACTIVITY_ID';
+        default:
+      }
     });
   });
 
@@ -18,7 +22,15 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await platform.getPlatformVersion(), '42');
+  test('createActivity', () async {
+    expect(await platform.createActivity({}), 'ACTIVITY_ID');
+  });
+
+  test('updateActivity', () async {
+    expect(await platform.updateActivity('ACTIVITY_ID', {}), null);
+  });
+
+  test('endActivity', () async {
+    expect(await platform.endActivity('ACTIVITY_ID'), null);
   });
 }

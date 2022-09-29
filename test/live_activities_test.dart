@@ -7,23 +7,38 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockLiveActivitiesPlatform
     with MockPlatformInterfaceMixin
     implements LiveActivitiesPlatform {
+  @override
+  Future<String?> createActivity(Map<String, String> data) {
+    return Future.value('ACTIVITY_ID');
+  }
 
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
+  Future endActivity(String activityId) {
+    return Future.value();
+  }
+
+  @override
+  Future updateActivity(String activityId, Map<String, String> data) {
+    return Future.value();
+  }
 }
 
 void main() {
-  final LiveActivitiesPlatform initialPlatform = LiveActivitiesPlatform.instance;
+  final LiveActivitiesPlatform initialPlatform =
+      LiveActivitiesPlatform.instance;
+  LiveActivities liveActivitiesPlugin = LiveActivities();
+  MockLiveActivitiesPlatform fakePlatform = MockLiveActivitiesPlatform();
+  LiveActivitiesPlatform.instance = fakePlatform;
 
   test('$MethodChannelLiveActivities is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelLiveActivities>());
   });
 
-  test('getPlatformVersion', () async {
-    LiveActivities liveActivitiesPlugin = LiveActivities();
-    MockLiveActivitiesPlatform fakePlatform = MockLiveActivitiesPlatform();
-    LiveActivitiesPlatform.instance = fakePlatform;
+  test('endActivity', () async {
+    expect(await liveActivitiesPlugin.endActivity('ACTIVITY_ID'), null);
+  });
 
-    expect(await liveActivitiesPlugin.getPlatformVersion(), '42');
+  test('updateActivity', () async {
+    expect(await liveActivitiesPlugin.updateActivity('ACTIVITY_ID', {}), null);
   });
 }
