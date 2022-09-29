@@ -10,108 +10,119 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    if (call.method == "createActivity") {
-      if #available(iOS 16.1, *) {
-        guard let args = call.arguments else {
+    if #available(iOS 16.1, *) {
+      switch (call.method) {
+      case "createActivity":
+        guard let args = call.arguments  as? [String: Any] else {
           return
         }
-        if let myArgs = args as? [String: Any],
-           let data = myArgs["data"] as? Dictionary<String, String> {
-          createActivity(params: data)
+        if let data = args["data"] as? Dictionary<String, String> {
+          createActivity(data: data, result: result)
         } else {
-          result(FlutterError(code: "-1", message: "iOS could not extract " +
-                              "flutter arguments in method: (sendParams)", details: nil))
+          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
+        }
+        break
+      case "updateActivity":
+        guard let args = call.arguments  as? [String: Any] else {
+          return
+        }
+        if let activityId = args["activityId"] as? String, let data = args["data"] as? Dictionary<String, String> {
+          updateActivity(activityId: activityId, data: data, result: result)
+        } else {
+          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' & 'data' are valid", details: nil))
+        }
+        break
+      case "endActivity":
+        guard let args = call.arguments  as? [String: Any] else {
+          return
+        }
+        if let activityId = args["activityId"] as? String {
+          endActivity(activityId: activityId, result: result)
+        } else {
+          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
+        }
+        break
+      default:
+        break
+      }
+    } else {
+      result(FlutterError(code: "WRONG_IOS_VERSION", message: "this version of iOS is not supported", details: nil))
+    }
+  }
+  
+  @available(iOS 16.1, *)
+  func createActivity(data: Dictionary<String, String>, result: @escaping FlutterResult) {
+    let center = UNUserNotificationCenter.current()
+    center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+      
+      if let error = error {
+        // Handle the error here.
+        print(error);
+      }
+      
+      // Enable or disable features based on the authorization.
+    }
+    
+    let pizzaDeliveryAttributes = LiveActivitiesAppAttributes()
+    let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(data: data)
+    
+    do {
+      let deliveryActivity = try Activity<LiveActivitiesAppAttributes>.request(
+        attributes: pizzaDeliveryAttributes,
+        contentState: initialContentState,
+        pushType: nil)
+      result(deliveryActivity.id)
+    } catch (let error) {
+      print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
+    }
+  }
+  
+  @available(iOS 16.1, *)
+  func updateActivity(activityId: String, data: Dictionary<String, String>, result: @escaping FlutterResult) {
+    Task {
+      for activity in Activity<LiveActivitiesAppAttributes>.activities {
+        if (activityId == activity.id) {
+          let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(data: data)
+          await activity.update(using: updatedStatus)
+          break;
         }
       }
-    } else if (call.method == "updateActivity") {
-      if #available(iOS 16.1, *) {
-        //update(activity: <#T##Activity<GroceryDeliveryAppAttributes>#>, )
-      }
-    } else if (call.method == "endActivity") {
-      if #available(iOS 16.1, *) {
-        //end(activity: <#T##Activity<GroceryDeliveryAppAttributes>#>, )
+    }
+  }
+  
+  @available(iOS 16.1, *)
+  func endActivity(activityId: String, result: @escaping FlutterResult) {
+    Task {
+      for activity in Activity<LiveActivitiesAppAttributes>.activities {
+        if (activityId == activity.id) {
+          await activity.end(dismissalPolicy: .immediate)
+          break;
+        }
       }
     }
+  }
+  
+  
+  struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
+    public typealias LiveDeliveryData = ContentState
     
-    result("iOS " + UIDevice.current.systemVersion)
-  }
-}
-
-@available(iOS 16.1, *)
-func createActivity(params: Dictionary<String, String>) {
-  let center = UNUserNotificationCenter.current()
-  center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-    
-    if let error = error {
-      // Handle the error here.
-      print(error);
-    }
-    
-    // Enable or disable features based on the authorization.
-  }
-  /*
-  
-  let attributes = LiveActivitiesAppAttributes()
-  let contentState = LiveActivitiesAppAttributes.LiveDeliveryData(data: params)
-  do {
-    let _ = try Activity<LiveActivitiesAppAttributes>.request(
-      attributes: attributes,
-      contentState: contentState,
-      pushType: .token)
-  } catch (let error) {
-    print(error.localizedDescription)
-  }
-   */
-  
-  let pizzaDeliveryAttributes = LiveActivitiesAppAttributes()
-  let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(data: params)
-                                            
-  do {
-      let deliveryActivity = try Activity<LiveActivitiesAppAttributes>.request(
-          attributes: pizzaDeliveryAttributes,
-          contentState: initialContentState,
-          pushType: nil)
-      print("Requested a pizza delivery Live Activity \(deliveryActivity.id)")
-  } catch (let error) {
-      print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
-  }
-}
-
-@available(iOS 16.1, *)
-func update(activity: Activity<LiveActivitiesAppAttributes>) {
-  /*Task {
-   let updatedStatus = GroceryDeliveryAppAttributes.LiveDeliveryData(courierName: "Adam",
-   deliveryTime: .now + 150)
-   await activity.update(using: updatedStatus)
-   }*/
-}
-
-@available(iOS 16.1, *)
-func end(activity: Activity<LiveActivitiesAppAttributes>) {
-  Task {
-    await activity.end(dismissalPolicy: .immediate)
-  }
-}
-
-
-struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
-  public typealias LiveDeliveryData = ContentState
-  
-  public struct ContentState: Codable, Hashable {
-    var data: Dictionary<String, String>
-  }
-  
-  var id = UUID()
-}
-
-struct PizzaDeliveryAttributes: ActivityAttributes {
-    public typealias PizzaDeliveryStatus = ContentState
-
     public struct ContentState: Codable, Hashable {
-        var driverName: String
-        var estimatedDeliveryTime: ClosedRange<Date>
+      // TODO: Need to send an Any object
+      var data: Dictionary<String, String>
     }
-
+    
+    var id = UUID()
+  }
+  
+  struct PizzaDeliveryAttributes: ActivityAttributes {
+    public typealias PizzaDeliveryStatus = ContentState
+    
+    public struct ContentState: Codable, Hashable {
+      var driverName: String
+      var estimatedDeliveryTime: ClosedRange<Date>
+    }
+    
     var numberOfPizzas: Int
     var totalAmount: String
+  }
 }
