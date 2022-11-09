@@ -1,3 +1,7 @@
+## 1.2.1
+
+* ✨ Add method to get the activity state (active, ended or dismissed).
+
 ## 1.2.0
 
 * ✨ Add stream to handle url scheme from live activities &/or dynamic island.

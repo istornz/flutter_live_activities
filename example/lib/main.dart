@@ -181,6 +181,18 @@ class _HomeState extends State<Home> {
                     textAlign: TextAlign.center,
                   ),
                 ),
+              if (_latestActivityId != null)
+                ElevatedButton(
+                  onPressed: () async {
+                    final state = await _liveActivitiesPlugin
+                        .getActivityState(_latestActivityId!);
+                    debugPrint(state.toString());
+                  },
+                  child: Text(
+                    'Get activity state $_latestActivityId',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               Expanded(
                 child: ListView.builder(
                   itemCount: _allActivitiesIds.length,

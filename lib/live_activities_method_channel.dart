@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 
 import 'live_activities_platform_interface.dart';
@@ -61,5 +62,16 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
           (dynamic event) =>
               UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
         );
+  }
+
+  @override
+  Future<LiveActivityState> getActivityState(String activityId) async {
+    final result = await methodChannel.invokeMethod<String>(
+      'getActivityState',
+      {
+        'activityId': activityId,
+      },
+    );
+    return LiveActivityState.values.byName(result ?? 'unknown');
   }
 }

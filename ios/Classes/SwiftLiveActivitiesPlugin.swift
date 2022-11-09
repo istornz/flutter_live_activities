@@ -58,6 +58,16 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
         }
         break
+      case "getActivityState":
+        guard let args = call.arguments  as? [String: Any] else {
+          return
+        }
+        if let activityId = args["activityId"] as? String {
+          getActivityState(activityId: activityId, result: result)
+        } else {
+          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
+        }
+        break
       case "getAllActivitiesIds":
         getAllActivitiesIds(result: result);
         break
@@ -110,6 +120,26 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         }
       }
       result(nil)
+    }
+  }
+  
+  @available(iOS 16.1, *)
+  func getActivityState(activityId: String, result: @escaping FlutterResult) {
+    Task {
+      for activity in Activity<LiveActivitiesAppAttributes>.activities {
+        if (activityId == activity.id) {
+          switch (activity.activityState) {
+          case .active:
+            result("active")
+          case .ended:
+            result("ended")
+          case .dismissed:
+            result("dismissed")
+          @unknown default:
+            result("unknown")
+          }
+        }
+      }
     }
   }
   

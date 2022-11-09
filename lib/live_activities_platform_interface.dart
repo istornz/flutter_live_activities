@@ -1,3 +1,4 @@
+import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -51,5 +52,9 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
 
   Stream<UrlSchemeData> urlSchemeStream() {
     throw UnimplementedError('urlSchemeStream() has not been implemented.');
+  }
+
+  Future<LiveActivityState> getActivityState(String activityId) {
+    throw UnimplementedError('getActivityState() has not been implemented.');
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_activities/live_activities_method_channel.dart';
+import 'package:live_activities/models/live_activity_state.dart';
 
 void main() {
   MethodChannelLiveActivities platform = MethodChannelLiveActivities();
@@ -17,6 +18,8 @@ void main() {
           return true;
         case 'getAllActivitiesIds':
           return ['ACTIVITY_ID'];
+        case 'getActivityState':
+          return 'dismissed';
         default:
       }
     });
@@ -48,5 +51,12 @@ void main() {
 
   test('areActivitiesEnabled', () async {
     expect(await platform.areActivitiesEnabled(), true);
+  });
+
+  test('getActivityState', () async {
+    expect(
+      await platform.getActivityState('ACTIVITY_ID'),
+      LiveActivityState.dismissed,
+    );
   });
 }
