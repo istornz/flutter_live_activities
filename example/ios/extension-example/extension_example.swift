@@ -50,6 +50,11 @@ struct PizzaDeliveryApp: Widget {
           .font(.caption)
           .foregroundColor(.secondary)
           .padding(.horizontal, 5)
+        
+        // Open the Flutter app with custom data
+        Link(destination: URL(string: "la://my.app/order?=123")!) {
+          Text("See order 📝")
+        }.padding(.vertical, 5).padding(.horizontal, 5)
       }.padding(15)
     } dynamicIsland: { context in
       let pizza = PizzaData(JSONData: context.state.data)

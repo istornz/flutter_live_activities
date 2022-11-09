@@ -1,3 +1,5 @@
+import 'package:live_activities/models/url_scheme_data.dart';
+
 import 'live_activities_platform_interface.dart';
 
 class LiveActivities {
@@ -37,5 +39,12 @@ class LiveActivities {
   /// Check if iOS 16.1+ live activities are enabled.
   Future<bool> areActivitiesEnabled() async {
     return LiveActivitiesPlatform.instance.areActivitiesEnabled();
+  }
+
+  /// Get a stream of url scheme data.
+  /// Don't forget to add **CFBundleURLSchemes** to your Info.plist file.
+  /// Return a Future of [scheme] [url] [host] [path] and [queryParameters].
+  Stream<UrlSchemeData> urlSchemeStream() {
+    return LiveActivitiesPlatform.instance.urlSchemeStream();
   }
 }

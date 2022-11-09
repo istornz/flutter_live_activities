@@ -1,3 +1,4 @@
+import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'live_activities_method_channel.dart';
@@ -46,5 +47,9 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   Future<bool> areActivitiesEnabled() {
     throw UnimplementedError(
         'areActivitiesEnabled() has not been implemented.');
+  }
+
+  Stream<UrlSchemeData> urlSchemeStream() {
+    throw UnimplementedError('urlSchemeStream() has not been implemented.');
   }
 }

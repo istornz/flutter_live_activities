@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:live_activities/live_activities.dart';
+import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:live_activities_example/models/pizza_live_activity_model.dart';
 
 void main() {
@@ -33,6 +36,26 @@ class _HomeState extends State<Home> {
   final _liveActivitiesPlugin = LiveActivities();
   String? _latestActivityId;
   List<String> _allActivitiesIds = [];
+  UrlSchemeData? schemeData;
+  StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    urlSchemeSubscription =
+        _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
+      setState(() {
+        this.schemeData = schemeData;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    urlSchemeSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +69,18 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (schemeData != null)
+                Column(
+                  children: [
+                    Text('Url: ${schemeData!.url}'),
+                    Text('Host: ${schemeData!.host}'),
+                    Text('Path: ${schemeData!.path}'),
+                    Text('Scheme: ${schemeData!.scheme}'),
+                    Text(
+                      'Params: ${schemeData!.queryParameters.map((e) => e["value"]).toList().join(',')}',
+                    ),
+                  ],
+                ),
               ElevatedButton(
                 onPressed: () async {
                   final activityModel = PizzaLiveActivityModel(

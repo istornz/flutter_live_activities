@@ -2,11 +2,27 @@ import Flutter
 import UIKit
 import ActivityKit
 
-public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
+public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+  private var urlSchemeSink: FlutterEventSink?
+  
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "live_activities", binaryMessenger: registrar.messenger())
+    let urlSchemeChannel = FlutterEventChannel(name: "live_activities/url_scheme", binaryMessenger: registrar.messenger())
     let instance = SwiftLiveActivitiesPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
+    urlSchemeChannel.setStreamHandler(instance)
+    
+    registrar.addApplicationDelegate(instance)
+  }
+  
+  public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+    urlSchemeSink = events
+    return nil
+  }
+  
+  public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+    urlSchemeSink = nil
+    return nil
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -130,6 +146,28 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
       
       result(activitiesId)
     }
+  }
+  
+  public func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+    let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+    
+    if components?.scheme == nil { return false }
+    
+    var queryResult: Dictionary<String, Any> = Dictionary()
+    
+    queryResult["queryItems"] = components?.queryItems?.map({ (item) -> Dictionary<String, String> in
+      var queryItemResult: Dictionary<String, String> = Dictionary()
+      queryItemResult["name"] = item.name
+      queryItemResult["value"] = item.value
+      return queryItemResult
+    })
+    queryResult["scheme"] = components?.scheme
+    queryResult["host"] = components?.host
+    queryResult["path"] = components?.path
+    queryResult["url"] = components?.url?.absoluteString
+    
+    urlSchemeSink?.self(queryResult)
+    return true
   }
   
   struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {

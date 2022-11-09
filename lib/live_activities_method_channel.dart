@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:live_activities/models/url_scheme_data.dart';
 
 import 'live_activities_platform_interface.dart';
 
@@ -8,6 +9,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('live_activities');
+
+  @visibleForTesting
+  final EventChannel urlSchemeChannel =
+      const EventChannel('live_activities/url_scheme');
 
   @override
   Future<String?> createActivity(Map<String, String> data) async {
@@ -48,5 +53,13 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     final result =
         await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
     return result ?? false;
+  }
+
+  @override
+  Stream<UrlSchemeData> urlSchemeStream() {
+    return urlSchemeChannel.receiveBroadcastStream('urlSchemeStream').map(
+          (dynamic event) =>
+              UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
+        );
   }
 }

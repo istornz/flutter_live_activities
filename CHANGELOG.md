@@ -1,3 +1,9 @@
+## 1.2.0
+
+* ✨ Add stream to handle url scheme from live activities &/or dynamic island.
+* 📝 Improve README.md
+* ♻️ Rework example
+
 ## 1.1.0
 
 * ✨ Add method to check if live activities are enabled.
