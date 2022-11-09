@@ -34,4 +34,16 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   Future endActivity(String activityId) {
     throw UnimplementedError('endActivity() has not been implemented.');
   }
+
+  Future<List<String>> getAllActivitiesIds() {
+    throw UnimplementedError('getAllActivitiesIds() has not been implemented.');
+  }
+
+  Future endAllActivities() {
+    throw UnimplementedError('endAllActivities() has not been implemented.');
+  }
+
+  Future<bool> areActivitiesEnabled() {
+    throw UnimplementedError('areActivitiesEnabled() has not been implemented.');
+  }
 }

@@ -21,6 +21,21 @@ class MockLiveActivitiesPlatform
   Future updateActivity(String activityId, Map<String, String> data) {
     return Future.value();
   }
+
+  @override
+  Future<bool> areActivitiesEnabled() {
+    return Future.value(true);
+  }
+
+  @override
+  Future endAllActivities() {
+    return Future.value();
+  }
+
+  @override
+  Future<List<String>> getAllActivitiesIds() {
+    return Future.value(['ACTIVITY_ID']);
+  }
 }
 
 void main() {
@@ -40,5 +55,17 @@ void main() {
 
   test('updateActivity', () async {
     expect(await liveActivitiesPlugin.updateActivity('ACTIVITY_ID', {}), null);
+  });
+
+  test('endAllActivities', () async {
+    expect(await liveActivitiesPlugin.endAllActivities(), null);
+  });
+
+  test('getAllActivities', () async {
+    expect(await liveActivitiesPlugin.getAllActivitiesIds(), ['ACTIVITY_ID']);
+  });
+
+  test('areActivitiesEnabled', () async {
+    expect(await liveActivitiesPlugin.areActivitiesEnabled(), true);
   });
 }

@@ -42,6 +42,15 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
         }
         break
+      case "getAllActivitiesIds":
+        getAllActivitiesIds(result: result);
+        break
+      case "endAllActivities":
+        endAllActivities(result: result);
+        break
+      case "areActivitiesEnabled":
+        result(ActivityAuthorizationInfo().areActivitiesEnabled)
+        break
       default:
         break
       }
@@ -84,6 +93,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
           break;
         }
       }
+      result(nil)
     }
   }
   
@@ -96,6 +106,29 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
           break;
         }
       }
+      result(nil)
+    }
+  }
+  
+  @available(iOS 16.1, *)
+  func endAllActivities(result: @escaping FlutterResult) {
+    Task {
+      for activity in Activity<LiveActivitiesAppAttributes>.activities {
+        await activity.end(dismissalPolicy: .immediate)
+      }
+    }
+    result(nil)
+  }
+  
+  @available(iOS 16.1, *)
+  func getAllActivitiesIds(result: @escaping FlutterResult) {
+    Task {
+      var activitiesId: [String] = []
+      for activity in Activity<LiveActivitiesAppAttributes>.activities {
+        activitiesId.append(activity.id)
+      }
+      
+      result(activitiesId)
     }
   }
   
