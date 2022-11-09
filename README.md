@@ -8,6 +8,8 @@ A Flutter plugin to use iOS 16.1+ **Live Activities** & iPhone 14 Pro **Dynamic 
 
 ## 🧐 What is it ?
 
+<hr />
+
 This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities).
 
 **live_activities** can be used to show **dynamic live notification** & implement **dynamic island** feature on the iPhone 14 Pro / Max ⚫️
@@ -21,6 +23,8 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
 </div>
 
 ## 👻 Getting started
+
+<hr />
 
 Due to some **technical restriction**, it's not currently possible to only use Flutter 🫣.
 
@@ -63,7 +67,9 @@ _liveActivitiesPlugin.createActivity(activityModel.toMap());
 
 > ⚠️ For now you can **only** pass values as ```String```.
 
-### Communicate over Native 🧵 and Flutter 💙
+## Communicate over Native 🧵 and Flutter 💙
+
+<hr />
 
 In order to pass some useful **data** between your **native** live activity / dynamic island with your **Flutter** app you just need to setup **URL scheme**.
 
@@ -90,6 +96,7 @@ _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
 ```
 
 ## 📘 Documentation
+<hr />
 
 | Name | Description | Returned value |
 | ---- | ----------- | -------- |
@@ -102,6 +109,7 @@ _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
 | ```.urlSchemeStream()``` | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data) | ```Future<UrlSchemeData>``` Url scheme data which handle ```scheme``` ```url``` ```host``` ```path``` ```queryItems``` |
 
 ## 🎯 Roadmap
+<hr />
 
 - [ ] Support multiple type instead of ```String``` (Date, Number etc.).
 - [ ] Inject a Widget inside the notification with Flutter Engine ?
