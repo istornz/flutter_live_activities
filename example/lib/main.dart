@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
                   deliverName: 'John Doe',
                   deliverDate: DateTime.now().add(
                     const Duration(
-                      hours: 1,
+                      minutes: 6,
                       seconds: 30,
                     ),
                   ),
