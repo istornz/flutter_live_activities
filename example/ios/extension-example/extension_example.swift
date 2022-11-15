@@ -37,48 +37,16 @@ struct PizzaDeliveryApp: Widget {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
       let pizza = PizzaData(JSONData: context.state.data)
       VStack(alignment: .leading) {
-        HStack {
-          VStack(alignment: .leading) {
-            Text("Your \(pizza!.name) is on the way!")
-              .font(.headline)
-            ZStack {
-              RoundedRectangle(cornerRadius: 15)
-                .fill(.secondary)
-              HStack {
-                RoundedRectangle(cornerRadius: 15)
-                  .fill(.blue)
-                  .frame(width: 50)
-                Image(systemName: "shippingbox.circle.fill")
-                  .foregroundColor(.white)
-                  .padding(.leading, -25)
-                Image(systemName: "arrow.forward")
-                  .foregroundColor(.white.opacity(0.5))
-                Image(systemName: "ellipsis")
-                  .foregroundColor(.white.opacity(0.5))
-                Text(timerInterval: pizza!.deliverDate, countsDown: true)
-                  .bold()
-                  .font(.caption)
-                  .foregroundColor(.white.opacity(0.8))
-                  .multilineTextAlignment(.center)
-                Image(systemName: "ellipsis")
-                  .foregroundColor(.white.opacity(0.5))
-                Image(systemName: "arrow.forward")
-                  .foregroundColor(.white.opacity(0.5))
-                Image(systemName: "house.circle.fill")
-                  .foregroundColor(.green)
-                  .background(.white)
-                  .clipShape(Circle())
-              }
-            }
-          }
+        Text("Your \(pizza!.name) is on the way!")
+          .font(.title2)
+        
+        Spacer()
+        VStack {
+          Text("\(pizza!.description) 🍕")
+            .font(.title3)
+            .bold()
           Spacer()
-          VStack {
-            Text("\(pizza!.description) 🍕")
-              .font(.title)
-              .bold()
-            Spacer()
-          }
-        }.padding(5)
+        }
         Text("You've already paid: \(pizza!.price) + $9.9 Delivery Fee 💸")
           .font(.caption)
           .foregroundColor(.secondary)
