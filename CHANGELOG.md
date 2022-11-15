@@ -1,3 +1,9 @@
+## 1.3.0
+
+* ✨ Now using [App Groups](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_application-groups) to pass typed data across Flutter & Native !
+* 🗑️ Remove unused code in example.
+* 📝 Improve README.md.
+
 ## 1.2.1
 
 * ✨ Add method to get the activity state (active, ended or dismissed).
