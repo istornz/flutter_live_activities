@@ -45,6 +45,10 @@ void main() {
     expect(await platform.endAllActivities(), null);
   });
 
+  test('init', () async {
+    expect(await platform.init('APP_GROUP_ID'), null);
+  });
+
   test('getAllActivities', () async {
     expect(await platform.getAllActivitiesIds(), ['ACTIVITY_ID']);
   });

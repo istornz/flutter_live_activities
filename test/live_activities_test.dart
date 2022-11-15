@@ -10,7 +10,12 @@ class MockLiveActivitiesPlatform
     with MockPlatformInterfaceMixin
     implements LiveActivitiesPlatform {
   @override
-  Future<String?> createActivity(Map<String, String> data) {
+  Future init(String appGroupId) {
+    return Future.value();
+  }
+  
+  @override
+  Future<String?> createActivity(Map<String, dynamic> data) {
     return Future.value('ACTIVITY_ID');
   }
 
@@ -20,7 +25,7 @@ class MockLiveActivitiesPlatform
   }
 
   @override
-  Future updateActivity(String activityId, Map<String, String> data) {
+  Future updateActivity(String activityId, Map<String, dynamic> data) {
     return Future.value();
   }
 
@@ -67,6 +72,10 @@ void main() {
 
   test('$MethodChannelLiveActivities is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelLiveActivities>());
+  });
+
+  test('init', () async {
+    expect(await liveActivitiesPlugin.init(appGroupId: 'APP_GROUP_ID'), null);
   });
 
   test('endActivity', () async {
