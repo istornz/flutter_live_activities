@@ -13,7 +13,7 @@ class MockLiveActivitiesPlatform
   Future init(String appGroupId) {
     return Future.value();
   }
-  
+
   @override
   Future<String?> createActivity(Map<String, dynamic> data) {
     return Future.value('ACTIVITY_ID');
