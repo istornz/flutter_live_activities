@@ -22,31 +22,33 @@ struct Widgets: WidgetBundle {
 struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
   public typealias LiveDeliveryData = ContentState
   
-  public struct ContentState: Codable, Hashable {
-    var data: Dictionary<String, String>
-  }
+  public struct ContentState: Codable, Hashable { }
   
   var id = UUID()
 }
 
+// Create shared default with custom group
+let sharedDefault = UserDefaults(suiteName: "group.dimitridessus.liveactivities")!
+
 @available(iOSApplicationExtension 16.1, *)
 struct PizzaDeliveryApp: Widget {
-  
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
-      let pizza = PizzaData(JSONData: context.state.data)
+      let pizzaName = sharedDefault.string(forKey: "name")!
+      let pizzaDescription = sharedDefault.string(forKey: "description")!
+      let pizzaPrice = sharedDefault.float(forKey: "price")
+      
       VStack(alignment: .leading) {
-        Text("Your \(pizza!.name) is on the way!")
+        Text("Your \(pizzaName) is on the way!")
           .font(.title2)
-        
         Spacer()
         VStack {
-          Text("\(pizza!.description) 🍕")
+          Text("\(pizzaDescription) 🍕")
             .font(.title3)
             .bold()
           Spacer()
         }
-        Text("You've already paid: \(pizza!.price) + $9.9 Delivery Fee 💸")
+        Text("You've already paid: \(pizzaPrice) + $9.9 Delivery Fee 💸")
           .font(.caption)
           .foregroundColor(.secondary)
           .padding(.horizontal, 5)
@@ -57,11 +59,15 @@ struct PizzaDeliveryApp: Widget {
         }.padding(.vertical, 5).padding(.horizontal, 5)
       }.padding(15)
     } dynamicIsland: { context in
-      let pizza = PizzaData(JSONData: context.state.data)
+      let deliverName = sharedDefault.string(forKey: "deliverName")!
+      let quantity = sharedDefault.integer(forKey: "quantity")
+      let deliverStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "deliverStartDate") / 1000)
+      let deliverEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "deliverEndDate") / 1000)
+      let deliverDate = deliverStartDate...deliverEndDate
       
       return DynamicIsland {
         DynamicIslandExpandedRegion(.center) {
-          Text("\(pizza!.deliverName) is on his way!")
+          Text("\(deliverName) is on his way!")
             .lineLimit(1)
             .font(.caption)
         }
@@ -73,20 +79,20 @@ struct PizzaDeliveryApp: Widget {
         }
       } compactLeading: {
         Label {
-          Text("\(pizza!.quantity) item(s)")
+          Text("\(quantity) item(s)")
         } icon: {
           Image(systemName: "bag")
         }
         .font(.caption2)
       } compactTrailing: {
-        Text(timerInterval: pizza!.deliverDate, countsDown: true)
+        Text(timerInterval: deliverDate, countsDown: true)
           .multilineTextAlignment(.center)
           .frame(width: 40)
           .font(.caption2)
       } minimal: {
         VStack(alignment: .center) {
           Image(systemName: "timer")
-          Text(timerInterval: pizza!.deliverDate, countsDown: true)
+          Text(timerInterval: deliverDate, countsDown: true)
             .multilineTextAlignment(.center)
             .monospacedDigit()
             .font(.caption2)
