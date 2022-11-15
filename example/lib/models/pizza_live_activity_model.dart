@@ -15,15 +15,15 @@ class PizzaLiveActivityModel {
     required this.deliverDate,
   });
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'description': description,
-      'quantity': quantity.toString(),
-      'price': price.toString(),
+      'quantity': quantity,
+      'price': price,
       'deliverName': deliverName,
-      'deliverStartDate': DateTime.now().millisecondsSinceEpoch.toString(),
-      'deliverEndDate': deliverDate.millisecondsSinceEpoch.toString(),
+      'deliverStartDate': DateTime.now().millisecondsSinceEpoch,
+      'deliverEndDate': deliverDate.millisecondsSinceEpoch,
     };
   }
 }

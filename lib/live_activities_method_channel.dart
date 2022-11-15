@@ -16,14 +16,21 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       const EventChannel('live_activities/url_scheme');
 
   @override
-  Future<String?> createActivity(Map<String, String> data) async {
+  Future init(String appGroupId) async {
+    await methodChannel.invokeMethod('init', {
+      'appGroupId': appGroupId,
+    });
+  }
+
+  @override
+  Future<String?> createActivity(Map<String, dynamic> data) async {
     return methodChannel.invokeMethod<String>('createActivity', {
       'data': data,
     });
   }
 
   @override
-  Future updateActivity(String activityId, Map<String, String> data) async {
+  Future updateActivity(String activityId, Map<String, dynamic> data) async {
     return methodChannel.invokeMethod('updateActivity', {
       'activityId': activityId,
       'data': data,

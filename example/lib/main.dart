@@ -43,6 +43,10 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
+    _liveActivitiesPlugin.init(
+      appGroupId: 'group.dimitridessus.liveactivities',
+    );
+
     urlSchemeSubscription =
         _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
       setState(() {

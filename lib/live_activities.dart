@@ -4,11 +4,18 @@ import 'package:live_activities/models/url_scheme_data.dart';
 import 'live_activities_platform_interface.dart';
 
 class LiveActivities {
+  /// This is required to initialize the plugin.
+  /// Create an App Group inside "Runner" target & "Extension" in Xcode.
+  /// Be sure to set the *SAME* App Group in both targets.
+  Future init({required String appGroupId}) {
+    return LiveActivitiesPlatform.instance.init(appGroupId);
+  }
+
   /// Create an iOS 16.1+ live activity.
   /// When the activity is created, an activity id is returned.
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Map is limited to String keys and values for now.
-  Future<String?> createActivity(Map<String, String> data) {
+  Future<String?> createActivity(Map<String, dynamic> data) {
     return LiveActivitiesPlatform.instance.createActivity(data);
   }
 
@@ -16,7 +23,7 @@ class LiveActivities {
   /// You can get an activity id by calling [createActivity].
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Map is limited to String keys and values for now.
-  Future updateActivity(String activityId, Map<String, String> data) {
+  Future updateActivity(String activityId, Map<String, dynamic> data) {
     return LiveActivitiesPlatform.instance.updateActivity(activityId, data);
   }
 

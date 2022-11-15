@@ -4,6 +4,8 @@ import ActivityKit
 
 public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   private var urlSchemeSink: FlutterEventSink?
+  private var appGroupId: String?
+  private var sharedDefault: UserDefaults?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "live_activities", binaryMessenger: registrar.messenger())
@@ -25,24 +27,47 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     return nil
   }
   
+  private func initializationGuard(result: @escaping FlutterResult) {
+    if (self.appGroupId == nil || self.sharedDefault == nil) {
+      result(FlutterError(code: "NEED_INIT", message: "you need to run 'init()' first with app group id to create live activity", details: nil))
+    }
+  }
+
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if #available(iOS 16.1, *) {
       switch (call.method) {
-      case "createActivity":
+      case "init":
         guard let args = call.arguments  as? [String: Any] else {
           return
         }
-        if let data = args["data"] as? Dictionary<String, String> {
+        
+        if let appGroupId = args["appGroupId"] as? String {
+          self.appGroupId = appGroupId
+          sharedDefault = UserDefaults(suiteName: self.appGroupId)!
+        } else {
+          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'appGroupId' is valid", details: nil))
+        }
+        
+        break;
+      case "createActivity":
+        initializationGuard(result: result)
+        
+        guard let args = call.arguments as? [String: Any] else {
+          return
+        }
+        if let data = args["data"] as? Dictionary<String, Any> {
           createActivity(data: data, result: result)
         } else {
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
         }
         break
       case "updateActivity":
+        initializationGuard(result: result)
+        
         guard let args = call.arguments  as? [String: Any] else {
           return
         }
-        if let activityId = args["activityId"] as? String, let data = args["data"] as? Dictionary<String, String> {
+        if let activityId = args["activityId"] as? String, let data = args["data"] as? Dictionary<String, Any> {
           updateActivity(activityId: activityId, data: data, result: result)
         } else {
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' & 'data' are valid", details: nil))
@@ -86,7 +111,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func createActivity(data: Dictionary<String, String>, result: @escaping FlutterResult) {
+  func createActivity(data: Dictionary<String, Any>, result: @escaping FlutterResult) {
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
       
@@ -95,8 +120,12 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       }
     }
     
+    for item in data {
+      sharedDefault!.set(item.value, forKey: item.key)
+    }
+    
     let liveDeliveryAttributes = LiveActivitiesAppAttributes()
-    let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(data: data)
+    let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
     
     do {
       let deliveryActivity = try Activity<LiveActivitiesAppAttributes>.request(
@@ -110,11 +139,15 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func updateActivity(activityId: String, data: Dictionary<String, String>, result: @escaping FlutterResult) {
+  func updateActivity(activityId: String, data: Dictionary<String, Any>, result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         if (activityId == activity.id) {
-          let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(data: data)
+          for item in data {
+            sharedDefault!.set(item.value, forKey: item.key)
+          }
+          
+          let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: "")
           await activity.update(using: updatedStatus)
           break;
         }
@@ -204,8 +237,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     public typealias LiveDeliveryData = ContentState
     
     public struct ContentState: Codable, Hashable {
-      // TODO: Need to send an Any object
-      var data: Dictionary<String, String>
+      var appGroupId: String
     }
     
     var id = UUID()
