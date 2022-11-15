@@ -25,6 +25,8 @@ Due to some **technical restriction**, it's not currently possible to only use F
 
 You need to **implement** in your Flutter iOS project a **Widget Extension** & develop in *Swift*/*Objective-C* your own **Live Activity** / **Dynamic Island** design.
 
+> ℹ️ You can check into the [**example repository**](https://github.com/istornz/live_activities/tree/main/example) for a full example app using Live Activities & Dynamic Island
+
 ### 🧵 Native
 - 📱 Create natively your Live Activity view [**tutorial**](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235)
 
@@ -37,8 +39,6 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 - ⛹️ Enable live activities for both your **app** & **widget extension**.
 
 <img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/live_activity.png" />
-
-> ℹ️ You can check into the [**example repository**](https://github.com/istornz/live_activities/tree/main/example) for a full example app using Live Activities & Dynamic Island
 
 ### 💙 Flutter
 
