@@ -16,20 +16,31 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
 > It will simply do nothing on other platform & < iOS 16.1
 
 <div align="center">
-  <img alt="flutter ios 16 live activities logo" src="" />
+  <img alt="flutter ios 16 live activities logo" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview.gif" />
 </div>
-
-## 🧵 Installation
-
-- Add push notification
-- Enabled live activities
 
 ## 👻 Getting started
 
+Due to some **technical restriction**, it's not currently possible to only use Flutter 🫣.
+
+You need to **implement** in your Flutter iOS project a **Widget Extension** & develop in *Swift*/*Objective-C* your own **Live Activity** / **Dynamic Island** design.
+
+### 🧵 Native
 - 📱 Create natively your Live Activity view [**tutorial**](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235)
+
   - ⚫️ (*Opt.*) Create natively a Dynamic Island [**tutorial**](https://medium.com/macoclock/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483)
 
+- 🛎 Enable push notification capabilities.
+
+<img alt="enable push notification capabilities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/push_capability.png" />
+
+- ⛹️ Enable live activities for both your **app** & **widget extension**.
+
+<img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/live_activity.png" />
+
 > ℹ️ You can check into the [**example repository**](https://github.com/istornz/live_activities/tree/main/example) for a full example app using Live Activities & Dynamic Island
+
+### 💙 Flutter
 
 - 🔌 Import the plugin.
 
@@ -49,7 +60,7 @@ final Map<String, String> activityModel = {
 _liveActivitiesPlugin.createActivity(activityModel.toMap());
 ```
 
-> ⚠️ For now you can only pass a ```String```.
+> ⚠️ For now you can **only** pass values as ```String```.
 
 ## 📘 Documentation
 
