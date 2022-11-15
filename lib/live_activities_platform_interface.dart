@@ -23,7 +23,15 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+  Future createActivity(Map<String, String> data) {
+    throw UnimplementedError('createActivity() has not been implemented.');
+  }
+
+  Future updateActivity() {
+    throw UnimplementedError('updateActivity() has not been implemented.');
+  }
+
+  Future endActivity() {
+    throw UnimplementedError('endActivity() has not been implemented.');
   }
 }
