@@ -56,24 +56,21 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
       
       if let error = error {
-        // Handle the error here.
-        print(error);
+        result(FlutterError(code: "AUTHORIZATION_ERROR", message: "authorization error", details: error.localizedDescription))
       }
-      
-      // Enable or disable features based on the authorization.
     }
     
-    let pizzaDeliveryAttributes = LiveActivitiesAppAttributes()
+    let liveDeliveryAttributes = LiveActivitiesAppAttributes()
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(data: data)
     
     do {
       let deliveryActivity = try Activity<LiveActivitiesAppAttributes>.request(
-        attributes: pizzaDeliveryAttributes,
+        attributes: liveDeliveryAttributes,
         contentState: initialContentState,
         pushType: nil)
       result(deliveryActivity.id)
     } catch (let error) {
-      print("Error requesting pizza delivery Live Activity \(error.localizedDescription)")
+      result(FlutterError(code: "LIVE_ACTIVITY_ERROR", message: "can't launch live activity", details: error.localizedDescription))
     }
   }
   
@@ -102,7 +99,6 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
     }
   }
   
-  
   struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
     public typealias LiveDeliveryData = ContentState
     
@@ -112,17 +108,5 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin {
     }
     
     var id = UUID()
-  }
-  
-  struct PizzaDeliveryAttributes: ActivityAttributes {
-    public typealias PizzaDeliveryStatus = ContentState
-    
-    public struct ContentState: Codable, Hashable {
-      var driverName: String
-      var estimatedDeliveryTime: ClosedRange<Date>
-    }
-    
-    var numberOfPizzas: Int
-    var totalAmount: String
   }
 }
