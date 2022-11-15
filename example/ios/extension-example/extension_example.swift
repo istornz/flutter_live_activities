@@ -32,7 +32,6 @@ struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
 @available(iOSApplicationExtension 16.1, *)
 struct PizzaDeliveryApp: Widget {
   
-  // TODO: Try to display a Flutter Engine to display a flutter view
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
       let pizza = PizzaData(JSONData: context.state.data)

@@ -29,8 +29,8 @@ class _MyAppState extends State<MyApp> {
             ElevatedButton(
               onPressed: () async {
                 final activityModel = PizzaLiveActivityModel(
-                  name: 'Pizza',
-                  description: 'Pizza description',
+                  name: 'Margherita',
+                  description: 'Tomato, mozzarella, basil',
                   quantity: 1,
                   price: 10.0,
                   deliverName: 'John Doe',
@@ -52,14 +52,14 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                 onPressed: () {
                   final activityModel = PizzaLiveActivityModel(
-                    name: 'Quiche',
-                    description: 'Quiche description',
-                    quantity: 76,
-                    price: 23.0,
+                    name: 'Romana',
+                    description: 'Tomato, mozzarella, oregano',
+                    quantity: 2,
+                    price: 13.0,
                     deliverName: 'Maryline',
                     deliverDate: DateTime.now().add(
                       const Duration(
-                        seconds: 45,
+                        minutes: 14,
                       ),
                     ),
                   );
