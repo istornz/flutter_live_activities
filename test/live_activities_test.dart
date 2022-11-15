@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_activities/live_activities.dart';
 import 'package:live_activities/live_activities_platform_interface.dart';
 import 'package:live_activities/live_activities_method_channel.dart';
+import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -50,6 +51,11 @@ class MockLiveActivitiesPlatform
       ],
     ));
   }
+
+  @override
+  Future<LiveActivityState> getActivityState(String activityId) {
+    return Future.value(LiveActivityState.active);
+  }
 }
 
 void main() {
@@ -91,5 +97,12 @@ void main() {
     expect(result.url, 'URL');
     expect(result.queryParameters.first['name'], 'NAME');
     expect(result.queryParameters.first['value'], 'VALUE');
+  });
+
+  test('getActivityState', () async {
+    expect(
+      await liveActivitiesPlugin.getActivityState('ACTIVITY_ID'),
+      LiveActivityState.active,
+    );
   });
 }

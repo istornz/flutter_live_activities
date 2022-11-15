@@ -1,3 +1,4 @@
+import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 
 import 'live_activities_platform_interface.dart';
@@ -7,7 +8,7 @@ class LiveActivities {
   /// When the activity is created, an activity id is returned.
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Map is limited to String keys and values for now.
-  Future<String?> createActivity(Map<String, String> data) async {
+  Future<String?> createActivity(Map<String, String> data) {
     return LiveActivitiesPlatform.instance.createActivity(data);
   }
 
@@ -23,6 +24,11 @@ class LiveActivities {
   /// You can get an activity id by calling [createActivity].
   Future endActivity(String activityId) {
     return LiveActivitiesPlatform.instance.endActivity(activityId);
+  }
+
+  /// Get the activity state.
+  Future<LiveActivityState> getActivityState(String activityId) {
+    return LiveActivitiesPlatform.instance.getActivityState(activityId);
   }
 
   /// Get all iOS 16.1+ live activity ids.
