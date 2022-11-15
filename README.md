@@ -1,8 +1,8 @@
 <div align="center">
-  <img alt="flutter ios 16 live activities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/logo.png" width="200px" />
+  <img alt="flutter ios 16 live activities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/logo.jpg" />
 </div>
 
-# Live Activities
+<br />
 
 A Flutter plugin to use iOS 16.1+ **Live Activities** & iPhone 14 Pro **Dynamic Island** features.
 
