@@ -34,11 +34,11 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 
 - 🛎 Enable push notification capabilities.
 
-<img alt="enable push notification capabilities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/push_capability.png" width="300px" />
+<img alt="enable push notification capabilities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/push_capability.png" width="400px" />
 
 - ⛹️ Enable live activities for both your **app** & **widget extension**.
 
-<img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/live_activity.png" width="300px" />
+<img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/live_activity.png" width="400px" />
 
 ### 💙 Flutter
 
