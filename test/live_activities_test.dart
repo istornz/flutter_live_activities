@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_activities/live_activities.dart';
 import 'package:live_activities/live_activities_platform_interface.dart';
 import 'package:live_activities/live_activities_method_channel.dart';
+import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockLiveActivitiesPlatform
@@ -36,6 +37,19 @@ class MockLiveActivitiesPlatform
   Future<List<String>> getAllActivitiesIds() {
     return Future.value(['ACTIVITY_ID']);
   }
+
+  @override
+  Stream<UrlSchemeData> urlSchemeStream() {
+    return Stream.value(UrlSchemeData(
+      url: 'URL',
+      scheme: 'SCHEME',
+      host: 'HOST',
+      path: 'PATH',
+      queryParameters: [
+        {'name': 'NAME', 'value': 'VALUE'},
+      ],
+    ));
+  }
 }
 
 void main() {
@@ -67,5 +81,15 @@ void main() {
 
   test('areActivitiesEnabled', () async {
     expect(await liveActivitiesPlugin.areActivitiesEnabled(), true);
+  });
+
+  test('urlSchemeStream', () async {
+    final result = await liveActivitiesPlugin.urlSchemeStream().first;
+    expect(result.host, 'HOST');
+    expect(result.path, 'PATH');
+    expect(result.scheme, 'SCHEME');
+    expect(result.url, 'URL');
+    expect(result.queryParameters.first['name'], 'NAME');
+    expect(result.queryParameters.first['value'], 'VALUE');
   });
 }
