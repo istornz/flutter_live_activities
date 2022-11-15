@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="flutter ios 16 live activities" />
+  <img alt="flutter ios 16 live activities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/logo.png" />
 </div>
 
 # Live Activities
@@ -19,10 +19,17 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
   <img alt="flutter ios 16 live activities logo" src="" />
 </div>
 
+## 🧵 Installation
+
+- Add push notification
+- Enabled live activities
+
 ## 👻 Getting started
 
 - 📱 Create natively your Live Activity view [**tutorial**](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235)
   - ⚫️ (*Opt.*) Create natively a Dynamic Island [**tutorial**](https://medium.com/macoclock/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483)
+
+> ℹ️ You can check into the [**example repository**](https://github.com/istornz/live_activities/tree/main/example) for a full example app using Live Activities & Dynamic Island
 
 - 🔌 Import the plugin.
 
