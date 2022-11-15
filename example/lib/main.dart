@@ -15,6 +15,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _liveActivitiesPlugin = LiveActivities();
+  String? _latestActivityId;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: [
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final activityModel = PizzaLiveActivityModel(
                   name: 'Pizza',
                   description: 'Pizza description',
@@ -41,21 +42,38 @@ class _MyAppState extends State<MyApp> {
                   ),
                 );
 
-                _liveActivitiesPlugin.createActivity(activityModel.toMap());
+                _latestActivityId =
+                    await _liveActivitiesPlugin.createActivity(activityModel.toMap());
+                setState(() {});
               },
               child: const Text('Create activity'),
             ),
+            if (_latestActivityId != null)
+              ElevatedButton(
+                onPressed: () {
+                  final activityModel = PizzaLiveActivityModel(
+                    name: 'Quiche',
+                    description: 'Quiche description',
+                    quantity: 76,
+                    price: 23.0,
+                    deliverName: 'Maryline',
+                    deliverDate: DateTime.now().add(
+                      const Duration(
+                        seconds: 45,
+                      ),
+                    ),
+                  );
+
+                  _liveActivitiesPlugin.updateActivity(_latestActivityId!, activityModel.toMap());
+                },
+                child: Text('Update activity $_latestActivityId'),
+              ),
+            if (_latestActivityId != null)
             ElevatedButton(
               onPressed: () {
-                _liveActivitiesPlugin.updateActivity();
+                _liveActivitiesPlugin.endActivity(_latestActivityId!);
               },
-              child: const Text('Update activity'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _liveActivitiesPlugin.endActivity();
-              },
-              child: const Text('End activity'),
+              child: Text('End activity $_latestActivityId'),
             ),
           ],
         ),

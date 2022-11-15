@@ -54,6 +54,7 @@ struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
 @available(iOSApplicationExtension 16.1, *)
 struct GroceryDeliveryApp: Widget {
   
+  // TODO: Try to display a Flutter Engine to display a flutter view
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
       let pizza = PizzaData(JSONData: context.state.data)
@@ -126,7 +127,7 @@ struct GroceryDeliveryApp: Widget {
           .font(.title2)
         }
         DynamicIslandExpandedRegion(.center) {
-          Text("\("context.state.driverName") is on his way!")
+          Text("\(pizza!.deliverName) is on his way!")
             .lineLimit(1)
             .font(.caption)
         }
