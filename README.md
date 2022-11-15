@@ -16,9 +16,8 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
 > It will simply do nothing on other platform & < iOS 16.1
 
 <div align="center">
-  <img alt="flutter ios 16 live activities preview dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview_dynamic_island.gif" width="200px" style="margin-right: 8px" />
+  <img alt="flutter ios 16 live activities preview dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview_live_activities.gif" width="200px" style="margin-right: 8px" />
   <img alt="flutter ios 16 live activities preview action" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview_action.gif" width="200px" style="margin-right: 8px" />
-  <img alt="flutter ios 16 live activities preview" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview_live_activities.gif" width="200px" />
 </div>
 
 ## 👻 Getting started
