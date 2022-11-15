@@ -22,4 +22,20 @@ class LiveActivities {
   Future endActivity(String activityId) {
     return LiveActivitiesPlatform.instance.endActivity(activityId);
   }
+
+  /// Get all iOS 16.1+ live activity ids.
+  /// You can get an activity id by calling [createActivity].
+  Future<List<String>> getAllActivitiesIds() {
+    return LiveActivitiesPlatform.instance.getAllActivitiesIds();
+  }
+
+  /// End all iOS 16.1+ live activities.
+  Future endAllActivities() {
+    return LiveActivitiesPlatform.instance.endAllActivities();
+  }
+
+  /// Check if iOS 16.1+ live activities are enabled.
+  Future<bool> areActivitiesEnabled() async {
+    return LiveActivitiesPlatform.instance.areActivitiesEnabled();
+  }
 }

@@ -13,6 +13,10 @@ void main() {
       switch (methodCall.method) {
         case 'createActivity':
           return 'ACTIVITY_ID';
+        case 'areActivitiesEnabled':
+          return true;
+        case 'getAllActivitiesIds':
+          return ['ACTIVITY_ID'];
         default:
       }
     });
@@ -32,5 +36,17 @@ void main() {
 
   test('endActivity', () async {
     expect(await platform.endActivity('ACTIVITY_ID'), null);
+  });
+
+  test('endAllActivities', () async {
+    expect(await platform.endAllActivities(), null);
+  });
+
+  test('getAllActivities', () async {
+    expect(await platform.getAllActivitiesIds(), ['ACTIVITY_ID']);
+  });
+
+  test('areActivitiesEnabled', () async {
+    expect(await platform.areActivitiesEnabled(), true);
   });
 }

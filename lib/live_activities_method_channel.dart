@@ -30,4 +30,21 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       'activityId': activityId,
     });
   }
+
+  @override
+  Future endAllActivities() async {
+    return methodChannel.invokeMethod('endAllActivities');
+  }
+
+  @override
+  Future<List<String>> getAllActivitiesIds() async {
+    final result = await methodChannel.invokeListMethod<String>('getAllActivitiesIds');
+    return result ?? [];
+  }
+
+  @override
+  Future<bool> areActivitiesEnabled() async {
+    final result = await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
+    return result ?? false;
+  }
 }

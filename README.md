@@ -69,8 +69,14 @@ _liveActivitiesPlugin.createActivity(activityModel.toMap());
 | ```.createActivity()``` | Create an iOS live activity,  | ```String``` The activity identifier |
 | ```.updateActivity()``` | Update the live activity data by using the ```activityId``` provided  | ```Future``` When the activity was updated |
 | ```.endActivity()``` | End the live activity by using the ```activityId``` provided | ```Future``` When the activity was ended |
+| ```.getAllActivitiesIds()``` | Get all activities ids created | ```Future<List<String>>``` List of all activities ids |
+| ```.endAllActivities()``` | End all live activities of the app | ```Future``` When all activities was ended |
+| ```.areActivitiesEnabled()``` | Check if live activities feature are supported & enabled | ```Future<bool>``` Live activities supported or not |
 
 ## 🎯 Roadmap
 
 - [ ] Support multiple type instead of ```String``` (Date, Number etc.).
 - [ ] Inject a Widget inside the notification with Flutter Engine ?
+- [x] Cancel all activities.
+- [x] Get all activities ids.
+- [x] Check if live activities are supported.  
