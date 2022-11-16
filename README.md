@@ -79,6 +79,23 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
   > You can pass all type of data you want but keep it mind it should be compatible with [```UserDefaults```](https://developer.apple.com/documentation/foundation/userdefaults)
 
   <br />
+  
+## Access Flutter data from Native 🧵
+
+- In your Swift extension, you need to create an ```UserDefaults``` instance to access data:
+```swift
+let sharedDefault = UserDefaults(suiteName: "YOUR_CREATED_APP_ID")!
+```
+> ⚠️ Be sure to use the **SAME** group id in your Swift extension and your Flutter app!
+
+- Access to your typed data:
+
+```swift
+let pizzaName = sharedDefault.string(forKey: "name")! // put the same key as your Dart map
+let pizzaPrice = sharedDefault.float(forKey: "price")
+let quantity = sharedDefault.integer(forKey: "quantity")
+// [...]
+```
 
 ## Communicate over Native 🧵 and Flutter 💙
 
