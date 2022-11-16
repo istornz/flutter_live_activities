@@ -6,8 +6,6 @@
 
 A Flutter plugin to use iOS 16.1+ **Live Activities** & iPhone 14 Pro **Dynamic Island** features.
 
-<br />
-
 ## 🧐 What is it ?
 
 This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities).
