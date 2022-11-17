@@ -1,3 +1,7 @@
+## 1.3.0+1
+
+* 📝 Update README.md.
+
 ## 1.3.0
 
 * ✨ Now using [App Groups](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_security_application-groups) to pass typed data across Flutter & Native !
