@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:live_activities/live_activities.dart';
 import 'package:live_activities/models/live_activity_image.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
-import 'package:live_activities_example/models/pizza_live_activity_model.dart';
+import 'package:live_activities_example/models/football_game_live_activity_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,8 +36,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _liveActivitiesPlugin = LiveActivities();
   String? _latestActivityId;
-  List<String> _allActivitiesIds = [];
-  UrlSchemeData? schemeData;
   StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
 
   @override
@@ -53,7 +49,11 @@ class _HomeState extends State<Home> {
     urlSchemeSubscription =
         _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
       setState(() {
-        this.schemeData = schemeData;
+        print(schemeData.host);
+        print(schemeData.path);
+        print(schemeData.queryParameters);
+        print(schemeData.url);
+        print(schemeData.scheme);
       });
     });
   }
@@ -61,6 +61,7 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     urlSchemeSubscription?.cancel();
+    _liveActivitiesPlugin.dispose();
     super.dispose();
   }
 
@@ -68,7 +69,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Live Activities'),
+        title: const Text('Live Activities example'),
       ),
       body: SizedBox.expand(
         child: Padding(
@@ -76,34 +77,20 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (schemeData != null)
-                Column(
-                  children: [
-                    Text('Url: ${schemeData!.url}'),
-                    Text('Host: ${schemeData!.host}'),
-                    Text('Path: ${schemeData!.path}'),
-                    Text('Scheme: ${schemeData!.scheme}'),
-                    Text(
-                      'Params: ${schemeData!.queryParameters.map((e) => e["value"]).toList().join(',')}',
-                    ),
-                  ],
-                ),
               ElevatedButton(
                 onPressed: () async {
-                  final activityModel = PizzaLiveActivityModel(
-                    name: 'Margherita',
-                    description: 'Tomato, mozzarella, basil',
-                    quantity: 1,
-                    price: 10.0,
-                    deliverName: 'John Doe',
-                    image: LiveActivityImageFromAsset(
-                      'assets/images/pizza_chorizo.png',
-                    ),
-                    shop: LiveActivityImageFromUrl(
-                      'https://cdn.pixabay.com/photo/2015/10/01/17/17/car-967387__480.png',
-                      resizeFactor: 0.3,
-                    ),
-                    deliverDate: DateTime.now().add(
+                  final activityModel = FootballGameLiveActivityModel(
+                    matchName: 'World cup ⚽️',
+                    teamAName: 'PSG',
+                    teamAState: 'Home',
+                    teamALogo:
+                        LiveActivityImageFromAsset('assets/images/psg.png'),
+                    teamBLogo:
+                        LiveActivityImageFromAsset('assets/images/chelsea.png'),
+                    teamBName: 'Chelsea',
+                    teamBState: 'External',
+                    matchStartDate: DateTime.now(),
+                    matchEndDate: DateTime.now().add(
                       const Duration(
                         minutes: 6,
                         seconds: 30,
@@ -121,7 +108,6 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                   _liveActivitiesPlugin.dispose(force: true);
                   _latestActivityId = null;
-                  _allActivitiesIds = [];
                   setState(() {});
                 },
                 child: const Text(
@@ -129,52 +115,12 @@ class _HomeState extends State<Home> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  final result =
-                      await _liveActivitiesPlugin.areActivitiesEnabled();
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Are activities enabled?'),
-                        content: Text(result ? 'Yes' : 'No'),
-                      );
-                    },
-                  );
-                },
-                child: const Text(
-                  'Check if live activities are enabled',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  final ids = await _liveActivitiesPlugin.getAllActivitiesIds();
-
-                  setState(() {
-                    _allActivitiesIds = ids;
-                  });
-                },
-                child: const Text(
-                  'Get all activities ids',
-                  textAlign: TextAlign.center,
-                ),
-              ),
               if (_latestActivityId != null)
                 ElevatedButton(
                   onPressed: () {
-                    final activityModel = PizzaLiveActivityModel(
-                      name: 'Romana',
-                      description: 'Tomato, mozzarella, oregano',
-                      quantity: 2,
-                      price: 13.0,
-                      deliverName: 'Maryline',
-                      deliverDate: DateTime.now().add(
-                        const Duration(
-                          minutes: 14,
-                        ),
-                      ),
+                    final activityModel = FootballGameLiveActivityModel(
+                      teamAScore: 3,
+                      teamBScore: 1,
                     );
 
                     _liveActivitiesPlugin.updateActivity(
@@ -187,45 +133,10 @@ class _HomeState extends State<Home> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              if (_latestActivityId != null)
-                ElevatedButton(
-                  onPressed: () {
-                    _liveActivitiesPlugin.endActivity(_latestActivityId!);
-                  },
-                  child: Text(
-                    'End activity $_latestActivityId',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              if (_latestActivityId != null)
-                ElevatedButton(
-                  onPressed: () async {
-                    final state = await _liveActivitiesPlugin
-                        .getActivityState(_latestActivityId!);
-                    debugPrint(state.toString());
-                  },
-                  child: Text(
-                    'Get activity state $_latestActivityId',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _allActivitiesIds.length,
-                  itemBuilder: (context, index) {
-                    final activityId = _allActivitiesIds[index];
-                    return Text(activityId);
-                  },
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Future<ByteData> getImageFileFromAssets(String path) async {
-    return rootBundle.load('assets/$path');
   }
 }

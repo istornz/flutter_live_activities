@@ -13,7 +13,7 @@ import SwiftUI
 struct Widgets: WidgetBundle {
   var body: some Widget {
     if #available(iOS 16.1, *) {
-      PizzaDeliveryApp()
+      FootballMatchApp()
     }
   }
 }
@@ -31,98 +31,299 @@ struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
 let sharedDefault = UserDefaults(suiteName: "group.dimitridessus.liveactivities")!
 
 @available(iOSApplicationExtension 16.1, *)
-struct PizzaDeliveryApp: Widget {
+struct FootballMatchApp: Widget {
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
-      let pizzaName = sharedDefault.string(forKey: "name")!
-      let pizzaDescription = sharedDefault.string(forKey: "description")!
-      let pizzaPrice = sharedDefault.float(forKey: "price")
-      let pizzaImage = sharedDefault.string(forKey: "image")!
+      let matchName = sharedDefault.string(forKey: "matchName")!
       
-      VStack(alignment: .leading) {
-        Text("Your \(pizzaName) is on the way!")
-          .font(.title2)
-        Text(pizzaImage)
-          .font(.title2)
-        Spacer()
-        VStack {
-          Text("\(pizzaDescription) 🍕")
-            .font(.title3)
-            .bold()
-          Spacer()
-        }
-        Text("You've already paid: \(pizzaPrice) + $9.9 Delivery Fee 💸")
-          .font(.caption)
-          .foregroundColor(.secondary)
-          .padding(.horizontal, 5)
+      let teamAName = sharedDefault.string(forKey: "teamAName")!
+      let teamAState = sharedDefault.string(forKey: "teamAState")!
+      let teamAScore = sharedDefault.integer(forKey: "teamAScore")
+      let teamALogo = sharedDefault.string(forKey: "teamALogo")!
+      
+      let teamBName = sharedDefault.string(forKey: "teamBName")!
+      let teamBState = sharedDefault.string(forKey: "teamBState")!
+      let teamBScore = sharedDefault.integer(forKey: "teamBScore")
+      let teamBLogo = sharedDefault.string(forKey: "teamBLogo")!
+      
+      let matchStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "matchStartDate") / 1000)
+      let matchEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "matchEndDate") / 1000)
+      let matchRemainingTime = matchStartDate...matchEndDate
+      
+      ZStack {
+        LinearGradient(colors: [Color.black.opacity(0.5),Color.black.opacity(0.3)], startPoint: .topLeading, endPoint: .bottom)
         
-        // Open the Flutter app with custom data
-        Link(destination: URL(string: "la://my.app/order?=123")!) {
-          Text("See order 📝")
-        }.padding(.vertical, 5).padding(.horizontal, 5)
-      }.padding(15)
+        HStack {
+          ZStack {
+            VStack(alignment: .center, spacing: 2.0) {
+              
+              Spacer()
+              
+              Text(teamAName)
+                .lineLimit(1)
+                .font(.subheadline)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+              
+              Text(teamAState)
+                .lineLimit(1)
+                .font(.footnote)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+            }
+            .frame(width: 70, height: 120)
+            .padding(.bottom, 8)
+            .padding(.top, 8)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            
+            ZStack {
+              if let uiImageTeamA = UIImage(contentsOfFile: teamALogo)
+              {
+                Image(uiImage: uiImageTeamA)
+                  .resizable()
+                  .frame(width: 80, height: 80)
+                  .offset(y:-20)
+              }
+            }
+          }
+          
+          VStack(alignment: .center, spacing: 6.0) {
+            HStack {
+              Text("\(teamAScore)")
+                .font(.title)
+                .fontWeight(.bold)
+
+              Text(":")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+
+              Text("\(teamBScore)")
+                .font(.title)
+                .fontWeight(.bold)
+            }
+            .padding(.horizontal, 5.0)
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+
+            HStack(alignment: .center, spacing: 2.0) {
+              Text(timerInterval: matchRemainingTime, countsDown: true)
+                .multilineTextAlignment(.center)
+                .frame(width: 50)
+                .monospacedDigit()
+                .font(.footnote)
+                .foregroundStyle(.white)
+            }
+
+            VStack(alignment: .center, spacing: 1.0) {
+              Link(destination: URL(string: "la://my.app/match?=123")!) {
+                Text("Open in app 👀")
+              }.padding(.vertical, 5).padding(.horizontal, 5)
+              Text(matchName)
+                .font(.footnote)
+                .foregroundStyle(.white)
+            }
+          }
+          .padding(.vertical, 6.0)
+          
+          ZStack {
+            VStack(alignment: .center, spacing: 2.0) {
+
+              Spacer()
+
+              Text(teamBName)
+                .lineLimit(1)
+                .font(.subheadline)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+
+              Text(teamBState)
+                .lineLimit(1)
+                .font(.footnote)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+            }
+            .frame(width: 70, height: 120)
+            .padding(.bottom, 8)
+            .padding(.top, 8)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+
+            ZStack {
+              if let uiImageTeamB = UIImage(contentsOfFile: teamBLogo)
+              {
+                Image(uiImage: uiImageTeamB)
+                  .resizable()
+                  .frame(width: 80, height: 80)
+                  .offset(y:-20)
+              }
+            }
+          }
+        }
+        .padding(.horizontal, 2.0)
+      }.frame(height: 160)
     } dynamicIsland: { context in
-      let deliverName = sharedDefault.string(forKey: "deliverName")!
-      let quantity = sharedDefault.integer(forKey: "quantity")
-      let deliverStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "deliverStartDate") / 1000)
-      let deliverEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "deliverEndDate") / 1000)
-      let deliverDate = deliverStartDate...deliverEndDate
+      let matchName = sharedDefault.string(forKey: "matchName")!
+      
+      let teamAName = sharedDefault.string(forKey: "teamAName")!
+      let teamAState = sharedDefault.string(forKey: "teamAState")!
+      let teamAScore = sharedDefault.integer(forKey: "teamAScore")
+      let teamALogo = sharedDefault.string(forKey: "teamALogo")!
+      
+      let teamBName = sharedDefault.string(forKey: "teamBName")!
+      let teamBState = sharedDefault.string(forKey: "teamBState")!
+      let teamBScore = sharedDefault.integer(forKey: "teamBScore")
+      let teamBLogo = sharedDefault.string(forKey: "teamBLogo")!
+      
+      let matchStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "matchStartDate") / 1000)
+      let matchEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "matchEndDate") / 1000)
+      let matchRemainingTime = matchStartDate...matchEndDate
       
       return DynamicIsland {
         DynamicIslandExpandedRegion(.leading) {
-          if let image = sharedDefault.string(forKey: "image"),
-                 let uiImage = UIImage(contentsOfFile: image)
-             {
-                 Image(uiImage: uiImage)
-                     .resizable()
-                     .frame(width: 53, height: 53)
-                     .cornerRadius(13)
-             } else {
-                 Text("IMAGE")
-             }
+          VStack(alignment: .center, spacing: 2.0) {
+            
+            if let uiImageTeamA = UIImage(contentsOfFile: teamALogo)
+            {
+              Image(uiImage: uiImageTeamA)
+                .resizable()
+                .frame(width: 80, height: 80)
+                .offset(y:0)
+            }
+            
+            Spacer()
+            
+            Text(teamAName)
+              .lineLimit(1)
+              .font(.subheadline)
+              .fontWeight(.bold)
+              .multilineTextAlignment(.center)
+            
+            Text(teamAState)
+              .lineLimit(1)
+              .font(.footnote)
+              .fontWeight(.bold)
+              .multilineTextAlignment(.center)
+          }
+          .frame(width: 70, height: 120)
+          .padding(.bottom, 8)
+          .padding(.top, 8)
+          
+          
+        }
+        DynamicIslandExpandedRegion(.trailing) {
+          VStack(alignment: .center, spacing: 2.0) {
+            
+            if let uiImageTeamB = UIImage(contentsOfFile: teamBLogo)
+            {
+              Image(uiImage: uiImageTeamB)
+                .resizable()
+                .frame(width: 80, height: 80)
+                .offset(y:0)
+            }
+            
+            Spacer()
+            
+            Text(teamBName)
+              .lineLimit(1)
+              .font(.subheadline)
+              .fontWeight(.bold)
+              .multilineTextAlignment(.center)
+            
+            Text(teamBState)
+              .lineLimit(1)
+              .font(.footnote)
+              .fontWeight(.bold)
+              .multilineTextAlignment(.center)
+          }
+          .frame(width: 70, height: 120)
+          .padding(.bottom, 8)
+          .padding(.top, 8)
+          
+          
         }
         DynamicIslandExpandedRegion(.center) {
-          Text("\(deliverName) is on his way!")
-            .lineLimit(1)
-            .font(.caption)
-        }
-        DynamicIslandExpandedRegion(.bottom) {
-          Button {
-          } label: {
-            Label("Contact driver", systemImage: "phone")
+          VStack(alignment: .center, spacing: 6.0) {
+            HStack {
+              Text("\(teamAScore)")
+                .font(.title)
+                .fontWeight(.bold)
+              
+              Text(":")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+              
+              Text("\(teamBScore)")
+                .font(.title)
+                .fontWeight(.bold)
+            }
+            .padding(.horizontal, 5.0)
+            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            
+            HStack(alignment: .center, spacing: 2.0) {
+              Text(timerInterval: matchRemainingTime, countsDown: true)
+                .multilineTextAlignment(.center)
+                .frame(width: 50)
+                .monospacedDigit()
+                .font(.footnote)
+                .foregroundStyle(.white)
+            }
+            
+            VStack(alignment: .center, spacing: 1.0) {
+              Link(destination: URL(string: "la://my.app/match?=123")!) {
+                Text("Open in app 👀")
+              }.padding(.vertical, 5).padding(.horizontal, 5)
+              Text(matchName)
+                .font(.footnote)
+                .foregroundStyle(.white)
+            }
+            
           }
+          .padding(.vertical, 6.0)
         }
       } compactLeading: {
-        Label {
-          Text("\(quantity) item(s)")
-        } icon: {
-          if let shop = sharedDefault.string(forKey: "shop"),
-                 let uiImage = UIImage(contentsOfFile: shop)
-             {
-                 Image(uiImage: uiImage)
-                     .resizable()
-                     .frame(width: 53, height: 53)
-                     .cornerRadius(13)
-             } else {
-                 Text("SHOP")
-             }
+        HStack {
+          if let uiImageTeamA = UIImage(contentsOfFile: teamALogo)
+          {
+            Image(uiImage: uiImageTeamA)
+              .resizable()
+              .frame(width: 36, height: 36)
+          }
+          
+          Text("\(teamAScore)")
+            .font(.title)
+            .fontWeight(.bold)
         }
-        .font(.caption2)
       } compactTrailing: {
-        Text(timerInterval: deliverDate, countsDown: true)
-          .multilineTextAlignment(.center)
-          .frame(width: 40)
-          .font(.caption2)
+        HStack {
+          Text("\(teamBScore)")
+            .font(.title)
+            .fontWeight(.bold)
+          if let uiImageTeamB = UIImage(contentsOfFile: teamBLogo)
+          {
+            Image(uiImage: uiImageTeamB)
+              .resizable()
+              .frame(width: 36, height: 36)
+          }
+        }
       } minimal: {
-        VStack(alignment: .center) {
-          Image(systemName: "timer")
-          Text(timerInterval: deliverDate, countsDown: true)
-            .multilineTextAlignment(.center)
-            .monospacedDigit()
-            .font(.caption2)
+        ZStack {
+          if let uiImageTeamA = UIImage(contentsOfFile: teamALogo)
+          {
+            Image(uiImage: uiImageTeamA)
+              .resizable()
+              .frame(width: 37, height: 37)
+              .offset(x:-6)
+          }
+          
+          if let uiImageTeamB = UIImage(contentsOfFile: teamBLogo)
+          {
+            Image(uiImage: uiImageTeamB)
+              .resizable()
+              .frame(width: 37, height: 37)
+              .offset(x:6)
+          }
         }
       }
-      .keylineTint(.accentColor)
     }
   }
 }
