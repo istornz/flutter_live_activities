@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:live_activities/live_activities.dart';
+import 'package:live_activities/models/live_activity_image.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:live_activities_example/models/pizza_live_activity_model.dart';
 
@@ -93,6 +96,13 @@ class _HomeState extends State<Home> {
                     quantity: 1,
                     price: 10.0,
                     deliverName: 'John Doe',
+                    image: LiveActivityImageFromAsset(
+                      'assets/images/pizza_chorizo.png',
+                    ),
+                    shop: LiveActivityImageFromUrl(
+                      'https://cdn.pixabay.com/photo/2015/10/01/17/17/car-967387__480.png',
+                      resizeFactor: 0.3,
+                    ),
                     deliverDate: DateTime.now().add(
                       const Duration(
                         minutes: 6,
@@ -109,7 +119,7 @@ class _HomeState extends State<Home> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _liveActivitiesPlugin.endAllActivities();
+                  _liveActivitiesPlugin.dispose(force: true);
                   _latestActivityId = null;
                   _allActivitiesIds = [];
                   setState(() {});
@@ -168,7 +178,9 @@ class _HomeState extends State<Home> {
                     );
 
                     _liveActivitiesPlugin.updateActivity(
-                        _latestActivityId!, activityModel.toMap());
+                      _latestActivityId!,
+                      activityModel.toMap(),
+                    );
                   },
                   child: Text(
                     'Update activity $_latestActivityId',
@@ -211,5 +223,9 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  Future<ByteData> getImageFileFromAssets(String path) async {
+    return rootBundle.load('assets/$path');
   }
 }

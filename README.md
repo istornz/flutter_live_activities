@@ -71,14 +71,14 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
     'quantity': 1,
   };
 
-  _liveActivitiesPlugin.createActivity(activityModel.toMap());
+  _liveActivitiesPlugin.createActivity(activityModel);
   ```
 
   > You can pass all type of data you want but keep it mind it should be compatible with [```UserDefaults```](https://developer.apple.com/documentation/foundation/userdefaults)
 
   <br />
   
-## Access Flutter data from Native 🧵
+## Access Flutter basic data from Native 🧵
 
 - In your Swift extension, you need to create an ```UserDefaults``` instance to access data:
 ```swift
@@ -93,6 +93,42 @@ let pizzaName = sharedDefault.string(forKey: "name")! // put the same key as you
 let pizzaPrice = sharedDefault.float(forKey: "price")
 let quantity = sharedDefault.integer(forKey: "quantity")
 // [...]
+```
+
+## Access Flutter picture from Native 🧵
+
+- In your map, send a ```LiveActivityImageFromAsset``` or ```LiveActivityImageFromUrl``` object:
+  
+```dart
+final Map<String, dynamic> activityModel = {
+  'assetKey': LiveActivityImageFromAsset('assets/images/pizza_chorizo.png'),
+  'url': LiveActivityImageFromUrl(
+    'https://cdn.pixabay.com/photo/2015/10/01/17/17/car-967387__480.png',
+    resizeFactor: 0.3,
+  ),
+};
+
+_liveActivitiesPlugin.createActivity(activityModel);
+```
+
+ℹ️ Use ```LiveActivityImageFromAsset``` to load an image from your Flutter asset.
+
+ℹ️ Use ```LiveActivityImageFromUrl``` to load an image from an external url.
+
+> ⚠️ Image need to be in a small resolution to be displayed in your live activity/dynamic island, you can use ```resizeFactor``` to automatically resize the image 👍.
+
+- In your Swift extension, display the image:
+
+```swift
+if let assetImage = sharedDefault.string(forKey: "assetKey"), // <-- Put your key here
+  let uiImage = UIImage(contentsOfFile: shop) {
+  Image(uiImage: uiImage)
+      .resizable()
+      .frame(width: 53, height: 53)
+      .cornerRadius(13)
+} else {
+  Text("Loading")
+}
 ```
 
 ## Communicate over Native 🧵 and Flutter 💙
@@ -146,7 +182,7 @@ Contributions are welcome. Contribute by creating a PR or create an issue 🎉.
 ## 🎯 Roadmap
 
 - [ ] Inject a Widget inside the notification with Flutter Engine ?
-- [ ] Pass media between extension & Flutter app.
+- [x] Pass media between extension & Flutter app.
 - [x] Support multiple type instead of ```String``` (Date, Number etc.).
 - [x] Pass data across native dynamic island and Flutter app.
 - [x] Pass data across native live activity notification and Flutter app.

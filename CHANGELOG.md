@@ -1,3 +1,8 @@
+## 1.4.0
+
+* ✨ Can now pass assets between Flutter & Native.
+* 📝 Update README.md.
+
 ## 1.3.0+1
 
 * 📝 Update README.md.

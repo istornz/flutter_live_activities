@@ -37,9 +37,12 @@ struct PizzaDeliveryApp: Widget {
       let pizzaName = sharedDefault.string(forKey: "name")!
       let pizzaDescription = sharedDefault.string(forKey: "description")!
       let pizzaPrice = sharedDefault.float(forKey: "price")
+      let pizzaImage = sharedDefault.string(forKey: "image")!
       
       VStack(alignment: .leading) {
         Text("Your \(pizzaName) is on the way!")
+          .font(.title2)
+        Text(pizzaImage)
           .font(.title2)
         Spacer()
         VStack {
@@ -66,6 +69,18 @@ struct PizzaDeliveryApp: Widget {
       let deliverDate = deliverStartDate...deliverEndDate
       
       return DynamicIsland {
+        DynamicIslandExpandedRegion(.leading) {
+          if let image = sharedDefault.string(forKey: "image"),
+                 let uiImage = UIImage(contentsOfFile: image)
+             {
+                 Image(uiImage: uiImage)
+                     .resizable()
+                     .frame(width: 53, height: 53)
+                     .cornerRadius(13)
+             } else {
+                 Text("IMAGE")
+             }
+        }
         DynamicIslandExpandedRegion(.center) {
           Text("\(deliverName) is on his way!")
             .lineLimit(1)
@@ -81,7 +96,16 @@ struct PizzaDeliveryApp: Widget {
         Label {
           Text("\(quantity) item(s)")
         } icon: {
-          Image(systemName: "bag")
+          if let shop = sharedDefault.string(forKey: "shop"),
+                 let uiImage = UIImage(contentsOfFile: shop)
+             {
+                 Image(uiImage: uiImage)
+                     .resizable()
+                     .frame(width: 53, height: 53)
+                     .cornerRadius(13)
+             } else {
+                 Text("SHOP")
+             }
         }
         .font(.caption2)
       } compactTrailing: {
