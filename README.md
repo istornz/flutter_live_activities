@@ -21,7 +21,6 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
 </div>
 <br />
 
-
 ## 👻 Getting started
 
 Due to some **technical restriction**, it's not currently possible to only use Flutter 🫣.
@@ -31,21 +30,35 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 > ℹ️ You can check into the [**example repository**](https://github.com/istornz/live_activities/tree/main/example) for a full example app using Live Activities & Dynamic Island
 
 - ## 📱 Native
-  - Create natively your Live Activity view [**tutorial**](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235), you can also create natively a Dynamic Island [**tutorial**](https://medium.com/macoclock/how-to-create-dynamic-island-widgets-on-ios-16-1-or-above-dca0a7dd1483).
+  - Open the Xcode workspace project ```ios/Runner.xcworkspace```.
+  - Click on ```File``` -> ```New``` -> ```Target...```
+    - Select ```Widget Extension``` & click on **Next**.
+    - Specify the product name (*MyApp*Widget for eg.) & be sure to select "**Runner**" in "Embed in Application" dropdown.
+    - Click on **Finish**.
+    - When selecting Finish, an alert will appear, you will need to click on **Activate**.
+  
+<img alt="create widget extension xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/create_widget_extension.gif" width="700px" />
 
-  - Enable push notification capabilities.
+  - Enable push notification capabilities on the main ```Runner``` app **only**!.
 
   <img alt="enable push notification capabilities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/push_capability.gif" width="700px" />
 
-  - Enable live activities for both your **app** & **widget extension**.
+  - Enable live activity by adding this line in ```Info.plist``` for both ```Runner``` & your ```Widget Extension```.
 
-  <img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/live_activity.png" width="700px" />
+```plist
+<key>NSSupportsLiveActivities</key>
+<true/>
+```
 
-  - Create App Group for both ```Runner``` & your widget extension.
+  <img alt="enable live activities xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/enable_live_activities.gif" width="700px" />
+
+  - Create App Group for both ```Runner``` & your ```Widget Extension```.
 
   <img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/app_group.gif" width="700px" />
 
   <br />
+
+> ℹ️ You can check on this [ressource](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235) or [here](https://betterprogramming.pub/create-live-activities-with-activitykit-on-ios-16-beta-4766a347035b) for more native informations.
 
 - ## 💙 Flutter
 
@@ -172,6 +185,7 @@ _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
 | ```.areActivitiesEnabled()``` | Check if live activities feature are supported & enabled | ```Future<bool>``` Live activities supported or not |
 | ```.getActivityState()``` | Get the activity current state | ```Future<LiveActivityState>``` An enum to know the status of the activity (```active```, ```dismissed``` or ```ended```) |
 | ```.urlSchemeStream()``` | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data) | ```Future<UrlSchemeData>``` Url scheme data which handle ```scheme``` ```url``` ```host``` ```path``` ```queryItems``` |
+| ```.dispose()``` | Remove all pictures passed in the AppGroups directory in the current session, you can use the ```force``` parameters to remove **all** pictures | ```Future``` Picture removed |
 
 <br />
 

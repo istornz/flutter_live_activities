@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
                     teamBLogo:
                         LiveActivityImageFromAsset('assets/images/chelsea.png'),
                     teamBName: 'Chelsea',
-                    teamBState: 'External',
+                    teamBState: 'Guest',
                     matchStartDate: DateTime.now(),
                     matchEndDate: DateTime.now().add(
                       const Duration(
@@ -106,7 +106,7 @@ class _HomeState extends State<Home> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _liveActivitiesPlugin.dispose(force: true);
+                  _liveActivitiesPlugin.endAllActivities();
                   _latestActivityId = null;
                   setState(() {});
                 },
