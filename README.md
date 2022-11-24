@@ -1,6 +1,15 @@
 <div align="center">
   <img alt="flutter ios 16 live activities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/logo.jpg" />
 </div>
+<br />
+
+<div align="center" style="display: flex;align-items: center;justify-content: center;">
+<img src="https://img.shields.io/pub/points/live_activities?style=for-the-badge" style="margin-right: 10px" />
+<img src="https://img.shields.io/pub/likes/live_activities?style=for-the-badge" style="margin-right: 10px" />
+<img src="https://img.shields.io/pub/popularity/live_activities?style=for-the-badge" style="margin-right: 10px" />
+<img src="https://img.shields.io/pub/v/live_activities?style=for-the-badge" style="margin-right: 10px" />
+<img src="https://img.shields.io/github/stars/istornz/live_activities?style=for-the-badge" />
+</div>
 
 <br />
 
