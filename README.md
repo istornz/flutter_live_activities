@@ -59,7 +59,7 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 
   - Enable live activity by adding this line in ```Info.plist``` for both ```Runner``` & your ```Widget Extension```.
 
-```plist
+```xml
 <key>NSSupportsLiveActivities</key>
 <true/>
 ```
