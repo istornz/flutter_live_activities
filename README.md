@@ -15,9 +15,14 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
 > ⚠️ **live_activities** is only intended to use with **iOS 16.1+** !
 > It will simply do nothing on other platform & < iOS 16.1
 
-<div align="center">
-  <img alt="flutter ios 16 live activities preview dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview_live_activities.gif" width="200px" style="margin-right: 8px" />
-  <img alt="flutter ios 16 live activities preview action" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/preview_action.gif" width="200px" style="margin-right: 8px" />
+<br />
+<div align="center" style="display: flex;align-items: center;justify-content: center;">
+  <div align="center" style="display: flex;flex-direction: column; align-items: center;justify-content: center;margin-right: 20px">
+    <img alt="flutter ios 16 live activities dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/showcase/static/dynamic_island.png" width="300px" style="margin-bottom: 20px" />
+    <img alt="flutter ios 16 live activities lockscreen" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/showcase/static/lockscreen_live_activity.png" width="300px" />
+  </div>
+  <img alt="flutter ios 16 live activities preview dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/showcase/animations/create_live_activity.gif" width="250px" style="margin-right: 20px" />
+  <img alt="flutter ios 16 live activities preview action" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/showcase/animations/update_live_activity.gif" width="250px" style="margin-right: 20px" />
 </div>
 <br />
 

@@ -115,8 +115,8 @@ struct FootballMatchApp: Widget {
             }
 
             VStack(alignment: .center, spacing: 1.0) {
-              Link(destination: URL(string: "la://my.app/match?=123")!) {
-                Text("Open in app 👀")
+              Link(destination: URL(string: "la://my.app/stats")!) {
+                Text("See stats 📊")
               }.padding(.vertical, 5).padding(.horizontal, 5)
               Text(matchName)
                 .font(.footnote)
@@ -269,8 +269,8 @@ struct FootballMatchApp: Widget {
             }
             
             VStack(alignment: .center, spacing: 1.0) {
-              Link(destination: URL(string: "la://my.app/match?=123")!) {
-                Text("Open in app 👀")
+              Link(destination: URL(string: "la://my.app/stats")!) {
+                Text("See stats 📊")
               }.padding(.vertical, 5).padding(.horizontal, 5)
               Text(matchName)
                 .font(.footnote)

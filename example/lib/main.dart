@@ -5,6 +5,7 @@ import 'package:live_activities/live_activities.dart';
 import 'package:live_activities/models/live_activity_image.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:live_activities_example/models/football_game_live_activity_model.dart';
+import 'package:live_activities_example/widgets/score_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,6 +39,12 @@ class _HomeState extends State<Home> {
   String? _latestActivityId;
   StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
 
+  int teamAScore = 0;
+  int teamBScore = 0;
+
+  String teamAName = 'PSG';
+  String teamBName = 'Chelsea';
+
   @override
   void initState() {
     super.initState();
@@ -49,11 +56,25 @@ class _HomeState extends State<Home> {
     urlSchemeSubscription =
         _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
       setState(() {
-        print(schemeData.host);
-        print(schemeData.path);
-        print(schemeData.queryParameters);
-        print(schemeData.url);
-        print(schemeData.scheme);
+        if (schemeData.path == '/stats') {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Stats 📊'),
+                content: Text(
+                  'Now playing final world cup between $teamAName and $teamBName\n\n$teamAName score: $teamAScore\n$teamBName score: $teamBScore',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Close'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
       });
     });
   }
@@ -69,7 +90,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Live Activities example'),
+        title: const Text('Live Activities (Flutter)'),
+        backgroundColor: Colors.green,
       ),
       body: SizedBox.expand(
         child: Padding(
@@ -77,66 +99,142 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () async {
-                  final activityModel = FootballGameLiveActivityModel(
-                    matchName: 'World cup ⚽️',
-                    teamAName: 'PSG',
-                    teamAState: 'Home',
-                    teamALogo:
-                        LiveActivityImageFromAsset('assets/images/psg.png'),
-                    teamBLogo:
-                        LiveActivityImageFromAsset('assets/images/chelsea.png'),
-                    teamBName: 'Chelsea',
-                    teamBState: 'Guest',
-                    matchStartDate: DateTime.now(),
-                    matchEndDate: DateTime.now().add(
-                      const Duration(
-                        minutes: 6,
-                        seconds: 30,
+              if (_latestActivityId != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Card(
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 120,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ScoreWidget(
+                              score: teamAScore,
+                              teamName: teamAName,
+                              onScoreChanged: (score) {
+                                setState(() {
+                                  teamAScore = score < 0 ? 0 : score;
+                                });
+                                _updateScore();
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: ScoreWidget(
+                              score: teamBScore,
+                              teamName: teamBName,
+                              onScoreChanged: (score) {
+                                setState(() {
+                                  teamBScore = score < 0 ? 0 : score;
+                                });
+                                _updateScore();
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-
-                  _latestActivityId = await _liveActivitiesPlugin
-                      .createActivity(activityModel.toMap());
-                  setState(() {});
-                },
-                child: const Text('Create activity'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _liveActivitiesPlugin.endAllActivities();
-                  _latestActivityId = null;
-                  setState(() {});
-                },
-                child: const Text(
-                  'End all activities',
-                  textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-              if (_latestActivityId != null)
-                ElevatedButton(
-                  onPressed: () {
+              if (_latestActivityId == null)
+                TextButton(
+                  onPressed: () async {
                     final activityModel = FootballGameLiveActivityModel(
-                      teamAScore: 3,
-                      teamBScore: 1,
+                      matchName: 'World cup ⚽️',
+                      teamAName: 'PSG',
+                      teamAState: 'Home',
+                      teamALogo:
+                          LiveActivityImageFromAsset('assets/images/psg.png'),
+                      teamBLogo: LiveActivityImageFromAsset(
+                          'assets/images/chelsea.png'),
+                      teamBName: 'Chelsea',
+                      teamBState: 'Guest',
+                      matchStartDate: DateTime.now(),
+                      matchEndDate: DateTime.now().add(
+                        const Duration(
+                          minutes: 6,
+                          seconds: 30,
+                        ),
+                      ),
                     );
 
-                    _liveActivitiesPlugin.updateActivity(
-                      _latestActivityId!,
-                      activityModel.toMap(),
+                    _latestActivityId = await _liveActivitiesPlugin
+                        .createActivity(activityModel.toMap());
+                    setState(() {});
+                  },
+                  child: Column(
+                    children: const [
+                      Text('Start football match ⚽️'),
+                      Text(
+                        '(start a new live activity)',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              if (_latestActivityId == null)
+                TextButton(
+                  onPressed: () async {
+                    final supported =
+                        await _liveActivitiesPlugin.areActivitiesEnabled();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text(
+                            supported ? 'Supported' : 'Not supported',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('Close'),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
-                  child: Text(
-                    'Update activity $_latestActivityId',
-                    textAlign: TextAlign.center,
+                  child: const Text('Is live activities supported ? 🤔'),
+                ),
+              if (_latestActivityId != null)
+                TextButton(
+                  onPressed: () {
+                    _liveActivitiesPlugin.endAllActivities();
+                    _latestActivityId = null;
+                    setState(() {});
+                  },
+                  child: Column(
+                    children: const [
+                      Text('Stop match ✋'),
+                      Text(
+                        '(end all live activities)',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Future _updateScore() {
+    final data = FootballGameLiveActivityModel(
+      teamAScore: teamAScore,
+      teamBScore: teamBScore,
+    );
+    return _liveActivitiesPlugin.updateActivity(
+      _latestActivityId!,
+      data.toMap(),
     );
   }
 }
