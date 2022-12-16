@@ -74,6 +74,35 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 
 > ℹ️ You can check on this [ressource](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235) or [here](https://betterprogramming.pub/create-live-activities-with-activitykit-on-ios-16-beta-4766a347035b) for more native informations.
 
+  - In your extension, you need to create an ```ActivityAttributes``` called **EXACTLY** ```LiveActivitiesAppAttributes``` (if you rename, activity will be created but not appear!)
+
+```swift
+struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
+  public struct ContentState: Codable, Hashable { }
+  
+  var id = UUID()
+}
+```
+
+  - Create an ```UserDefaults``` with your group id to access Flutter data in your Swift code.
+
+```swift
+// Create shared default with custom group
+let sharedDefault = UserDefaults(suiteName: "YOUR_GROUP_ID")!
+
+struct FootballMatchApp: Widget {
+  var body: some WidgetConfiguration {
+    ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
+      // create your live activity widget extension here
+      // to access Flutter properties:
+      let myVariableFromFlutter = sharedDefault.string(forKey: "myVariableFromFlutter")!
+
+      // [...]
+    }
+  }
+}
+```
+
 - ## 💙 Flutter
 
   - Import the plugin.

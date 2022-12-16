@@ -11,7 +11,6 @@ class LiveActivities {
   /// Create an App Group inside "Runner" target & "Extension" in Xcode.
   /// Be sure to set the *SAME* App Group in both targets.
   Future init({required String appGroupId}) {
-    // _appGroupId = appGroupId;
     _appGroupsImageService.appGroupId = appGroupId;
     return LiveActivitiesPlatform.instance.init(appGroupId);
   }
