@@ -108,14 +108,14 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   live_activities:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "1.4.0+4"
+    version: "1.4.0+5"
   matcher:
     dependency: transitive
     description:
@@ -274,7 +274,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "3.1.2"
   xdg_directories:
     dependency: transitive
     description:
