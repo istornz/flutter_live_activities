@@ -1,3 +1,7 @@
+## 1.4.1
+
+* 🐛 Fix a bug where init never completes (thanks to @JulianBissekkou 👍) 
+
 ## 1.4.0
 
 * ✨ Can now pass assets between Flutter & Native.
