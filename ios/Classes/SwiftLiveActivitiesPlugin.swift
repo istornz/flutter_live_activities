@@ -1,46 +1,48 @@
+import ActivityKit
 import Flutter
 import UIKit
-import ActivityKit
 
 public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   private var urlSchemeSink: FlutterEventSink?
   private var appGroupId: String?
   private var sharedDefault: UserDefaults?
-  
+  private var appLifecycleLifeActiviyIds = [String]()
+
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "live_activities", binaryMessenger: registrar.messenger())
     let urlSchemeChannel = FlutterEventChannel(name: "live_activities/url_scheme", binaryMessenger: registrar.messenger())
     let instance = SwiftLiveActivitiesPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
     urlSchemeChannel.setStreamHandler(instance)
-    
+
     registrar.addApplicationDelegate(instance)
   }
-  
+
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
     urlSchemeSink = events
     return nil
   }
-  
+
   public func onCancel(withArguments arguments: Any?) -> FlutterError? {
     urlSchemeSink = nil
     return nil
   }
-  
+
   private func initializationGuard(result: @escaping FlutterResult) {
-    if (self.appGroupId == nil || self.sharedDefault == nil) {
+    if self.appGroupId == nil || self.sharedDefault == nil {
       result(FlutterError(code: "NEED_INIT", message: "you need to run 'init()' first with app group id to create live activity", details: nil))
     }
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if #available(iOS 16.1, *) {
-      switch (call.method) {
+        
+      switch call.method {
       case "init":
-        guard let args = call.arguments  as? [String: Any] else {
+        guard let args = call.arguments as? [String: Any] else {
           return
         }
-        
+
         if let appGroupId = args["appGroupId"] as? String {
           self.appGroupId = appGroupId
           sharedDefault = UserDefaults(suiteName: self.appGroupId)!
@@ -48,44 +50,48 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         } else {
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'appGroupId' is valid", details: nil))
         }
-        
-        break;
+
+        break
       case "createActivity":
         initializationGuard(result: result)
-        
         guard let args = call.arguments as? [String: Any] else {
+          result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
           return
         }
-        if let data = args["data"] as? Dictionary<String, Any> {
-          createActivity(data: data, result: result)
+          
+        if let data = args["data"] as? [String: Any] {
+          let removeWhenAppIsKilled = args["removeWhenAppIsKilled"] as? Bool ?? false
+          createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, result: result)
         } else {
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
         }
         break
       case "updateActivity":
         initializationGuard(result: result)
-        
-        guard let args = call.arguments  as? [String: Any] else {
+        guard let args = call.arguments as? [String: Any] else {
+          result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
           return
         }
-        if let activityId = args["activityId"] as? String, let data = args["data"] as? Dictionary<String, Any> {
+        if let activityId = args["activityId"] as? String, let data = args["data"] as? [String: Any] {
           updateActivity(activityId: activityId, data: data, result: result)
         } else {
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' & 'data' are valid", details: nil))
         }
         break
       case "endActivity":
-        guard let args = call.arguments  as? [String: Any] else {
+        guard let args = call.arguments as? [String: Any] else {
+          result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
           return
         }
         if let activityId = args["activityId"] as? String {
-          endActivity(activityId: activityId, result: result)
+         endActivity(activityId: activityId, result: result)
         } else {
           result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
         }
         break
       case "getActivityState":
-        guard let args = call.arguments  as? [String: Any] else {
+        guard let args = call.arguments as? [String: Any] else {
+          result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
           return
         }
         if let activityId = args["activityId"] as? String {
@@ -95,10 +101,10 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         }
         break
       case "getAllActivitiesIds":
-        getAllActivitiesIds(result: result);
+        getAllActivitiesIds(result: result)
         break
       case "endAllActivities":
-        endAllActivities(result: result);
+        endAllActivities(result: result)
         break
       case "areActivitiesEnabled":
         result(ActivityAuthorizationInfo().areActivitiesEnabled)
@@ -112,7 +118,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func createActivity(data: Dictionary<String, Any>, result: @escaping FlutterResult) {
+  func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, result: @escaping FlutterResult) {
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
       
@@ -133,6 +139,9 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         attributes: liveDeliveryAttributes,
         contentState: initialContentState,
         pushType: nil)
+      if removeWhenAppIsKilled {
+        appLifecycleLifeActiviyIds.append(deliveryActivity.id)
+      }
       result(deliveryActivity.id)
     } catch (let error) {
       result(FlutterError(code: "LIVE_ACTIVITY_ERROR", message: "can't launch live activity", details: error.localizedDescription))
@@ -140,10 +149,10 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func updateActivity(activityId: String, data: Dictionary<String, Any>, result: @escaping FlutterResult) {
+  func updateActivity(activityId: String, data: [String: Any], result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
-        if (activityId == activity.id) {
+        if activityId == activity.id {
           for item in data {
             sharedDefault!.set(item.value, forKey: item.key)
           }
@@ -176,39 +185,43 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       }
     }
   }
-  
+
   @available(iOS 16.1, *)
   func endActivity(activityId: String, result: @escaping FlutterResult) {
+    appLifecycleLifeActiviyIds.removeAll { $0 == activityId }
     Task {
-      for activity in Activity<LiveActivitiesAppAttributes>.activities {
-        if (activityId == activity.id) {
-          await activity.end(dismissalPolicy: .immediate)
-          break;
-        }
-      }
+      await endActivitiesWithId(activityIds: [activityId])
       result(nil)
     }
   }
-  
+
   @available(iOS 16.1, *)
   func endAllActivities(result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         await activity.end(dismissalPolicy: .immediate)
       }
+      appLifecycleLifeActiviyIds.removeAll()
+      result(nil)
     }
-    result(nil)
   }
-  
+
   @available(iOS 16.1, *)
   func getAllActivitiesIds(result: @escaping FlutterResult) {
-    Task {
-      var activitiesId: [String] = []
-      for activity in Activity<LiveActivitiesAppAttributes>.activities {
-        activitiesId.append(activity.id)
+    var activitiesId: [String] = []
+    for activity in Activity<LiveActivitiesAppAttributes>.activities {
+      activitiesId.append(activity.id)
+    }
+
+    result(activitiesId)
+  }
+
+  @available(iOS 16.1, *)
+  private func endActivitiesWithId(activityIds: [String]) async {
+    for activity in Activity<LiveActivitiesAppAttributes>.activities {
+      if (activityIds.contains { $0 == activity.id }) {
+        await activity.end(dismissalPolicy: .immediate)
       }
-      
-      result(activitiesId)
     }
   }
   
@@ -233,14 +246,23 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     urlSchemeSink?.self(queryResult)
     return true
   }
-  
+
+  public func applicationWillTerminate(_ application: UIApplication) {
+      print("App will terminate")
+    if #available(iOS 16.1, *) {
+        Task {
+            await self.endActivitiesWithId(activityIds: self.appLifecycleLifeActiviyIds)
+        }
+    }
+  }
+
   struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
     public typealias LiveDeliveryData = ContentState
-    
+
     public struct ContentState: Codable, Hashable {
       var appGroupId: String
     }
-    
+
     var id = UUID()
   }
 }
