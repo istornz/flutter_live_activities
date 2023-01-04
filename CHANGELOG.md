@@ -1,6 +1,10 @@
+## 1.4.2
+
+* ✨ End live activity when the app is terminated (thanks to @JulianBissekkou 👍).
+
 ## 1.4.1
 
-* 🐛 Fix a bug where init never completes (thanks to @JulianBissekkou 👍) 
+* 🐛 Fix a bug where init never completes (thanks to @JulianBissekkou 👍).
 
 ## 1.4.0
 
