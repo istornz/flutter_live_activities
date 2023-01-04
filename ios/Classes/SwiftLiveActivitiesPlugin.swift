@@ -250,7 +250,6 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
 
   public func applicationWillTerminate(_ application: UIApplication) {
-      print("App will terminate")
     if #available(iOS 16.1, *) {
         Task {
             await self.endActivitiesWithId(activityIds: self.appLifecycleLifeActiviyIds)
