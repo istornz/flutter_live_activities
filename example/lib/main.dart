@@ -159,9 +159,11 @@ class _HomeState extends State<Home> {
                       ),
                     );
 
-                    _latestActivityId = await _liveActivitiesPlugin
-                        .createActivity(activityModel.toMap());
-                    setState(() {});
+                    final activityId =
+                        await _liveActivitiesPlugin.createActivity(
+                      activityModel.toMap(),
+                    );
+                    setState(() => _latestActivityId = activityId);
                   },
                   child: Column(
                     children: const [

@@ -29,7 +29,10 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     throw UnimplementedError('init() has not been implemented.');
   }
 
-  Future<String?> createActivity(Map<String, dynamic> data) {
+  Future<String?> createActivity(
+    Map<String, dynamic> data, {
+    bool removeWhenAppIsKilled = false,
+  }) {
     throw UnimplementedError('createActivity() has not been implemented.');
   }
 

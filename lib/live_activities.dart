@@ -19,9 +19,15 @@ class LiveActivities {
   /// When the activity is created, an activity id is returned.
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Image are limited by size, be sure to pass only small images (you can use ```resizeFactor```).
-  Future<String?> createActivity(Map<String, dynamic> data) async {
+  Future<String?> createActivity(
+    Map<String, dynamic> data, {
+    bool removeWhenAppIsKilled = false,
+  }) async {
     await _appGroupsImageService.sendImageToAppGroups(data);
-    return LiveActivitiesPlatform.instance.createActivity(data);
+    return LiveActivitiesPlatform.instance.createActivity(
+      data,
+      removeWhenAppIsKilled: removeWhenAppIsKilled,
+    );
   }
 
   /// Update an iOS 16.1+ live activity.

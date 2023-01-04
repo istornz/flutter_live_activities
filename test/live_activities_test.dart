@@ -15,7 +15,10 @@ class MockLiveActivitiesPlatform
   }
 
   @override
-  Future<String?> createActivity(Map<String, dynamic> data) {
+  Future<String?> createActivity(
+    Map<String, dynamic> data, {
+    bool removeWhenAppIsKilled = false,
+  }) {
     return Future.value('ACTIVITY_ID');
   }
 

@@ -26,9 +26,13 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
-  Future<String?> createActivity(Map<String, dynamic> data) async {
+  Future<String?> createActivity(
+    Map<String, dynamic> data, {
+    bool removeWhenAppIsKilled = false,
+  }) async {
     return methodChannel.invokeMethod<String>('createActivity', {
       'data': data,
+      'removeWhenAppIsKilled': removeWhenAppIsKilled,
     });
   }
 
