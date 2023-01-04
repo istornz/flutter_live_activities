@@ -162,7 +162,6 @@ class _HomeState extends State<Home> {
                     final activityId =
                         await _liveActivitiesPlugin.createActivity(
                       activityModel.toMap(),
-                      removeWhenAppIsKilled: true,
                     );
                     setState(() => _latestActivityId = activityId);
                   },
