@@ -156,8 +156,10 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           for item in data {
             sharedDefault!.set(item.value, forKey: item.key)
           }
+            
           
-          let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
+          // Why is appGroupId empty here? Maybe add a comment.
+          let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: "")
           await activity.update(using: updatedStatus)
           break;
         }
