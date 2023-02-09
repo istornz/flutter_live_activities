@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="flutter ios 16 live activities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/logo.jpg" />
+  <img alt="flutter ios 16 live activities" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/logo.jpg" />
 </div>
 <br />
 
@@ -27,11 +27,11 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
 <br />
 <div align="center" style="display: flex;align-items: center;justify-content: center;">
   <div align="center" style="display: flex;flex-direction: column; align-items: center;justify-content: center;margin-right: 20px">
-    <img alt="flutter ios 16 live activities dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/showcase/static/dynamic_island.png" width="300px" style="margin-bottom: 20px" />
-    <img alt="flutter ios 16 live activities lockscreen" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/showcase/static/lockscreen_live_activity.png" width="300px" />
+    <img alt="flutter ios 16 live activities dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/showcase/static/dynamic_island.png" width="300px" style="margin-bottom: 20px" />
+    <img alt="flutter ios 16 live activities lockscreen" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/showcase/static/lockscreen_live_activity.png" width="300px" />
   </div>
-  <img alt="flutter ios 16 live activities preview dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/showcase/animations/create_live_activity.gif" width="250px" style="margin-right: 20px" />
-  <img alt="flutter ios 16 live activities preview action" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/showcase/animations/update_live_activity.gif" width="250px" style="margin-right: 20px" />
+  <img alt="flutter ios 16 live activities preview dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/showcase/animations/create_live_activity.gif" width="250px" style="margin-right: 20px" />
+  <img alt="flutter ios 16 live activities preview action" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/showcase/animations/update_live_activity.gif" width="250px" style="margin-right: 20px" />
 </div>
 <br />
 
@@ -51,11 +51,11 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
     - Click on **Finish**.
     - When selecting Finish, an alert will appear, you will need to click on **Activate**.
   
-<img alt="create widget extension xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/create_widget_extension.gif" width="700px" />
+<img alt="create widget extension xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/create_widget_extension.gif" width="700px" />
 
   - Enable push notification capabilities on the main ```Runner``` app **only**!.
 
-  <img alt="enable push notification capabilities" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/push_capability.gif" width="700px" />
+  <img alt="enable push notification capabilities" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/push_capability.gif" width="700px" />
 
   - Enable live activity by adding this line in ```Info.plist``` for both ```Runner``` & your ```Widget Extension```.
 
@@ -64,11 +64,11 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 <true/>
 ```
 
-  <img alt="enable live activities xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/enable_live_activities.gif" width="700px" />
+  <img alt="enable live activities xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/enable_live_activities.gif" width="700px" />
 
   - Create App Group for both ```Runner``` & your ```Widget Extension```.
 
-  <img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/app_group.gif" width="700px" />
+  <img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/app_group.gif" width="700px" />
 
   <br />
 
@@ -193,7 +193,7 @@ In order to pass some useful **data** between your **native** live activity / dy
 
 - Add a custom url scheme in Xcode by navigating to **Runner** > **Runner** > **URL Types** > **URL Schemes**
 
-<img alt="add url scheme xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/.github/images/tutorial/url_scheme.png" width="700px" />
+<img alt="add url scheme xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/url_scheme.png" width="700px" />
 
 - In your Swift code, just create a new **link** and open to your custom **URL Scheme**
 
