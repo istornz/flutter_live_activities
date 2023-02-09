@@ -1,3 +1,7 @@
+## 1.4.2+1
+
+* 📝 Add screenshots in pubspec.yaml
+
 ## 1.4.2
 
 * ✨ End live activity when the app is terminated (thanks to @JulianBissekkou 👍).
