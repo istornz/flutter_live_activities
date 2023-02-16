@@ -64,4 +64,8 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   Future<LiveActivityState> getActivityState(String activityId) {
     throw UnimplementedError('getActivityState() has not been implemented.');
   }
+  
+  Future<String> getPushToken(String activityId) {
+    throw UnimplementedError('getPushToken() has not been implemented.');
+  }
 }
