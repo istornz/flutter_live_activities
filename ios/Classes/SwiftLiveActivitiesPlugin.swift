@@ -100,6 +100,16 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
                     result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
                 }
                 break
+            case "getPushToken":
+                guard let args = call.arguments  as? [String: Any] else {
+                    return
+                }
+                if let activityId = args["activityId"] as? String {
+                    getPushToken(activityId: activityId, result: result)
+                } else {
+                    result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
+                }
+                break
             case "getAllActivitiesIds":
                 getAllActivitiesIds(result: result)
                 break
@@ -180,6 +190,20 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
                         result("dismissed")
                     @unknown default:
                         result("unknown")
+                    }
+                }
+            }
+        }
+    }
+    
+    @available(iOS 16.1, *)
+    func getPushToken(activityId: String, result: @escaping FlutterResult) {
+        Task {
+            for activity in Activity<LiveActivitiesAppAttributes>.activities {
+                if (activityId == activity.id) {
+                    for await data in activity.pushTokenUpdates {
+                        let pushToken = data.map {String(format: "%02x", $0)}.joined()
+                        result(pushToken)
                     }
                 }
             }
