@@ -64,7 +64,7 @@ class MockLiveActivitiesPlatform
   Future<LiveActivityState> getActivityState(String activityId) {
     return Future.value(LiveActivityState.active);
   }
-  
+
   @override
   Future<String> getPushToken(String activityId) {
     return Future.value('PUSH_TOKEN');

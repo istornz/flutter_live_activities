@@ -88,7 +88,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     );
     return LiveActivityState.values.byName(result ?? 'unknown');
   }
-  
+
   @override
   Future<String> getPushToken(String activityId) async {
     final result = await methodChannel.invokeMethod<String>(

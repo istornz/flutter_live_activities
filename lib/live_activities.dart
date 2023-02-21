@@ -49,7 +49,7 @@ class LiveActivities {
   Future<LiveActivityState> getActivityState(String activityId) {
     return LiveActivitiesPlatform.instance.getActivityState(activityId);
   }
-  
+
   /// Get the push token.
   Future<String> getPushToken(String activityId) {
     return LiveActivitiesPlatform.instance.getPushToken(activityId);
