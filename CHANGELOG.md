@@ -1,3 +1,8 @@
+## 1.5.0
+
+* ✨ Add method to get push token (thanks to @jolamar 👍).
+* ♻️ Rework Swift code.
+
 ## 1.4.2+1
 
 * 📝 Add screenshots in pubspec.yaml
