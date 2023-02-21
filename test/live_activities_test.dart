@@ -64,6 +64,11 @@ class MockLiveActivitiesPlatform
   Future<LiveActivityState> getActivityState(String activityId) {
     return Future.value(LiveActivityState.active);
   }
+  
+  @override
+  Future<String> getPushToken(String activityId) {
+    return Future.value('PUSH_TOKEN');
+  }
 }
 
 void main() {
@@ -115,6 +120,13 @@ void main() {
     expect(
       await liveActivitiesPlugin.getActivityState('ACTIVITY_ID'),
       LiveActivityState.active,
+    );
+  });
+
+  test('getPushToken', () async {
+    expect(
+      await liveActivitiesPlugin.getPushToken('PUSH_TOKEN'),
+      'PUSH_TOKEN',
     );
   });
 }
