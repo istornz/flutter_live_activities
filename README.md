@@ -78,6 +78,8 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 
 ```swift
 struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
+  public typealias LiveDeliveryData = ContentState // don't forget to add this line, otherwise, live activity will not display it.
+
   public struct ContentState: Codable, Hashable { }
   
   var id = UUID()
