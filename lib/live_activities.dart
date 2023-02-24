@@ -1,3 +1,4 @@
+import 'package:live_activities/models/activity_update.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:live_activities/services/app_groups_image_service.dart';
@@ -88,4 +89,6 @@ class LiveActivities {
       return _appGroupsImageService.removeImagesSession();
     }
   }
+
+  Stream<ActivityUpdate> get activityUpdateStream => LiveActivitiesPlatform.instance.activityUpdateStream;
 }

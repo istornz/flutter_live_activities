@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:live_activities/models/activity_update.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 
@@ -15,8 +16,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   final methodChannel = const MethodChannel('live_activities');
 
   @visibleForTesting
-  final EventChannel urlSchemeChannel =
-      const EventChannel('live_activities/url_scheme');
+  final activityStatusChannel = const EventChannel('live_activities/token_channel');
+
+  @visibleForTesting
+  final EventChannel urlSchemeChannel = const EventChannel('live_activities/url_scheme');
 
   @override
   Future init(String appGroupId) async {
@@ -58,23 +61,20 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<List<String>> getAllActivitiesIds() async {
-    final result =
-        await methodChannel.invokeListMethod<String>('getAllActivitiesIds');
+    final result = await methodChannel.invokeListMethod<String>('getAllActivitiesIds');
     return result ?? [];
   }
 
   @override
   Future<bool> areActivitiesEnabled() async {
-    final result =
-        await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
+    final result = await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
     return result ?? false;
   }
 
   @override
   Stream<UrlSchemeData> urlSchemeStream() {
     return urlSchemeChannel.receiveBroadcastStream('urlSchemeStream').map(
-          (dynamic event) =>
-              UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
+          (dynamic event) => UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
         );
   }
 
@@ -99,4 +99,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     );
     return result ?? '';
   }
+
+  @override
+  Stream<ActivityUpdate> get activityUpdateStream => activityStatusChannel
+      .receiveBroadcastStream('activityUpdateStream')
+      .distinct()
+      .map((event) => ActivityUpdate.fromMap(Map<String, dynamic>.from(event)));
 }
