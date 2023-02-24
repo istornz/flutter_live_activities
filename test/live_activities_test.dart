@@ -2,13 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_activities/live_activities.dart';
 import 'package:live_activities/live_activities_platform_interface.dart';
 import 'package:live_activities/live_activities_method_channel.dart';
+import 'package:live_activities/models/activity_update.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockLiveActivitiesPlatform
-    with MockPlatformInterfaceMixin
-    implements LiveActivitiesPlatform {
+class MockLiveActivitiesPlatform with MockPlatformInterfaceMixin implements LiveActivitiesPlatform {
   @override
   Future init(String appGroupId) {
     return Future.value();
@@ -69,11 +68,20 @@ class MockLiveActivitiesPlatform
   Future<String> getPushToken(String activityId) {
     return Future.value('PUSH_TOKEN');
   }
+
+  @override
+  Stream<ActivityUpdate> get activityUpdateStream {
+    final map = <String, dynamic>{
+      'status': 'active',
+      'activityId': 'ACTIVITY_ID',
+      'token': 'ACTIVITY_TOKEN',
+    };
+    return Stream.value(ActivityUpdate.fromMap(map));
+  }
 }
 
 void main() {
-  final LiveActivitiesPlatform initialPlatform =
-      LiveActivitiesPlatform.instance;
+  final LiveActivitiesPlatform initialPlatform = LiveActivitiesPlatform.instance;
   LiveActivities liveActivitiesPlugin = LiveActivities();
   MockLiveActivitiesPlatform fakePlatform = MockLiveActivitiesPlatform();
   LiveActivitiesPlatform.instance = fakePlatform;
@@ -127,6 +135,19 @@ void main() {
     expect(
       await liveActivitiesPlugin.getPushToken('PUSH_TOKEN'),
       'PUSH_TOKEN',
+    );
+  });
+
+  test('activityUpdateStream', () async {
+    final result = await liveActivitiesPlugin.activityUpdateStream.first;
+    expect(result.activityId, 'ACTIVITY_ID');
+    expect(
+      result.map<String>(
+        active: (state) => state.activityToken,
+        ended: (_) => 'WRONG_TOKEN',
+        unknown: (_) => 'WRONG_TOKEN',
+      ),
+      'ACTIVITY_TOKEN',
     );
   });
 }
