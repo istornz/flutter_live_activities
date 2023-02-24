@@ -158,7 +158,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       sharedDefault!.set(item.value, forKey: item.key)
     }
     
-    let liveDeliveryAttributes = LiveActivitiesAppAttributes()
+    let liveDeliveryAttributes = LiveActivitiesAppAttributes(data)
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
     
     do {
