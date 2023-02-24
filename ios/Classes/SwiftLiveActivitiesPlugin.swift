@@ -7,24 +7,41 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   private var appGroupId: String?
   private var sharedDefault: UserDefaults?
   private var appLifecycleLifeActiviyIds = [String]()
+  private var activityEventSink: FlutterEventSink?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "live_activities", binaryMessenger: registrar.messenger())
     let urlSchemeChannel = FlutterEventChannel(name: "live_activities/url_scheme", binaryMessenger: registrar.messenger())
+    let tokenEventChannel = FlutterEventChannel(name: "live_activities/token_channel", binaryMessenger: registrar.messenger())
+      
     let instance = SwiftLiveActivitiesPlugin()
+      
     registrar.addMethodCallDelegate(instance, channel: channel)
     urlSchemeChannel.setStreamHandler(instance)
-    
+    tokenEventChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
   }
   
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-    urlSchemeSink = events
+    if let args = arguments as? String{
+        if (args == "urlSchemeStream") {
+            urlSchemeSink = events
+        } else if (args == "activityUpdateStream") {
+            activityEventSink = events
+        }
+    }
+   
     return nil
   }
   
   public func onCancel(withArguments arguments: Any?) -> FlutterError? {
-    urlSchemeSink = nil
+    if let args = arguments as? String{
+        if (args == "urlSchemeStream") {
+            urlSchemeSink = nil
+        } else if (args == "activityUpdateStream") {
+            activityEventSink = nil
+        }
+    }
     return nil
   }
   
@@ -152,6 +169,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       if removeWhenAppIsKilled {
         appLifecycleLifeActiviyIds.append(deliveryActivity.id)
       }
+      monitorLiveActivity(deliveryActivity)
       result(deliveryActivity.id)
     } catch (let error) {
       result(FlutterError(code: "LIVE_ACTIVITY_ERROR", message: "can't launch live activity", details: error.localizedDescription))
@@ -287,5 +305,39 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
     
     var id = UUID()
+  }
+     
+  @available(iOS 16.1, *)
+  private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
+      Task {
+          for await state in activity.activityStateUpdates {
+            var response: Dictionary<String, Any> = Dictionary()
+            response["activityId"] = activity.id
+            switch state {
+            case .active:
+                monitorTokenChanges(activity)
+            case .dismissed, .ended:
+                response["status"] = "ended"
+                activityEventSink?.self(response)
+            @unknown default:
+                response["status"] = "unknown"
+                activityEventSink?.self(response)
+            }
+          }
+      }
+  }
+    
+  @available(iOS 16.1, *)
+  private func monitorTokenChanges<T: ActivityAttributes>(_ activity: Activity<T>) {
+      Task {
+          for await data in activity.pushTokenUpdates {
+            var response: Dictionary<String, Any> = Dictionary()
+            let pushToken = data.map {String(format: "%02x", $0)}.joined()
+            response["token"] = pushToken
+            response["activityId"] = activity.id
+            response["status"] = "active"
+            activityEventSink?.self(response)
+          }
+      }
   }
 }
