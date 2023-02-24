@@ -7,7 +7,9 @@ import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockLiveActivitiesPlatform with MockPlatformInterfaceMixin implements LiveActivitiesPlatform {
+class MockLiveActivitiesPlatform
+    with MockPlatformInterfaceMixin
+    implements LiveActivitiesPlatform {
   @override
   Future init(String appGroupId) {
     return Future.value();
@@ -81,7 +83,8 @@ class MockLiveActivitiesPlatform with MockPlatformInterfaceMixin implements Live
 }
 
 void main() {
-  final LiveActivitiesPlatform initialPlatform = LiveActivitiesPlatform.instance;
+  final LiveActivitiesPlatform initialPlatform =
+      LiveActivitiesPlatform.instance;
   LiveActivities liveActivitiesPlugin = LiveActivities();
   MockLiveActivitiesPlatform fakePlatform = MockLiveActivitiesPlatform();
   LiveActivitiesPlatform.instance = fakePlatform;

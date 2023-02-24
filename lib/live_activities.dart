@@ -90,5 +90,7 @@ class LiveActivities {
     }
   }
 
-  Stream<ActivityUpdate> get activityUpdateStream => LiveActivitiesPlatform.instance.activityUpdateStream;
+  /// Get a stream of activity updates.
+  Stream<ActivityUpdate> get activityUpdateStream =>
+      LiveActivitiesPlatform.instance.activityUpdateStream;
 }

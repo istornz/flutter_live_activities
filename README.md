@@ -232,6 +232,7 @@ _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
 | ```.getPushToken()``` | Get the activity push token | ```String``` The activity push token |
 | ```.urlSchemeStream()``` | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data) | ```Future<UrlSchemeData>``` Url scheme data which handle ```scheme``` ```url``` ```host``` ```path``` ```queryItems``` |
 | ```.dispose()``` | Remove all pictures passed in the AppGroups directory in the current session, you can use the ```force``` parameters to remove **all** pictures | ```Future``` Picture removed |
+| ```.activityUpdateStream``` | Get notified with a stream about live activity push token & status | ```Stream<ActivityUpdate>``` Picture removed |
 
 <br />
 

@@ -1,3 +1,8 @@
+## 1.6.0
+
+* ✨ Add a way to track push token and the activity status (thanks @arnar-steinthors).
+* ♻️ Format code.
+
 ## 1.5.0
 
 * ✨ Add method to get push token (thanks to @jolamar 👍).
