@@ -82,6 +82,7 @@ struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
 
   public struct ContentState: Codable, Hashable { }
   
+  var sharedId: String
   var id = UUID()
 }
 ```
@@ -97,7 +98,7 @@ struct FootballMatchApp: Widget {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
       // create your live activity widget extension here
       // to access Flutter properties:
-      let myVariableFromFlutter = sharedDefault.string(forKey: "myVariableFromFlutter")!
+      let myVariableFromFlutter = sharedDefault.string(forKey: "\(context.attributes.sharedId)myVariableFromFlutter")!
 
       // [...]
     }
@@ -147,9 +148,9 @@ let sharedDefault = UserDefaults(suiteName: "YOUR_CREATED_APP_ID")!
 - Access to your typed data:
 
 ```swift
-let pizzaName = sharedDefault.string(forKey: "name")! // put the same key as your Dart map
-let pizzaPrice = sharedDefault.float(forKey: "price")
-let quantity = sharedDefault.integer(forKey: "quantity")
+let pizzaName = sharedDefault.string(forKey: "\(context.attributes.sharedId)name")! // put the same key as your Dart map
+let pizzaPrice = sharedDefault.float(forKey: "\(context.attributes.sharedId)price")
+let quantity = sharedDefault.integer(forKey: "\(context.attributes.sharedId)quantity")
 // [...]
 ```
 
