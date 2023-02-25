@@ -154,11 +154,13 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       }
     }
     
+    let sharedId = data["sharedId"] as? String ?? UUID().uuidString
+    
     for item in data {
-      sharedDefault!.set(item.value, forKey: item.key)
+      sharedDefault!.set(item.value, forKey: sharedId + item.key)
     }
     
-    let liveDeliveryAttributes = LiveActivitiesAppAttributes()
+    let liveDeliveryAttributes = LiveActivitiesAppAttributes(sharedId: sharedId)
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
     
     do {
@@ -304,6 +306,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       var appGroupId: String
     }
     
+    var sharedId: String
     var id = UUID()
   }
   
