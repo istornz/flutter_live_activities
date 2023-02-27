@@ -98,6 +98,9 @@ struct FootballMatchApp: Widget {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
       // create your live activity widget extension here
       // to access Flutter properties:
+      let myVariableFromFlutter = sharedDefault.string(forKey: "myVariableFromFlutter")!
+      
+      // if you want to support multiple live activities at a time add sharedId to the sharedDefault key
       let myVariableFromFlutter = sharedDefault.string(forKey: "\(context.attributes.sharedId)myVariableFromFlutter")!
 
       // [...]
@@ -146,9 +149,17 @@ let sharedDefault = UserDefaults(suiteName: "YOUR_CREATED_APP_ID")!
 > ⚠️ Be sure to use the **SAME** group id in your Swift extension and your Flutter app!
 
 - Access to your typed data:
+If a single live activity:
 
 ```swift
-let pizzaName = sharedDefault.string(forKey: "\(context.attributes.sharedId)name")! // put the same key as your Dart map
+let pizzaName = sharedDefault.string(forKey: "name")! // put the same key as your Dart map
+let pizzaPrice = sharedDefault.float(forKey: "price")
+let quantity = sharedDefault.integer(forKey: "quantity")
+// [...]
+```
+For multiple live activities:
+```swift
+let pizzaName = sharedDefault.string(forKey: "\(context.attributes.sharedId)name")! // put the same key as your Dart map with sharedId included
 let pizzaPrice = sharedDefault.float(forKey: "\(context.attributes.sharedId)price")
 let quantity = sharedDefault.integer(forKey: "\(context.attributes.sharedId)quantity")
 // [...]
