@@ -154,7 +154,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       }
     }
     
-    let sharedId = data["sharedId"] as? String ?? UUID().uuidString
+    let sharedId = data["sharedId"] as? String ?? ""
     
     for item in data {
       sharedDefault!.set(item.value, forKey: sharedId + item.key)
