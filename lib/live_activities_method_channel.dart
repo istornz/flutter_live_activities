@@ -95,14 +95,14 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
-  Future<String> getPushToken(String activityId) async {
-    final result = await methodChannel.invokeMethod<String>(
+  Future<String?> getPushToken(String activityId) async {
+    final result = await methodChannel.invokeMethod<String?>(
       'getPushToken',
       {
         'activityId': activityId,
       },
     );
-    return result ?? '';
+    return result;
   }
 
   @override
