@@ -215,6 +215,33 @@ _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
 });
 ```
 
+## Update Live Activity with push notification 🎯
+
+You can update live activity directly in your app using the `updateActivity()` method, but if your app was killed or in the background, you can’t update the notification...
+
+To do this, you can update it using Push Notification on a server.
+
+- Get the push token:
+  - Listen on the activity updates (recommended):
+    ```dart
+    _liveActivitiesPlugin.activityUpdateStream.listen((event) {
+      event.map(
+        active: (activity) {
+          // Get the token
+          print(activity.activityToken);
+        },
+        ended: (activity) {},
+        unknown: (activity) {},
+      );
+    });
+    ```
+  - Get directly the push token (not recommended, because the token may change in the future):
+    ```dart
+    final activityToken = await _liveActivitiesPlugin.getPushToken(_latestActivityId!);
+    print(activityToken);
+    ```
+- Update your activity with the token on your server (more information can be [**found here**](https://ohdarling88.medium.com/update-dynamic-island-and-live-activity-with-push-notification-38779803c145)).
+
 <br />
 
 ## 📘 Documentation
@@ -229,7 +256,7 @@ _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
 | ```.endAllActivities()``` | End all live activities of the app | ```Future``` When all activities was ended |
 | ```.areActivitiesEnabled()``` | Check if live activities feature are supported & enabled | ```Future<bool>``` Live activities supported or not |
 | ```.getActivityState()``` | Get the activity current state | ```Future<LiveActivityState>``` An enum to know the status of the activity (```active```, ```dismissed``` or ```ended```) |
-| ```.getPushToken()``` | Get the activity push token | ```String``` The activity push token |
+| ```.getPushToken()``` | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date) | ```String?``` The activity push token (can be null) |
 | ```.urlSchemeStream()``` | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data) | ```Future<UrlSchemeData>``` Url scheme data which handle ```scheme``` ```url``` ```host``` ```path``` ```queryItems``` |
 | ```.dispose()``` | Remove all pictures passed in the AppGroups directory in the current session, you can use the ```force``` parameters to remove **all** pictures | ```Future``` Picture removed |
 | ```.activityUpdateStream``` | Get notified with a stream about live activity push token & status | ```Stream<ActivityUpdate>``` Status updates for new push tokens or when the activity ends |
@@ -243,6 +270,7 @@ Contributions are welcome. Contribute by creating a PR or create an issue 🎉.
 ## 🎯 Roadmap
 
 - [ ] Inject a Widget inside the notification with Flutter Engine ?
+- [x] Support push token. 
 - [x] Pass media between extension & Flutter app.
 - [x] Support multiple type instead of ```String``` (Date, Number etc.).
 - [x] Pass data across native dynamic island and Flutter app.
