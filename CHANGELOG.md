@@ -1,3 +1,7 @@
+## 1.7.0
+* ✨🐛 Change method `getPushToken()` to be synchronous.
+* ⬆️ Upgrade dependencies.
+
 ## 1.6.0
 
 * ✨ Add a way to track push token and the activity status (thanks @arnar-steinthors).
