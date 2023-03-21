@@ -51,8 +51,9 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.getActivityState(activityId);
   }
 
-  /// Get the push token.
-  Future<String> getPushToken(String activityId) {
+  /// Get synchronously the push token.
+  /// Prefer using the stream [activityUpdateStream] to keep push token up to date.
+  Future<String?> getPushToken(String activityId) {
     return LiveActivitiesPlatform.instance.getPushToken(activityId);
   }
 

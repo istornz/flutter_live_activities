@@ -12,13 +12,11 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "live_activities", binaryMessenger: registrar.messenger())
     let urlSchemeChannel = FlutterEventChannel(name: "live_activities/url_scheme", binaryMessenger: registrar.messenger())
-    let tokenEventChannel = FlutterEventChannel(name: "live_activities/token_channel", binaryMessenger: registrar.messenger())
     
     let instance = SwiftLiveActivitiesPlugin()
     
     registrar.addMethodCallDelegate(instance, channel: channel)
     urlSchemeChannel.setStreamHandler(instance)
-    tokenEventChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
   }
   
@@ -217,14 +215,15 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   @available(iOS 16.1, *)
   func getPushToken(activityId: String, result: @escaping FlutterResult) {
     Task {
+      var pushToken: String?;
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         if (activityId == activity.id) {
-          for await data in activity.pushTokenUpdates {
-            let pushToken = data.map {String(format: "%02x", $0)}.joined()
-            result(pushToken)
+          if let data = activity.pushToken {
+            pushToken = data.map { String(format: "%02x", $0) }.joined()
           }
         }
       }
+      result(pushToken)
     }
   }
   
