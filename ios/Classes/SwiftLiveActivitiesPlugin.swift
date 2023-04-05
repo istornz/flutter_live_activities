@@ -12,11 +12,13 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "live_activities", binaryMessenger: registrar.messenger())
     let urlSchemeChannel = FlutterEventChannel(name: "live_activities/url_scheme", binaryMessenger: registrar.messenger())
+    let activityStatusChannel = FlutterEventChannel(name: "live_activities/activity_status", binaryMessenger: registrar.messenger())
     
     let instance = SwiftLiveActivitiesPlugin()
     
     registrar.addMethodCallDelegate(instance, channel: channel)
     urlSchemeChannel.setStreamHandler(instance)
+    activityStatusChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
   }
   

@@ -1,3 +1,6 @@
+## 1.7.1
+* 🐛 Fix missing `activityUpdateStream` implementation channel on native part.
+
 ## 1.7.0
 * ✨🐛 Change method `getPushToken()` to be synchronous.
 * ⬆️ Upgrade dependencies.

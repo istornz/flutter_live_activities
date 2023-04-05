@@ -53,6 +53,10 @@ class _HomeState extends State<Home> {
       appGroupId: 'group.dimitridessus.liveactivities',
     );
 
+    _liveActivitiesPlugin.activityUpdateStream.listen((event) {
+      print('Activity update: $event');
+    });
+
     urlSchemeSubscription =
         _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
       setState(() {

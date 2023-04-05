@@ -17,7 +17,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @visibleForTesting
   final activityStatusChannel =
-      const EventChannel('live_activities/token_channel');
+      const EventChannel('live_activities/activity_status');
 
   @visibleForTesting
   final EventChannel urlSchemeChannel =
