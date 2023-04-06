@@ -43,8 +43,35 @@ class FootballGameLiveActivityModel {
       'matchStartDate': matchStartDate?.millisecondsSinceEpoch,
       'matchEndDate': matchEndDate?.millisecondsSinceEpoch,
     };
-    map.removeWhere((key, value) => value == null);
 
     return map;
+  }
+
+  FootballGameLiveActivityModel copyWith({
+    DateTime? matchStartDate,
+    DateTime? matchEndDate,
+    String? matchName,
+    String? teamAName,
+    String? teamAState,
+    int? teamAScore,
+    LiveActivityImageFromAsset? teamALogo,
+    String? teamBName,
+    String? teamBState,
+    int? teamBScore,
+    LiveActivityImageFromAsset? teamBLogo,
+  }) {
+    return FootballGameLiveActivityModel(
+      matchStartDate: matchStartDate ?? this.matchStartDate,
+      matchEndDate: matchEndDate ?? this.matchEndDate,
+      matchName: matchName ?? this.matchName,
+      teamAName: teamAName ?? this.teamAName,
+      teamAState: teamAState ?? this.teamAState,
+      teamAScore: teamAScore ?? this.teamAScore,
+      teamALogo: teamALogo ?? this.teamALogo,
+      teamBName: teamBName ?? this.teamBName,
+      teamBState: teamBState ?? this.teamBState,
+      teamBScore: teamBScore ?? this.teamBScore,
+      teamBLogo: teamBLogo ?? this.teamBLogo,
+    );
   }
 }

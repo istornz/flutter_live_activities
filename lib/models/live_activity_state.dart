@@ -8,5 +8,8 @@ enum LiveActivityState {
 
   /// The Live Activity ended and is no longer visible because the user or the system removed it.
   dismissed,
+
+  /// The Live Activity content is out of date and needs an update.
+  stale,
   unknown,
 }

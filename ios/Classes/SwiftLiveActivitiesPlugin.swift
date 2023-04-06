@@ -177,12 +177,16 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func updateActivity(activityId: String, data: [String: Any], result: @escaping FlutterResult) {
+  func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         if activityId == activity.id {
           for item in data {
-            sharedDefault!.set(item.value, forKey: item.key)
+            if (item.value != nil && !(item.value is NSNull)) {
+              sharedDefault!.set(item.value, forKey: item.key)
+            } else {
+              sharedDefault!.removeObject(forKey: item.key)
+            }
           }
           
           let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
@@ -206,6 +210,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
               result("ended")
             case .dismissed:
               result("dismissed")
+            case .stale:
+              result("stale")
             @unknown default:
               result("unknown")
           }
@@ -319,6 +325,9 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
             monitorTokenChanges(activity)
           case .dismissed, .ended:
             response["status"] = "ended"
+            activityEventSink?.self(response)
+          case .stale:
+            response["status"] = "stale"
             activityEventSink?.self(response)
           @unknown default:
             response["status"] = "unknown"

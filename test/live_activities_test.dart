@@ -148,6 +148,7 @@ void main() {
       result.map<String>(
         active: (state) => state.activityToken,
         ended: (_) => 'WRONG_TOKEN',
+        stale: (_) => 'WRONG_TOKEN',
         unknown: (_) => 'WRONG_TOKEN',
       ),
       'ACTIVITY_TOKEN',

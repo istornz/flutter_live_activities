@@ -1,3 +1,7 @@
+## 1.7.2
+* ✨ Add missing "stale" activity status.
+* 🐛 When value set to null in map, value is removed from live activity.
+
 ## 1.7.1
 * 🐛 Fix missing `activityUpdateStream` implementation channel on native part.
 

@@ -38,6 +38,7 @@ class _HomeState extends State<Home> {
   final _liveActivitiesPlugin = LiveActivities();
   String? _latestActivityId;
   StreamSubscription<UrlSchemeData>? urlSchemeSubscription;
+  FootballGameLiveActivityModel? _footballGameLiveActivityModel;
 
   int teamAScore = 0;
   int teamBScore = 0;
@@ -144,7 +145,7 @@ class _HomeState extends State<Home> {
               if (_latestActivityId == null)
                 TextButton(
                   onPressed: () async {
-                    final activityModel = FootballGameLiveActivityModel(
+                    _footballGameLiveActivityModel = FootballGameLiveActivityModel(
                       matchName: 'World cup ⚽️',
                       teamAName: 'PSG',
                       teamAState: 'Home',
@@ -165,7 +166,7 @@ class _HomeState extends State<Home> {
 
                     final activityId =
                         await _liveActivitiesPlugin.createActivity(
-                      activityModel.toMap(),
+                      _footballGameLiveActivityModel!.toMap(),
                     );
                     setState(() => _latestActivityId = activityId);
                   },
@@ -233,10 +234,15 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future _updateScore() {
-    final data = FootballGameLiveActivityModel(
+  Future _updateScore() async {
+    if (_footballGameLiveActivityModel == null) {
+      return;
+    }
+
+    final data = _footballGameLiveActivityModel!.copyWith(
       teamAScore: teamAScore,
       teamBScore: teamBScore,
+      // teamAName: null,
     );
     return _liveActivitiesPlugin.updateActivity(
       _latestActivityId!,

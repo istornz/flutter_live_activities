@@ -17,6 +17,8 @@ abstract class ActivityUpdate {
       case LiveActivityState.ended:
       case LiveActivityState.dismissed:
         return _EndedActivityUpdate(activityId: activityId);
+      case LiveActivityState.stale:
+        return _StaleActivityUpdate(activityId: activityId);
       case LiveActivityState.unknown:
         return _UnknownActivityUpdate(activityId: activityId);
     }
@@ -25,6 +27,7 @@ abstract class ActivityUpdate {
   TResult map<TResult extends Object?>({
     required TResult Function(_ActiveActivityUpdate value) active,
     required TResult Function(_EndedActivityUpdate value) ended,
+    required TResult Function(_StaleActivityUpdate value) stale,
     required TResult Function(_UnknownActivityUpdate value) unknown,
   });
 
@@ -44,6 +47,7 @@ class _ActiveActivityUpdate extends ActivityUpdate {
   map<TResult extends Object?>({
     required TResult Function(_ActiveActivityUpdate value) active,
     required TResult Function(_EndedActivityUpdate value) ended,
+    required TResult Function(_StaleActivityUpdate value) stale,
     required TResult Function(_UnknownActivityUpdate value) unknown,
   }) {
     return active(this);
@@ -62,9 +66,24 @@ class _EndedActivityUpdate extends ActivityUpdate {
   map<TResult extends Object?>({
     required TResult Function(_ActiveActivityUpdate value) active,
     required TResult Function(_EndedActivityUpdate value) ended,
+    required TResult Function(_StaleActivityUpdate value) stale,
     required TResult Function(_UnknownActivityUpdate value) unknown,
   }) {
     return ended(this);
+  }
+}
+
+class _StaleActivityUpdate extends ActivityUpdate {
+  _StaleActivityUpdate({required super.activityId});
+
+  @override
+  map<TResult extends Object?>({
+    required TResult Function(_ActiveActivityUpdate value) active,
+    required TResult Function(_EndedActivityUpdate value) ended,
+    required TResult Function(_StaleActivityUpdate value) stale,
+    required TResult Function(_UnknownActivityUpdate value) unknown,
+  }) {
+    return stale(this);
   }
 }
 
@@ -75,6 +94,7 @@ class _UnknownActivityUpdate extends ActivityUpdate {
   map<TResult extends Object?>({
     required TResult Function(_ActiveActivityUpdate value) active,
     required TResult Function(_EndedActivityUpdate value) ended,
+    required TResult Function(_StaleActivityUpdate value) stale,
     required TResult Function(_UnknownActivityUpdate value) unknown,
   }) {
     return unknown(this);
