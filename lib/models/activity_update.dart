@@ -1,5 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
-
+import 'package:flutter/cupertino.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 
 abstract class ActivityUpdate {
@@ -12,23 +11,29 @@ abstract class ActivityUpdate {
     final activityId = map['activityId'] as String;
     switch (status) {
       case LiveActivityState.active:
-        return _ActiveActivityUpdate(
-            activityId: activityId, activityToken: map['token'] as String);
+        return ActiveActivityUpdate(activityId: activityId, activityToken: map['token'] as String);
       case LiveActivityState.ended:
       case LiveActivityState.dismissed:
-        return _EndedActivityUpdate(activityId: activityId);
+        return EndedActivityUpdate(activityId: activityId);
       case LiveActivityState.stale:
-        return _StaleActivityUpdate(activityId: activityId);
+        return StaleActivityUpdate(activityId: activityId);
       case LiveActivityState.unknown:
-        return _UnknownActivityUpdate(activityId: activityId);
+        return UnknownActivityUpdate(activityId: activityId);
     }
   }
 
   TResult map<TResult extends Object?>({
-    required TResult Function(_ActiveActivityUpdate value) active,
-    required TResult Function(_EndedActivityUpdate value) ended,
-    required TResult Function(_StaleActivityUpdate value) stale,
-    required TResult Function(_UnknownActivityUpdate value) unknown,
+    required TResult Function(ActiveActivityUpdate value) active,
+    required TResult Function(EndedActivityUpdate value) ended,
+    required TResult Function(StaleActivityUpdate value) stale,
+    required TResult Function(UnknownActivityUpdate value) unknown,
+  });
+
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ActiveActivityUpdate value)? active,
+    TResult Function(EndedActivityUpdate value)? ended,
+    TResult Function(StaleActivityUpdate value)? stale,
+    TResult Function(UnknownActivityUpdate value)? unknown,
   });
 
   @override
@@ -37,18 +42,18 @@ abstract class ActivityUpdate {
   }
 }
 
-class _ActiveActivityUpdate extends ActivityUpdate {
-  _ActiveActivityUpdate(
-      {required super.activityId, required this.activityToken});
+class ActiveActivityUpdate extends ActivityUpdate {
+  @visibleForTesting
+  ActiveActivityUpdate({required super.activityId, required this.activityToken});
 
   final String activityToken;
 
   @override
   map<TResult extends Object?>({
-    required TResult Function(_ActiveActivityUpdate value) active,
-    required TResult Function(_EndedActivityUpdate value) ended,
-    required TResult Function(_StaleActivityUpdate value) stale,
-    required TResult Function(_UnknownActivityUpdate value) unknown,
+    required TResult Function(ActiveActivityUpdate value) active,
+    required TResult Function(EndedActivityUpdate value) ended,
+    required TResult Function(StaleActivityUpdate value) stale,
+    required TResult Function(UnknownActivityUpdate value) unknown,
   }) {
     return active(this);
   }
@@ -57,46 +62,89 @@ class _ActiveActivityUpdate extends ActivityUpdate {
   String toString() {
     return '$runtimeType(activityId: $activityId, activityToken: $activityToken)';
   }
+
+  @override
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ActiveActivityUpdate value)? active,
+    TResult Function(EndedActivityUpdate value)? ended,
+    TResult Function(StaleActivityUpdate value)? stale,
+    TResult Function(UnknownActivityUpdate value)? unknown,
+  }) {
+    return active?.call(this);
+  }
 }
 
-class _EndedActivityUpdate extends ActivityUpdate {
-  _EndedActivityUpdate({required super.activityId});
+class EndedActivityUpdate extends ActivityUpdate {
+  @visibleForTesting
+  EndedActivityUpdate({required super.activityId});
 
   @override
   map<TResult extends Object?>({
-    required TResult Function(_ActiveActivityUpdate value) active,
-    required TResult Function(_EndedActivityUpdate value) ended,
-    required TResult Function(_StaleActivityUpdate value) stale,
-    required TResult Function(_UnknownActivityUpdate value) unknown,
+    required TResult Function(ActiveActivityUpdate value) active,
+    required TResult Function(EndedActivityUpdate value) ended,
+    required TResult Function(StaleActivityUpdate value) stale,
+    required TResult Function(UnknownActivityUpdate value) unknown,
   }) {
     return ended(this);
   }
-}
-
-class _StaleActivityUpdate extends ActivityUpdate {
-  _StaleActivityUpdate({required super.activityId});
 
   @override
-  map<TResult extends Object?>({
-    required TResult Function(_ActiveActivityUpdate value) active,
-    required TResult Function(_EndedActivityUpdate value) ended,
-    required TResult Function(_StaleActivityUpdate value) stale,
-    required TResult Function(_UnknownActivityUpdate value) unknown,
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ActiveActivityUpdate value)? active,
+    TResult Function(EndedActivityUpdate value)? ended,
+    TResult Function(StaleActivityUpdate value)? stale,
+    TResult Function(UnknownActivityUpdate value)? unknown,
   }) {
-    return stale(this);
+    return ended?.call(this);
   }
 }
 
-class _UnknownActivityUpdate extends ActivityUpdate {
-  _UnknownActivityUpdate({required super.activityId});
+class StaleActivityUpdate extends ActivityUpdate {
+  @visibleForTesting
+  StaleActivityUpdate({required super.activityId});
 
   @override
   map<TResult extends Object?>({
-    required TResult Function(_ActiveActivityUpdate value) active,
-    required TResult Function(_EndedActivityUpdate value) ended,
-    required TResult Function(_StaleActivityUpdate value) stale,
-    required TResult Function(_UnknownActivityUpdate value) unknown,
+    required TResult Function(ActiveActivityUpdate value) active,
+    required TResult Function(EndedActivityUpdate value) ended,
+    required TResult Function(StaleActivityUpdate value) stale,
+    required TResult Function(UnknownActivityUpdate value) unknown,
+  }) {
+    return stale(this);
+  }
+
+  @override
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ActiveActivityUpdate value)? active,
+    TResult Function(EndedActivityUpdate value)? ended,
+    TResult Function(StaleActivityUpdate value)? stale,
+    TResult Function(UnknownActivityUpdate value)? unknown,
+  }) {
+    return stale?.call(this);
+  }
+}
+
+class UnknownActivityUpdate extends ActivityUpdate {
+  @visibleForTesting
+  UnknownActivityUpdate({required super.activityId});
+
+  @override
+  map<TResult extends Object?>({
+    required TResult Function(ActiveActivityUpdate value) active,
+    required TResult Function(EndedActivityUpdate value) ended,
+    required TResult Function(StaleActivityUpdate value) stale,
+    required TResult Function(UnknownActivityUpdate value) unknown,
   }) {
     return unknown(this);
+  }
+
+  @override
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(ActiveActivityUpdate value)? active,
+    TResult Function(EndedActivityUpdate value)? ended,
+    TResult Function(StaleActivityUpdate value)? stale,
+    TResult Function(UnknownActivityUpdate value)? unknown,
+  }) {
+    return unknown?.call(this);
   }
 }
