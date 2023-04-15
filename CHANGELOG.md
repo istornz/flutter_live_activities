@@ -1,3 +1,6 @@
+## 1.7.3
+* ActivityUpdate subclasses are now public along with a new MapOrNull method
+
 ## 1.7.2
 * ✨ Add missing "stale" activity status.
 * 🐛 When value set to null in map, value is removed from live activity.
