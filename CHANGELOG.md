@@ -1,5 +1,5 @@
 ## 1.7.3
-* ActivityUpdate subclasses are now public along with a new MapOrNull method
+* ✨ ActivityUpdate subclasses are now public along with a new MapOrNull method (thanks @arnar-steinthors 👍).
 
 ## 1.7.2
 * ✨ Add missing "stale" activity status.
@@ -14,7 +14,7 @@
 
 ## 1.6.0
 
-* ✨ Add a way to track push token and the activity status (thanks @arnar-steinthors).
+* ✨ Add a way to track push token and the activity status (thanks @arnar-steinthors 👍).
 * ♻️ Format code.
 
 ## 1.5.0
