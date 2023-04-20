@@ -7,9 +7,7 @@ import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-class MockLiveActivitiesPlatform
-    with MockPlatformInterfaceMixin
-    implements LiveActivitiesPlatform {
+class MockLiveActivitiesPlatform with MockPlatformInterfaceMixin implements LiveActivitiesPlatform {
   @override
   Future init(String appGroupId) {
     return Future.value();
@@ -83,8 +81,7 @@ class MockLiveActivitiesPlatform
 }
 
 void main() {
-  final LiveActivitiesPlatform initialPlatform =
-      LiveActivitiesPlatform.instance;
+  final LiveActivitiesPlatform initialPlatform = LiveActivitiesPlatform.instance;
   LiveActivities liveActivitiesPlugin = LiveActivities();
   MockLiveActivitiesPlatform fakePlatform = MockLiveActivitiesPlatform();
   LiveActivitiesPlatform.instance = fakePlatform;
@@ -153,5 +150,16 @@ void main() {
       ),
       'ACTIVITY_TOKEN',
     );
+  });
+
+  test('activityUpdateStreamMapOrNullCorrectMapping', () async {
+    final result = await liveActivitiesPlugin.activityUpdateStream.first;
+    final wrongMappingIsNull = result.mapOrNull(ended: (_) => 'NOT_NULL');
+
+    expect(wrongMappingIsNull, null);
+
+    final correctMappingNotNull = result.mapOrNull(active: (state) => state.activityToken);
+
+    expect(correctMappingNotNull, 'ACTIVITY_TOKEN');
   });
 }

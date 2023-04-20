@@ -91,7 +91,27 @@ class LiveActivities {
     }
   }
 
-  /// Get a stream of activity updates.
-  Stream<ActivityUpdate> get activityUpdateStream =>
-      LiveActivitiesPlatform.instance.activityUpdateStream;
+  /// A stream of activity updates.
+  /// An event is emitted onto this stream each time a pushTokenUpdate occurs. The operating system can decide
+  /// to update a push token at any time. An update can also mean that the activity has ended or it became stale
+  ///
+  /// You can map out each type of update to respond to it
+  ///
+  /// ```dart
+  /// activityUpdateStream.listen((event) => event.map(
+  ///   active: (state) { ... },
+  ///   ended: (state) { ... },
+  ///   stale: (state) { ... },
+  ///   unknown: (state) { ... },
+  /// ))
+  /// ```
+  ///
+  /// or if you only want to react to limited updates you can use mapOrNull
+  ///
+  /// ```dart
+  /// activityUpdateStream.listen((event) => event.mapOrNull(
+  ///   active: (state) { ... },
+  /// ))
+  /// ```
+  Stream<ActivityUpdate> get activityUpdateStream => LiveActivitiesPlatform.instance.activityUpdateStream;
 }
