@@ -11,7 +11,8 @@ abstract class ActivityUpdate {
     final activityId = map['activityId'] as String;
     switch (status) {
       case LiveActivityState.active:
-        return ActiveActivityUpdate(activityId: activityId, activityToken: map['token'] as String);
+        return ActiveActivityUpdate(
+            activityId: activityId, activityToken: map['token'] as String);
       case LiveActivityState.ended:
       case LiveActivityState.dismissed:
         return EndedActivityUpdate(activityId: activityId);
@@ -44,7 +45,8 @@ abstract class ActivityUpdate {
 
 class ActiveActivityUpdate extends ActivityUpdate {
   @visibleForTesting
-  ActiveActivityUpdate({required super.activityId, required this.activityToken});
+  ActiveActivityUpdate(
+      {required super.activityId, required this.activityToken});
 
   final String activityToken;
 

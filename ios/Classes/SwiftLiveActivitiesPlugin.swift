@@ -52,8 +52,16 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    if (call.method == "areActivitiesEnabled") {
+      if #available(iOS 16.1, *) {
+        result(ActivityAuthorizationInfo().areActivitiesEnabled)
+      } else {
+        result(false)
+      }
+      return
+    }
+    
     if #available(iOS 16.1, *) {
-      
       switch call.method {
         case "init":
           guard let args = call.arguments as? [String: Any] else {
@@ -132,9 +140,6 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           break
         case "endAllActivities":
           endAllActivities(result: result)
-          break
-        case "areActivitiesEnabled":
-          result(ActivityAuthorizationInfo().areActivitiesEnabled)
           break
         default:
           break

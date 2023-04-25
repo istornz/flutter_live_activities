@@ -113,5 +113,6 @@ class LiveActivities {
   ///   active: (state) { ... },
   /// ))
   /// ```
-  Stream<ActivityUpdate> get activityUpdateStream => LiveActivitiesPlatform.instance.activityUpdateStream;
+  Stream<ActivityUpdate> get activityUpdateStream =>
+      LiveActivitiesPlatform.instance.activityUpdateStream;
 }

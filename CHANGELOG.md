@@ -1,3 +1,7 @@
+## 1.7.4
+
+* 🐛 Method `areActivitiesEnabled()` are now callable on iOS < 16.1
+
 ## 1.7.3
 * ✨ ActivityUpdate subclasses are now public along with a new MapOrNull method (thanks @arnar-steinthors 👍).
 

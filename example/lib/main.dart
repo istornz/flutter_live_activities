@@ -145,7 +145,8 @@ class _HomeState extends State<Home> {
               if (_latestActivityId == null)
                 TextButton(
                   onPressed: () async {
-                    _footballGameLiveActivityModel = FootballGameLiveActivityModel(
+                    _footballGameLiveActivityModel =
+                        FootballGameLiveActivityModel(
                       matchName: 'World cup ⚽️',
                       teamAName: 'PSG',
                       teamAState: 'Home',
