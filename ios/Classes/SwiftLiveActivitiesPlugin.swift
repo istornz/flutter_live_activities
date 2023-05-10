@@ -86,7 +86,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           
           if let data = args["data"] as? [String: Any] {
             let removeWhenAppIsKilled = args["removeWhenAppIsKilled"] as? Bool ?? false
-            createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, result: result)
+            let staleIn = args["staleIn"] as? Int? ?? nil
+            createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn, result: result)
           } else {
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
           }
@@ -150,7 +151,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, result: @escaping FlutterResult) {
+  func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, result: @escaping FlutterResult) {
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
       
@@ -165,20 +166,38 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     
     let liveDeliveryAttributes = LiveActivitiesAppAttributes()
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
-    
-    do {
-      let deliveryActivity = try Activity<LiveActivitiesAppAttributes>.request(
-        attributes: liveDeliveryAttributes,
-        contentState: initialContentState,
-        pushType: .token)
-      if removeWhenAppIsKilled {
-        appLifecycleLifeActiviyIds.append(deliveryActivity.id)
+    var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
+    if #available(iOS 16.2, *){
+        let activityContent = ActivityContent(
+          state: initialContentState,
+          staleDate: staleIn != nil ? Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now) : nil)
+      do {
+        deliveryActivity = try Activity.request(
+          attributes: liveDeliveryAttributes,
+          content: activityContent,
+          pushType: .token)
+      } catch (let error) {
+        result(FlutterError(code: "LIVE_ACTIVITY_ERROR", message: "can't launch live activity", details: error.localizedDescription))
       }
-      monitorLiveActivity(deliveryActivity)
-      result(deliveryActivity.id)
-    } catch (let error) {
-      result(FlutterError(code: "LIVE_ACTIVITY_ERROR", message: "can't launch live activity", details: error.localizedDescription))
+    } else {
+      do {
+        deliveryActivity = try Activity<LiveActivitiesAppAttributes>.request(
+          attributes: liveDeliveryAttributes,
+          contentState: initialContentState,
+          pushType: .token)
+        
+      } catch (let error) {
+        result(FlutterError(code: "LIVE_ACTIVITY_ERROR", message: "can't launch live activity", details: error.localizedDescription))
+      }
     }
+    if removeWhenAppIsKilled {
+      appLifecycleLifeActiviyIds.append(deliveryActivity!.id)
+    }
+    monitorLiveActivity(deliveryActivity!)
+    result(deliveryActivity!.id)
+    
+    
+
   }
   
   @available(iOS 16.1, *)

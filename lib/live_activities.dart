@@ -20,14 +20,20 @@ class LiveActivities {
   /// When the activity is created, an activity id is returned.
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Image are limited by size, be sure to pass only small images (you can use ```resizeFactor```).
+  ///
+  /// [StaleIn] indicates if a StaleDate should be added to the activity. If the value is null or the Duration
+  /// is less than 1 minute then no staleDate will be used. The parameter only affects the live activity on
+  /// iOS 16.2+ and does nothing on on iOS 16.1
   Future<String?> createActivity(
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    Duration? staleIn,
   }) async {
     await _appGroupsImageService.sendImageToAppGroups(data);
     return LiveActivitiesPlatform.instance.createActivity(
       data,
       removeWhenAppIsKilled: removeWhenAppIsKilled,
+      staleIn: staleIn,
     );
   }
 
@@ -113,6 +119,5 @@ class LiveActivities {
   ///   active: (state) { ... },
   /// ))
   /// ```
-  Stream<ActivityUpdate> get activityUpdateStream =>
-      LiveActivitiesPlatform.instance.activityUpdateStream;
+  Stream<ActivityUpdate> get activityUpdateStream => LiveActivitiesPlatform.instance.activityUpdateStream;
 }
