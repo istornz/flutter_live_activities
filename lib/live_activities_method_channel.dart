@@ -16,12 +16,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   final methodChannel = const MethodChannel('live_activities');
 
   @visibleForTesting
-  final activityStatusChannel =
-      const EventChannel('live_activities/activity_status');
+  final activityStatusChannel = const EventChannel('live_activities/activity_status');
 
   @visibleForTesting
-  final EventChannel urlSchemeChannel =
-      const EventChannel('live_activities/url_scheme');
+  final EventChannel urlSchemeChannel = const EventChannel('live_activities/url_scheme');
 
   @override
   Future init(String appGroupId) async {
@@ -34,10 +32,14 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   Future<String?> createActivity(
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    Duration? staleIn,
   }) async {
+    // If the duration is less than 1 minute then pass a null value instead of using 0 minutes
+    final staleInMinutes = (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
     return methodChannel.invokeMethod<String>('createActivity', {
       'data': data,
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
+      'staleIn': staleInMinutes,
     });
   }
 
@@ -63,23 +65,20 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<List<String>> getAllActivitiesIds() async {
-    final result =
-        await methodChannel.invokeListMethod<String>('getAllActivitiesIds');
+    final result = await methodChannel.invokeListMethod<String>('getAllActivitiesIds');
     return result ?? [];
   }
 
   @override
   Future<bool> areActivitiesEnabled() async {
-    final result =
-        await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
+    final result = await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
     return result ?? false;
   }
 
   @override
   Stream<UrlSchemeData> urlSchemeStream() {
     return urlSchemeChannel.receiveBroadcastStream('urlSchemeStream').map(
-          (dynamic event) =>
-              UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
+          (dynamic event) => UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
         );
   }
 

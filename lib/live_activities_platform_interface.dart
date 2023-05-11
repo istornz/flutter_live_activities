@@ -33,6 +33,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   Future<String?> createActivity(
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    Duration? staleIn,
   }) {
     throw UnimplementedError('createActivity() has not been implemented.');
   }
@@ -54,8 +55,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   }
 
   Future<bool> areActivitiesEnabled() {
-    throw UnimplementedError(
-        'areActivitiesEnabled() has not been implemented.');
+    throw UnimplementedError('areActivitiesEnabled() has not been implemented.');
   }
 
   Stream<UrlSchemeData> urlSchemeStream() {
