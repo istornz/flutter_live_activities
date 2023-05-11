@@ -19,6 +19,7 @@ class MockLiveActivitiesPlatform
   Future<String?> createActivity(
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    Duration? staleIn,
   }) {
     return Future.value('ACTIVITY_ID');
   }

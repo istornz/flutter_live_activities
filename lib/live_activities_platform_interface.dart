@@ -55,7 +55,8 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   }
 
   Future<bool> areActivitiesEnabled() {
-    throw UnimplementedError('areActivitiesEnabled() has not been implemented.');
+    throw UnimplementedError(
+        'areActivitiesEnabled() has not been implemented.');
   }
 
   Stream<UrlSchemeData> urlSchemeStream() {
