@@ -190,14 +190,13 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         result(FlutterError(code: "LIVE_ACTIVITY_ERROR", message: "can't launch live activity", details: error.localizedDescription))
       }
     }
-    if removeWhenAppIsKilled {
-      appLifecycleLifeActiviyIds.append(deliveryActivity!.id)
+    if (deliveryActivity != nil) {
+      if removeWhenAppIsKilled {
+        appLifecycleLifeActiviyIds.append(deliveryActivity!.id)
+      }
+      monitorLiveActivity(deliveryActivity!)
+      result(deliveryActivity!.id)
     }
-    monitorLiveActivity(deliveryActivity!)
-    result(deliveryActivity!.id)
-    
-    
-
   }
   
   @available(iOS 16.1, *)
