@@ -316,7 +316,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     queryResult["url"] = components?.url?.absoluteString
     
     urlSchemeSink?.self(queryResult)
-    return true
+    return false
   }
   
   public func applicationWillTerminate(_ application: UIApplication) {
