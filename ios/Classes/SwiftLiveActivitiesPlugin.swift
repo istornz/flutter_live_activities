@@ -199,6 +199,27 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
   
+  // @available(iOS 16.1, *)
+  // func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
+  //   Task {
+  //     for activity in Activity<LiveActivitiesAppAttributes>.activities {
+  //       if activityId == activity.id {
+  //         for item in data {
+  //           if (item.value != nil && !(item.value is NSNull)) {
+  //             sharedDefault!.set(item.value, forKey: item.key)
+  //           } else {
+  //             sharedDefault!.removeObject(forKey: item.key)
+  //           }
+  //         }
+          
+  //         let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
+  //         await activity.update(using: updatedStatus, alertConfiguration: nil)
+  //         break;
+  //       }
+  //     }
+  //     result(nil)
+  //   }
+  // }
   @available(iOS 16.1, *)
   func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
     Task {
@@ -213,13 +234,15 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           }
           
           let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
-          await activity.update(using: updatedStatus)
+          let alertConfig = AlertConfiguration(title: "This is a title", body: "Default Body", sound: .default)
+          await activity.update(using: updatedStatus, alertConfiguration: alertConfig)
           break;
         }
       }
       result(nil)
     }
   }
+
   
   @available(iOS 16.1, *)
   func getActivityState(activityId: String, result: @escaping FlutterResult) {
