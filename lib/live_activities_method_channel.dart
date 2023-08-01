@@ -53,6 +53,18 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       'data': data,
     });
   }
+  
+  @override
+  Future updateActivityWithAlert(String activityId, Map<String, dynamic> data, String title, String body, {String? sound}) {
+    return methodChannel.invokeMethod('updateActivityWithAlert', {
+      'activityId': activityId,
+      'data': data,
+      'title': title,
+      'body': body,
+      'sound': sound,
+    });
+  }
+
 
   @override
   Future endActivity(String activityId) async {

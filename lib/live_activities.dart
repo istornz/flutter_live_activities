@@ -46,6 +46,12 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.updateActivity(activityId, data);
   }
 
+  // Update activity with alert to bring to banner  
+  Future updateActivityWithAlert(String activityId, Map<String, dynamic> data, String title, String body, {String? sound}) {
+    return LiveActivitiesPlatform.instance.updateActivityWithAlert(activityId, data, title, body, sound: sound);
+  }
+
+
   /// End an iOS 16.1+ live activity.
   /// You can get an activity id by calling [createActivity].
   Future endActivity(String activityId) {

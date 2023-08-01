@@ -104,6 +104,19 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' & 'data' are valid", details: nil))
           }
           break
+        case "updateActivityWithAlert":
+          initializationGuard(result: result)
+          guard let args = call.arguments as? [String: Any],
+                let activityId = args["activityId"] as? String,
+                let data = args["data"] as? [String: Any],
+                let title = args["title"] as? String,
+                let body = args["body"] as? String else {
+            result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
+            return
+          }
+          let sound = args["sound"] as String
+          updateActivityWithAlert(activityId: activityId, data: data, title: title, body: body, sound: sound, result: result)
+          break
         case "endActivity":
           guard let args = call.arguments as? [String: Any] else {
             result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
@@ -199,27 +212,6 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
   
-  // @available(iOS 16.1, *)
-  // func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
-  //   Task {
-  //     for activity in Activity<LiveActivitiesAppAttributes>.activities {
-  //       if activityId == activity.id {
-  //         for item in data {
-  //           if (item.value != nil && !(item.value is NSNull)) {
-  //             sharedDefault!.set(item.value, forKey: item.key)
-  //           } else {
-  //             sharedDefault!.removeObject(forKey: item.key)
-  //           }
-  //         }
-          
-  //         let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
-  //         await activity.update(using: updatedStatus, alertConfiguration: nil)
-  //         break;
-  //       }
-  //     }
-  //     result(nil)
-  //   }
-  // }
   @available(iOS 16.1, *)
   func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
     Task {
@@ -234,14 +226,66 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           }
           
           let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
-          let alertConfig = AlertConfiguration(title: "This is a title", body: "Default Body", sound: .default)
-          await activity.update(using: updatedStatus, alertConfiguration: alertConfig)
+          await activity.update(using: updatedStatus, alertConfiguration: nil)
           break;
         }
       }
       result(nil)
     }
   }
+  // @available(iOS 16.1, *)
+  // func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
+  //   Task {
+  //     for activity in Activity<LiveActivitiesAppAttributes>.activities {
+  //       if activityId == activity.id {
+  //         for item in data {
+  //           if (item.value != nil && !(item.value is NSNull)) {
+  //             sharedDefault!.set(item.value, forKey: item.key)
+  //           } else {
+  //             sharedDefault!.removeObject(forKey: item.key)
+  //           }
+  //         }
+          
+  //         let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
+  //         let alertConfig = AlertConfiguration(title: "This is a title", body: "Default Body", sound: .default)
+  //         await activity.update(using: updatedStatus, alertConfiguration: alertConfig)
+  //         break;
+  //       }
+  //     }
+  //     result(nil)
+  //   }
+  // }
+
+ @available(iOS 16.1, *)
+  func updateActivityWithAlert(activityId: String, data: [String: Any?], title: String, body: String, sound: String?, result: @escaping FlutterResult) {
+      Task {
+          for activity in Activity<LiveActivitiesAppAttributes>.activities {
+              if activityId == activity.id {
+                  for item in data {
+                      if let value = item.value as? String, !(item.value is NSNull) {
+                          sharedDefault!.set(value, forKey: item.key)
+                      } else {
+                          sharedDefault!.removeObject(forKey: item.key)
+                      }
+                  }
+                  
+                  let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
+                  let alertSound: AlertConfiguration.AlertSound
+                  switch sound {
+                  case "default":
+                      alertSound = .default
+                  default:
+                      alertSound = .default
+                  }
+                  let alertConfig = AlertConfiguration(title: title, body: body, sound: alertSound)
+                  await activity.update(using: updatedStatus, alertConfiguration: alertConfig)
+                  break;
+              }
+          }
+          result(nil)
+      }
+  }
+
 
   
   @available(iOS 16.1, *)
