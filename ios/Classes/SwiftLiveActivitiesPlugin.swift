@@ -114,7 +114,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
             result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
             return
           }
-          let sound = args["sound"] as String
+          let sound = args["sound"] as? String
           updateActivityWithAlert(activityId: activityId, data: data, title: title, body: body, sound: sound, result: result)
           break
         case "endActivity":
@@ -233,6 +233,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       result(nil)
     }
   }
+  
   // @available(iOS 16.1, *)
   // func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
   //   Task {
@@ -271,13 +272,16 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
                   
                   let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
                   let alertSound: AlertConfiguration.AlertSound
+
+                  let titleResource = LocalizedStringResource.init(stringLiteral: title)
+                  let bodyResource = LocalizedStringResource.init(stringLiteral: body)
                   switch sound {
                   case "default":
                       alertSound = .default
                   default:
                       alertSound = .default
                   }
-                  let alertConfig = AlertConfiguration(title: title, body: body, sound: alertSound)
+                  let alertConfig = AlertConfiguration(title: titleResource, body: bodyResource, sound: alertSound)
                   await activity.update(using: updatedStatus, alertConfiguration: alertConfig)
                   break;
               }
