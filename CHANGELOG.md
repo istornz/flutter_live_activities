@@ -1,3 +1,9 @@
+## 1.7.5
+
+* 🚨 Lint some code.
+* 🐛 Fix deprecated tests.
+* ⬆️ Upgrade dependencies.
+
 ## 1.7.4
 
 * 🐛 Method `areActivitiesEnabled()` are now callable on iOS < 16.1
