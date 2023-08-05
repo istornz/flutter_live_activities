@@ -251,6 +251,7 @@ To do this, you can update it using Push Notification on a server.
 | ```.init()``` | Initialize the Plugin by providing an App Group Id (see above)  | ```Future``` When the plugin is ready to create/update an activity |
 | ```.createActivity()``` | Create an iOS live activity  | ```String``` The activity identifier |
 | ```.updateActivity()``` | Update the live activity data by using the ```activityId``` provided  | ```Future``` When the activity was updated |
+| ```.updateActivityWithAlert()``` | Update the live activity data with an alert by using the ```activityId``` provided, and an ```alertTitle``` and ```alertBody```  | ```Future``` When the activity was updated |
 | ```.endActivity()``` | End the live activity by using the ```activityId``` provided | ```Future``` When the activity was ended |
 | ```.getAllActivitiesIds()``` | Get all activities ids created | ```Future<List<String>>``` List of all activities ids |
 | ```.endAllActivities()``` | End all live activities of the app | ```Future``` When all activities was ended |
