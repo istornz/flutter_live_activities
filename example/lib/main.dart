@@ -171,8 +171,8 @@ class _HomeState extends State<Home> {
                     );
                     setState(() => _latestActivityId = activityId);
                   },
-                  child: Column(
-                    children: const [
+                  child: const Column(
+                    children: [
                       Text('Start football match ⚽️'),
                       Text(
                         '(start a new live activity)',
@@ -189,22 +189,24 @@ class _HomeState extends State<Home> {
                   onPressed: () async {
                     final supported =
                         await _liveActivitiesPlugin.areActivitiesEnabled();
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text(
-                            supported ? 'Supported' : 'Not supported',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('Close'),
+                    if (context.mounted) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text(
+                              supported ? 'Supported' : 'Not supported',
                             ),
-                          ],
-                        );
-                      },
-                    );
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text('Close'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
                   child: const Text('Is live activities supported ? 🤔'),
                 ),
@@ -215,8 +217,8 @@ class _HomeState extends State<Home> {
                     _latestActivityId = null;
                     setState(() {});
                   },
-                  child: Column(
-                    children: const [
+                  child: const Column(
+                    children: [
                       Text('Stop match ✋'),
                       Text(
                         '(end all live activities)',

@@ -10,7 +10,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
+    handler(MethodCall methodCall) async {
       switch (methodCall.method) {
         case 'createActivity':
           return 'ACTIVITY_ID';
@@ -22,11 +22,18 @@ void main() {
           return 'dismissed';
         default:
       }
-    });
+      return null;
+    }
+
+    TestWidgetsFlutterBinding.ensureInitialized();
+
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, handler);
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
   });
 
   test('createActivity', () async {
