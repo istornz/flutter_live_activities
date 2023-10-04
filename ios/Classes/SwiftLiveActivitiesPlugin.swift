@@ -87,7 +87,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           if let data = args["data"] as? [String: Any] {
             let removeWhenAppIsKilled = args["removeWhenAppIsKilled"] as? Bool ?? false
             let staleIn = args["staleIn"] as? Int? ?? nil
-            createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn, result: result)
+            let uuid = args["uuid"] as? String
+            createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn, uuid: uuid, result: result)
           } else {
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
           }
@@ -151,7 +152,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, result: @escaping FlutterResult) {
+    func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, uuid: String?, result: @escaping FlutterResult) {
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
       
@@ -163,8 +164,12 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     for item in data {
       sharedDefault!.set(item.value, forKey: item.key)
     }
-    
-    let liveDeliveryAttributes = LiveActivitiesAppAttributes()
+    let liveDeliveryAttributes: LiveActivitiesAppAttributes
+        if let uuidString = uuid, let id = UUID(uuidString: uuidString) {
+            liveDeliveryAttributes = LiveActivitiesAppAttributes(id: id)
+        } else {
+            liveDeliveryAttributes = LiveActivitiesAppAttributes()
+        }
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
     var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
     if #available(iOS 16.2, *){

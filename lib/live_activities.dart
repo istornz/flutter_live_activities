@@ -28,12 +28,14 @@ class LiveActivities {
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
+    String? uuid,
   }) async {
     await _appGroupsImageService.sendImageToAppGroups(data);
     return LiveActivitiesPlatform.instance.createActivity(
       data,
       removeWhenAppIsKilled: removeWhenAppIsKilled,
       staleIn: staleIn,
+      uuid: uuid,
     );
   }
 
@@ -119,6 +121,5 @@ class LiveActivities {
   ///   active: (state) { ... },
   /// ))
   /// ```
-  Stream<ActivityUpdate> get activityUpdateStream =>
-      LiveActivitiesPlatform.instance.activityUpdateStream;
+  Stream<ActivityUpdate> get activityUpdateStream => LiveActivitiesPlatform.instance.activityUpdateStream;
 }
