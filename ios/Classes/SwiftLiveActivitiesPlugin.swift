@@ -170,7 +170,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         } else {
             liveDeliveryAttributes = LiveActivitiesAppAttributes()
         }
-        let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
+        let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(flightId: nil, pnr: nil, origin: nil, destination: nil, flightNumber: nil, std: nil, etd: nil, atd: nil, sta: nil, eta: nil, ata: nil, flightStatus: nil, statusColorCode: nil, boardingTime: nil, gate: nil, terminal: nil, boardingProgress: nil, boardingStatus: nil, seat: nil)
         var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
         if #available(iOS 16.2, *){
             let activityContent = ActivityContent(
@@ -217,7 +217,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
                         }
                     }
                     
-                    let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
+                    let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(flightId: nil, pnr: nil, origin: nil, destination: nil, flightNumber: nil, std: nil, etd: nil, atd: nil, sta: nil, eta: nil, ata: nil, flightStatus: nil, statusColorCode: nil, boardingTime: nil, gate: nil, terminal: nil, boardingProgress: nil, boardingStatus: nil, seat: nil)
                     await activity.update(using: updatedStatus)
                     break;
                 }
@@ -340,11 +340,30 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         public typealias LiveDeliveryData = ContentState
         
         public struct ContentState: Codable, Hashable {
-            var appGroupId: String
+            let flightId: String?
+            let pnr: String?
+            let origin: String?
+            let destination: String?
+            let flightNumber: String?
+            let std: String?
+            let etd: String?
+            let atd: String?
+            let sta: String?
+            let eta: String?
+            let ata: String?
+            let flightStatus: String?
+            let statusColorCode: String?
+            let boardingTime: String?
+            let gate: String?
+            let terminal: String?
+            let boardingProgress: String?
+            let boardingStatus: String?
+            let seat: String?
         }
         
         var id = UUID()
     }
+
     
     @available(iOS 16.1, *)
     private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
