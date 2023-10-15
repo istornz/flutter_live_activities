@@ -1,9 +1,8 @@
 abstract class LiveActivityImage {
-  num resizeFactor;
+  int minHeight = 50;
+  int minWidth = 50;
 
-  LiveActivityImage(
-    this.resizeFactor,
-  );
+  LiveActivityImage(this.minHeight, this.minWidth);
 }
 
 /// Load an image from Flutter asset.
@@ -14,8 +13,9 @@ class LiveActivityImageFromAsset extends LiveActivityImage {
 
   LiveActivityImageFromAsset(
     this.path, {
-    num resizeFactor = 1,
-  }) : super(resizeFactor);
+    int minHeight = 50,
+    int minWidth = 50,
+  }) : super(minHeight, minWidth);
 }
 
 /// Load an image from an url.
@@ -26,6 +26,7 @@ class LiveActivityImageFromUrl extends LiveActivityImage {
 
   LiveActivityImageFromUrl(
     this.url, {
-    num resizeFactor = 1,
-  }) : super(resizeFactor);
+    int minHeight = 50,
+    int minWidth = 50,
+  }) : super(minHeight, minWidth);
 }

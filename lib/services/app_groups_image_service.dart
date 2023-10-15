@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:app_group_directory/app_group_directory.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:live_activities/models/live_activity_image.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -42,38 +42,56 @@ class AppGroupsImageService {
           file = File('${tempDir.path}/$fileName');
           await file.writeAsBytes(byteData.buffer
               .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+          final finalDestination = '${appGroupPicture.path}/$fileName';
+          file.copySync(finalDestination);
+
+          data[key] = finalDestination;
+          _assetsCopiedInAppGroups.add(finalDestination);
+
+          // remove file from temp directory
+          file.deleteSync();
         } else if (value is LiveActivityImageFromUrl) {
           final urlImagePath = value;
-          fileName = (urlImagePath.url.split('/').last);
 
-          final ByteData imageData =
-              await NetworkAssetBundle(Uri.parse(urlImagePath.url)).load("");
-          final Uint8List bytes = imageData.buffer.asUint8List();
-          file = await File('${tempDir.path}/$fileName').create();
-          file.writeAsBytesSync(bytes);
+          Directory tempDir = await getTemporaryDirectory();
+          Uint8List? bytes;
+          var fileName = (urlImagePath.url.split('/').last).split('?').first;
+          var fileNameNew = 'copy${fileName.split('?').first}';
+          var fileFormat = fileName.split('.').last;
+          final ByteData imageData;
+          if (fileFormat != 'svg') {
+            imageData =
+                await NetworkAssetBundle(Uri.parse(urlImagePath.url)).load("");
+
+            bytes = imageData.buffer.asUint8List();
+          }
+
+          var file = await File('${tempDir.path}/$fileName').create();
+          var fileNew = await File('${tempDir.path}/$fileNameNew').create();
+          if (bytes != null) {
+            file.writeAsBytesSync(bytes);
+
+            var result = await FlutterImageCompress.compressAndGetFile(
+              file.path,
+              fileNew.path,
+              format: fileFormat == CompressFormat.png.name
+                  ? CompressFormat.png
+                  : CompressFormat.jpeg,
+              minHeight: urlImagePath.minHeight,
+              minWidth: urlImagePath.minWidth,
+            );
+
+            file = await File(result!.path).create();
+            final finalDestination = '${appGroupPicture.path}/$fileName';
+            file.copySync(finalDestination);
+
+            data[key] = finalDestination;
+            _assetsCopiedInAppGroups.add(finalDestination);
+
+            file.delete();
+          }
         }
-
-        if (value.resizeFactor != 1) {
-          ImageProperties properties =
-              await FlutterNativeImage.getImageProperties(file.path);
-
-          final targetWidth = (properties.width! * value.resizeFactor).round();
-          file = await FlutterNativeImage.compressImage(
-            file.path,
-            targetWidth: targetWidth,
-            targetHeight:
-                (properties.height! * targetWidth / properties.width!).round(),
-          );
-        }
-
-        final finalDestination = '${appGroupPicture.path}/$fileName';
-        file.copySync(finalDestination);
-
-        data[key] = finalDestination;
-        _assetsCopiedInAppGroups.add(finalDestination);
-
-        // remove file from temp directory
-        file.deleteSync();
       }
     }
   }
