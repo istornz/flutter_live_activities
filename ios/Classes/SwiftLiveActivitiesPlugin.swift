@@ -21,6 +21,11 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     activityStatusChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
   }
+
+  public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
+      urlSchemeSink = nil
+      activityEventSink = nil
+  }
   
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
     if let args = arguments as? String{
