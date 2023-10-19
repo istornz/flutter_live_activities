@@ -286,7 +286,7 @@ struct FootballMatchApp: Widget {
           {
             Image(uiImage: uiImageTeamA)
               .resizable()
-              .frame(width: 36, height: 36)
+              .frame(width: 26, height: 26)
           }
           
           Text("\(teamAScore)")
@@ -302,7 +302,7 @@ struct FootballMatchApp: Widget {
           {
             Image(uiImage: uiImageTeamB)
               .resizable()
-              .frame(width: 36, height: 36)
+              .frame(width: 26, height: 26)
           }
         }
       } minimal: {
@@ -311,7 +311,7 @@ struct FootballMatchApp: Widget {
           {
             Image(uiImage: uiImageTeamA)
               .resizable()
-              .frame(width: 37, height: 37)
+              .frame(width: 26, height: 26)
               .offset(x:-6)
           }
           
@@ -319,7 +319,7 @@ struct FootballMatchApp: Widget {
           {
             Image(uiImage: uiImageTeamB)
               .resizable()
-              .frame(width: 37, height: 37)
+              .frame(width: 26, height: 26)
               .offset(x:6)
           }
         }
