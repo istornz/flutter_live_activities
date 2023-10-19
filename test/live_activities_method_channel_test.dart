@@ -53,7 +53,7 @@ void main() {
   });
 
   test('init', () async {
-    expect(await platform.init('APP_GROUP_ID'), null);
+    expect(await platform.init('APP_GROUP_ID', urlScheme: 'URL_SCHEME'), null);
   });
 
   test('getAllActivities', () async {
