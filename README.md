@@ -193,6 +193,10 @@ if let assetImage = sharedDefault.string(forKey: "assetKey"), // <-- Put your ke
 
 In order to pass some useful **data** between your **native** live activity / dynamic island with your **Flutter** app you just need to setup **URL scheme**.
 
+> ⚠️ It's recommended to set a custom scheme, in this example, `la` is used but keep in mind, you should use a more personalized scheme.
+
+> **ex:** for an app named `Strava`, you could use `str`.
+
 - Add a custom url scheme in Xcode by navigating to **Runner** > **Runner** > **URL Types** > **URL Schemes**
 
 <img alt="add url scheme xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/url_scheme.png" width="700px" />
@@ -205,9 +209,18 @@ Link(destination: URL(string: "la://my.app/order?=123")!) { // Replace "la" with
 }
 ```
 
-> ⚠️ Don't forget to put the **URL Scheme** you have typed in the **previous step**.
+> ⚠️ Don't forget to put the **URL Scheme** you have typed in the **previous step**. (`str://` in the previous example)
 
-- In your Flutter App, you just need to listen on the **url scheme Scheme**
+- In your Flutter App, you need to init the custom scheme you provided before
+
+```dart
+_liveActivitiesPlugin.init(
+  appGroupId: 'your.group.id', // replace here with your custom app group id
+  urlScheme: 'str' // replace here with your custom app scheme
+);
+```
+
+- Finally, on the Flutter App too, you just need to listen on the **url scheme Scheme**
 
 ```dart
 _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
