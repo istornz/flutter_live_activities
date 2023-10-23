@@ -1,3 +1,10 @@
+## 1.8.0
+
+* ✨ Add url scheme optional argument.
+* ✨ Add sinks unregister on engine end (thanks @ggirotto 👍).
+* 🐛 Fix example images size.
+* ⬆️ Upgrade dependencies.
+
 ## 1.7.5
 
 * 🚨 Lint some code.
