@@ -24,9 +24,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       const EventChannel('live_activities/url_scheme');
 
   @override
-  Future init(String appGroupId) async {
+  Future init(String appGroupId, {String? urlScheme}) async {
     await methodChannel.invokeMethod('init', {
       'appGroupId': appGroupId,
+      'urlScheme': urlScheme,
     });
   }
 

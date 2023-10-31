@@ -11,9 +11,13 @@ class LiveActivities {
   /// This is required to initialize the plugin.
   /// Create an App Group inside "Runner" target & "Extension" in Xcode.
   /// Be sure to set the *SAME* App Group in both targets.
-  Future init({required String appGroupId}) {
+  /// [urlScheme] is optional and is the scheme sub-component of the URL.
+  Future init({required String appGroupId, String? urlScheme}) {
     _appGroupsImageService.appGroupId = appGroupId;
-    return LiveActivitiesPlatform.instance.init(appGroupId);
+    return LiveActivitiesPlatform.instance.init(
+      appGroupId,
+      urlScheme: urlScheme,
+    );
   }
 
   /// Create an iOS 16.1+ live activity.

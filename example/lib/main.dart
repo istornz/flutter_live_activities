@@ -150,10 +150,12 @@ class _HomeState extends State<Home> {
                       matchName: 'World cup ⚽️',
                       teamAName: 'PSG',
                       teamAState: 'Home',
-                      teamALogo:
-                          LiveActivityImageFromAsset('assets/images/psg.png'),
+                      teamALogo: LiveActivityImageFromAsset(
+                        'assets/images/psg.png',
+                      ),
                       teamBLogo: LiveActivityImageFromAsset(
-                          'assets/images/chelsea.png'),
+                        'assets/images/chelsea.png',
+                      ),
                       teamBName: 'Chelsea',
                       teamBState: 'Guest',
                       matchStartDate: DateTime.now(),

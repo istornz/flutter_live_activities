@@ -11,7 +11,7 @@ class MockLiveActivitiesPlatform
     with MockPlatformInterfaceMixin
     implements LiveActivitiesPlatform {
   @override
-  Future init(String appGroupId) {
+  Future init(String appGroupId, {String? urlScheme}) {
     return Future.value();
   }
 
