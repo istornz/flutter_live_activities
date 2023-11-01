@@ -17,7 +17,7 @@ class FlutterAlertConfig {
   }
 
   func getAlertConfig() -> AlertConfiguration {
-      return AlertConfiguration(title: LocalizedStringResource(stringLiteral: _title), body: LocalizedStringResource(stringLiteral: _body), sound: (_sound == nil) ? .default : AlertConfiguration.AlertSound(rawValue: _sound!));
+      return AlertConfiguration(title: LocalizedStringResource(stringLiteral: _title), body: LocalizedStringResource(stringLiteral: _body), sound: (_sound == nil) ? .default : AlertSound(rawValue: _sound!));
   }
 }
 
