@@ -8,6 +8,7 @@ import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 
 import 'live_activities_platform_interface.dart';
+import 'models/alert_config.dart';
 
 /// An implementation of [LiveActivitiesPlatform] that uses method channels.
 class MethodChannelLiveActivities extends LiveActivitiesPlatform {
@@ -48,24 +49,14 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
-  Future updateActivity(String activityId, Map<String, dynamic> data) async {
+  Future updateActivity(String activityId, Map<String, dynamic> data,
+      [AlertConfig? alertConfig]) async {
     return methodChannel.invokeMethod('updateActivity', {
       'activityId': activityId,
       'data': data,
+      'alertConfig': alertConfig?.toMap()
     });
   }
-  
-  @override
-  Future updateActivityWithAlert(String activityId, Map<String, dynamic> data, String title, String body, {String? sound}) {
-    return methodChannel.invokeMethod('updateActivityWithAlert', {
-      'activityId': activityId,
-      'data': data,
-      'title': title,
-      'body': body,
-      'sound': sound,
-    });
-  }
-
 
   @override
   Future endActivity(String activityId) async {
