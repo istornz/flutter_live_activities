@@ -4,14 +4,14 @@ import UIKit
 
 @available(iOS 16.1, *)
 class FlutterAlertConfig {
-  let title:String
-  let body:String
-  let sound:AlertConfiguration.AlertSound
+  let _title:String
+  let _body:String
+  let _sound:AlertConfiguration.AlertSound
 
   init(title:String, body:String, sound:String?) {
-    title = title;
-    body = body;
-    sound = sound == nil ? .default : AlertConfiguration.AlertSound(rawValue: sound!);
+    _title = title;
+    _body = body;
+    _sound = sound == nil ? .default : AlertConfiguration.AlertSound(rawValue: sound!);
   }
 
   func getAlertConfig() -> AlertConfiguration {
