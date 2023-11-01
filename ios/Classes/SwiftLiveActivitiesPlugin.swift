@@ -6,16 +6,18 @@ import UIKit
 class FlutterAlertConfig {
   let _title:String
   let _body:String
-  let _sound:AlertConfiguration.AlertSound
+  let _sound:String?
+//  let _sound:AlertConfiguration.AlertSound
 
   init(title:String, body:String, sound:String?) {
     _title = title;
     _body = body;
-    _sound = sound == nil ? .default : AlertConfiguration.AlertSound(rawValue: sound!);
+      _sound = sound;
+//    _sound = sound == nil ? .default : AlertConfiguration.AlertSound(rawValue: sound!);
   }
 
   func getAlertConfig() -> AlertConfiguration {
-    return AlertConfiguration(title: _title, body: _body, sound: _sound);
+      return AlertConfiguration(title: LocalizedStringResource(stringLiteral: _title), body: LocalizedStringResource(stringLiteral: _body), sound: (_sound == nil) ? .default : AlertConfiguration.AlertSound(rawValue: _sound!));
   }
 }
 
