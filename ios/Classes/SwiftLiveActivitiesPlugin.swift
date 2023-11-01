@@ -126,7 +126,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
             return
           }
           if let activityId = args["activityId"] as? String, let data = args["data"] as? [String: Any] {
-              let alertConfigMap = args?["alertConfig"] as? [String:String?];
+              let alertConfigMap = args["alertConfig"] as? [String:String?];
               let alertTitle = alertConfigMap["title"] as? String;
               let alertBody = alertConfigMap["body"] as? String;
               let alertSound = alertConfigMap["sound"] as? String;
