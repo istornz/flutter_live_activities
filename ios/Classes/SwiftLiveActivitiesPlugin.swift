@@ -2,6 +2,7 @@ import ActivityKit
 import Flutter
 import UIKit
 
+@available(iOS 16.1, *)
 class FlutterAlertConfig {
   var title:String
   var body:String
