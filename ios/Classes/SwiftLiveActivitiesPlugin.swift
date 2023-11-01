@@ -15,7 +15,7 @@ class FlutterAlertConfig {
   }
 
   func getAlertConfig() -> AlertConfiguration {
-    return AlertConfiguration(title: title, body: body, sound: sound);
+    return AlertConfiguration(title: _title, body: _body, sound: _sound);
   }
 }
 
@@ -129,7 +129,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
               let alertBody = alertConfigMap["body"] as? String;
               let alertSound = alertConfigMap["sound"] as? String;
               
-              let alertConfig = alertTitle == nil || alertBody || nil ? nil : FlutterAlertConfig(title: alertTitle, body: alertBody, sound: alertSound);
+              let alertConfig = (alertTitle == nil || alertBody == nil) ? nil : FlutterAlertConfig(title: alertTitle, body: alertBody, sound: alertSound);
         
 //              let alertTitle = args?[
             updateActivity(activityId: activityId, data: data, alertConfig: alertConfig, result: result)
