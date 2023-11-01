@@ -4,9 +4,9 @@ import UIKit
 
 @available(iOS 16.1, *)
 class FlutterAlertConfig {
-  var title:String
-  var body:String
-  var sound:AlertConfiguration.AlertSound
+  let title:String
+  let body:String
+  let sound:AlertConfiguration.AlertSound
 
   init(title:String, body:String, sound:String?) {
     title = title;
