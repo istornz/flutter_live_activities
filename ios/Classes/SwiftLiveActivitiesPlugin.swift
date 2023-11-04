@@ -246,8 +246,11 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           @unknown default:
             result("unknown")
           }
+          return // Exit the function after calling result
         }
       }
+      // No matching activity was found
+      result("unknown")
     }
   }
   
@@ -365,6 +368,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           activityEventSink?.self(response)
         }
       }
+      // No matching activity was found
+      result("unknown")
     }
   }
   
