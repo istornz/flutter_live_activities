@@ -252,7 +252,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         }
       } else {
         // No matching activity was found
-        result("unknown")
+        result(nil)
       }
     }
   }

@@ -57,7 +57,7 @@ class LiveActivities {
   }
 
   /// Get the activity state.
-  Future<LiveActivityState> getActivityState(String activityId) {
+  Future<LiveActivityState?> getActivityState(String activityId) {
     return LiveActivitiesPlatform.instance.getActivityState(activityId);
   }
 

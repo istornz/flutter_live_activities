@@ -66,7 +66,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     throw UnimplementedError('urlSchemeStream() has not been implemented.');
   }
 
-  Future<LiveActivityState> getActivityState(String activityId) {
+  Future<LiveActivityState?> getActivityState(String activityId) {
     throw UnimplementedError('getActivityState() has not been implemented.');
   }
 
