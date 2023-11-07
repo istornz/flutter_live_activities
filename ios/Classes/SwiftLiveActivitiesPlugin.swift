@@ -237,21 +237,22 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   @available(iOS 16.1, *)
   func getActivityState(activityId: String, result: @escaping FlutterResult) {
     Task {
-      for activity in Activity<LiveActivitiesAppAttributes>.activities {
-        if (activityId == activity.id) {
-          switch (activity.activityState) {
-          case .active:
-            result("active")
-          case .ended:
-            result("ended")
-          case .dismissed:
-            result("dismissed")
-          case .stale:
-            result("stale")
-          @unknown default:
-            result("unknown")
-          }
+      if let matchingActivity = Activity<LiveActivitiesAppAttributes>.activities.first(where: { $0.id == activityId }) {
+        switch (matchingActivity.activityState) {
+        case .active:
+          result("active")
+        case .ended:
+          result("ended")
+        case .dismissed:
+          result("dismissed")
+        case .stale:
+          result("stale")
+        @unknown default:
+          result("unknown")
         }
+      } else {
+        // No matching activity was found
+        result("unknown")
       }
     }
   }
