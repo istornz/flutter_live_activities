@@ -295,7 +295,7 @@ That's it 😇
 | ```.getAllActivitiesIds()``` | Get all activities ids created | ```Future<List<String>>``` List of all activities ids |
 | ```.endAllActivities()``` | End all live activities of the app | ```Future``` When all activities was ended |
 | ```.areActivitiesEnabled()``` | Check if live activities feature are supported & enabled | ```Future<bool>``` Live activities supported or not |
-| ```.getActivityState()``` | Get the activity current state | ```Future<LiveActivityState>``` An enum to know the status of the activity (```active```, ```dismissed``` or ```ended```) |
+| ```.getActivityState()``` | Get the activity current state | ```Future<LiveActivityState?>``` An enum to know the status of the activity (```active```, ```dismissed``` or ```ended```) |
 | ```.getPushToken()``` | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date) | ```String?``` The activity push token (can be null) |
 | ```.urlSchemeStream()``` | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data) | ```Future<UrlSchemeData>``` Url scheme data which handle ```scheme``` ```url``` ```host``` ```path``` ```queryItems``` |
 | ```.dispose()``` | Remove all pictures passed in the AppGroups directory in the current session, you can use the ```force``` parameters to remove **all** pictures | ```Future``` Picture removed |

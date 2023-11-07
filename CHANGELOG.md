@@ -1,3 +1,9 @@
+## 1.9.0
+
+- ✨ Add the ability to handle multiple live notification (thanks @Clon1998 👍).
+- 🐛 Fix stall state for unknown activityId (thanks @Clon1998 👍).
+- 🐛 Now return `null` value when activity is not found in `getActivityState()`.
+
 ## 1.8.0
 
 * ✨ Add url scheme optional argument.
