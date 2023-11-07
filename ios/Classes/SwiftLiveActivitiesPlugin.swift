@@ -167,14 +167,17 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         result(FlutterError(code: "AUTHORIZATION_ERROR", message: "authorization error", details: error.localizedDescription))
       }
     }
-    
-    for item in data {
-      sharedDefault!.set(item.value, forKey: item.key)
-    }
+
     
     let liveDeliveryAttributes = LiveActivitiesAppAttributes()
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
     var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
+    let prefix = liveDeliveryAttributes.id
+      
+    for item in data {
+        sharedDefault!.set(item.value, forKey: "\(prefix)_\(item.key)")
+    }
+ 
     if #available(iOS 16.2, *){
       let activityContent = ActivityContent(
         state: initialContentState,
@@ -212,11 +215,13 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         if activityId == activity.id {
+          let prefix = activity.attributes.id
+
           for item in data {
             if (item.value != nil && !(item.value is NSNull)) {
-              sharedDefault!.set(item.value, forKey: item.key)
+              sharedDefault!.set(item.value, forKey: "\(prefix)_\(item.key)")
             } else {
-              sharedDefault!.removeObject(forKey: item.key)
+              sharedDefault!.removeObject(forKey: "\(prefix)_\(item.key)")
             }
           }
           

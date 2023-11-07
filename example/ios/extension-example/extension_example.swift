@@ -34,20 +34,20 @@ let sharedDefault = UserDefaults(suiteName: "group.dimitridessus.liveactivities"
 struct FootballMatchApp: Widget {
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
-      let matchName = sharedDefault.string(forKey: "matchName")!
+      let matchName = sharedDefault.string(forKey: context.attributes.prefixedKey("matchName"))!
       
-      let teamAName = sharedDefault.string(forKey: "teamAName")!
-      let teamAState = sharedDefault.string(forKey: "teamAState")!
-      let teamAScore = sharedDefault.integer(forKey: "teamAScore")
-      let teamALogo = sharedDefault.string(forKey: "teamALogo")!
+      let teamAName = sharedDefault.string(forKey: context.attributes.prefixedKey("teamAName"))!
+      let teamAState = sharedDefault.string(forKey: context.attributes.prefixedKey("teamAState"))!
+      let teamAScore = sharedDefault.integer(forKey: context.attributes.prefixedKey("teamAScore"))
+      let teamALogo = sharedDefault.string(forKey: context.attributes.prefixedKey("teamALogo"))!
       
-      let teamBName = sharedDefault.string(forKey: "teamBName")!
-      let teamBState = sharedDefault.string(forKey: "teamBState")!
-      let teamBScore = sharedDefault.integer(forKey: "teamBScore")
-      let teamBLogo = sharedDefault.string(forKey: "teamBLogo")!
+      let teamBName = sharedDefault.string(forKey: context.attributes.prefixedKey("teamBName"))!
+      let teamBState = sharedDefault.string(forKey: context.attributes.prefixedKey("teamBState"))!
+      let teamBScore = sharedDefault.integer(forKey: context.attributes.prefixedKey("teamBScore"))
+      let teamBLogo = sharedDefault.string(forKey: context.attributes.prefixedKey("teamBLogo"))!
       
-      let matchStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "matchStartDate") / 1000)
-      let matchEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "matchEndDate") / 1000)
+      let matchStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: context.attributes.prefixedKey("matchStartDate")) / 1000)
+      let matchEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: context.attributes.prefixedKey("matchEndDate")) / 1000)
       let matchRemainingTime = matchStartDate...matchEndDate
       
       ZStack {
@@ -161,20 +161,20 @@ struct FootballMatchApp: Widget {
         .padding(.horizontal, 2.0)
       }.frame(height: 160)
     } dynamicIsland: { context in
-      let matchName = sharedDefault.string(forKey: "matchName")!
+      let matchName = sharedDefault.string(forKey: context.attributes.prefixedKey("matchName"))!
       
-      let teamAName = sharedDefault.string(forKey: "teamAName")!
-      let teamAState = sharedDefault.string(forKey: "teamAState")!
-      let teamAScore = sharedDefault.integer(forKey: "teamAScore")
-      let teamALogo = sharedDefault.string(forKey: "teamALogo")!
+      let teamAName = sharedDefault.string(forKey: context.attributes.prefixedKey("teamAName"))!
+      let teamAState = sharedDefault.string(forKey: context.attributes.prefixedKey("teamAState"))!
+      let teamAScore = sharedDefault.integer(forKey: context.attributes.prefixedKey("teamAScore"))
+      let teamALogo = sharedDefault.string(forKey: context.attributes.prefixedKey("teamALogo"))!
       
-      let teamBName = sharedDefault.string(forKey: "teamBName")!
-      let teamBState = sharedDefault.string(forKey: "teamBState")!
-      let teamBScore = sharedDefault.integer(forKey: "teamBScore")
-      let teamBLogo = sharedDefault.string(forKey: "teamBLogo")!
+      let teamBName = sharedDefault.string(forKey: context.attributes.prefixedKey("teamBName"))!
+      let teamBState = sharedDefault.string(forKey: context.attributes.prefixedKey("teamBState"))!
+      let teamBScore = sharedDefault.integer(forKey: context.attributes.prefixedKey("teamBScore"))
+      let teamBLogo = sharedDefault.string(forKey: context.attributes.prefixedKey("teamBLogo"))!
       
-      let matchStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "matchStartDate") / 1000)
-      let matchEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: "matchEndDate") / 1000)
+      let matchStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: context.attributes.prefixedKey("matchStartDate")) / 1000)
+      let matchEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: context.attributes.prefixedKey("matchEndDate")) / 1000)
       let matchRemainingTime = matchStartDate...matchEndDate
       
       return DynamicIsland {
@@ -326,4 +326,10 @@ struct FootballMatchApp: Widget {
       }
     }
   }
+}
+
+extension LiveActivitiesAppAttributes {
+    func prefixedKey(key: String) -> String {
+        return "\(id)_\(key)"
+    }
 }
