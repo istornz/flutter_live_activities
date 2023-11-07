@@ -92,19 +92,19 @@ struct FootballMatchApp: Widget {
               Text("\(teamAScore)")
                 .font(.title)
                 .fontWeight(.bold)
-
+              
               Text(":")
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundStyle(.primary)
-
+              
               Text("\(teamBScore)")
                 .font(.title)
                 .fontWeight(.bold)
             }
             .padding(.horizontal, 5.0)
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-
+            
             HStack(alignment: .center, spacing: 2.0) {
               Text(timerInterval: matchRemainingTime, countsDown: true)
                 .multilineTextAlignment(.center)
@@ -113,7 +113,7 @@ struct FootballMatchApp: Widget {
                 .font(.footnote)
                 .foregroundStyle(.white)
             }
-
+            
             VStack(alignment: .center, spacing: 1.0) {
               Link(destination: URL(string: "la://my.app/stats")!) {
                 Text("See stats 📊")
@@ -127,15 +127,15 @@ struct FootballMatchApp: Widget {
           
           ZStack {
             VStack(alignment: .center, spacing: 2.0) {
-
+              
               Spacer()
-
+              
               Text(teamBName)
                 .lineLimit(1)
                 .font(.subheadline)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
-
+              
               Text(teamBState)
                 .lineLimit(1)
                 .font(.footnote)
@@ -146,7 +146,7 @@ struct FootballMatchApp: Widget {
             .padding(.bottom, 8)
             .padding(.top, 8)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-
+            
             ZStack {
               if let uiImageTeamB = UIImage(contentsOfFile: teamBLogo)
               {
@@ -329,7 +329,7 @@ struct FootballMatchApp: Widget {
 }
 
 extension LiveActivitiesAppAttributes {
-    func prefixedKey(key: String) -> String {
-        return "\(id)_\(key)"
-    }
+  func prefixedKey(_ key: String) -> String {
+    return "\(id)_\(key)"
+  }
 }
