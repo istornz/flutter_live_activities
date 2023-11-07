@@ -255,6 +255,33 @@ To do this, you can update it using Push Notification on a server.
     ```
 - Update your activity with the token on your server (more information can be [**found here**](https://ohdarling88.medium.com/update-dynamic-island-and-live-activity-with-push-notification-38779803c145)).
 
+## Multiple notifications 🔀
+
+If you want to manage multiple live notifications you need to use a prefix for each value you want to use inside your content.
+
+On your Swift extension code, you can follow these steps:
+
+- Create a new extension to manage prefix creation (we gonna concatenate notification id with parameter key).
+
+```swift
+extension LiveActivitiesAppAttributes {
+  func prefixedKey(_ key: String) -> String {
+    return "\(id)_\(key)"
+  }
+}
+```
+
+- Replace each access to `UserDefaults` by your prefix.
+
+```swift
+// let matchName = sharedDefault.string(forKey: "matchName"); // replace this to this:
+let matchName = sharedDefault.string(forKey: context.attributes.prefixedKey("matchName"))
+```
+
+To set `matchName` for a specific notification, you just need to grab the notification id you want (ex. `35253464632`) and concatenate with your key by adding a `_`, example: `35253464632_matchName`.
+
+That's it 😇
+
 <br />
 
 ## 📘 Documentation
