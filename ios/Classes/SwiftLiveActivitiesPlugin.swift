@@ -97,7 +97,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           
           if let appGroupId = args["appGroupId"] as? String {
             self.appGroupId = appGroupId
-            sharedDefault = UserDefaults(suiteName: self.appGroupId)!
+            sharedDefault = UserDefaults.standard!
+//             sharedDefault = UserDefaults(suiteName: self.appGroupId)!
             result(nil)
           } else {
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'appGroupId' is valid", details: nil))
