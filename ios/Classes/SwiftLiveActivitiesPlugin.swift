@@ -97,7 +97,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           
           if let appGroupId = args["appGroupId"] as? String {
             self.appGroupId = appGroupId
-            sharedDefault = UserDefaults.standard!
+            sharedDefault = UserDefaults.standard
 //             sharedDefault = UserDefaults(suiteName: self.appGroupId)!
             result(nil)
           } else {
