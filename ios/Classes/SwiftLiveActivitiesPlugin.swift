@@ -97,8 +97,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           
           if let appGroupId = args["appGroupId"] as? String {
             self.appGroupId = appGroupId
-            sharedDefault = UserDefaults.standard
-//             sharedDefault = UserDefaults(suiteName: self.appGroupId)!
+            sharedDefault = UserDefaults(suiteName: self.appGroupId)!
             result(nil)
           } else {
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'appGroupId' is valid", details: nil))
@@ -189,8 +188,9 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   @available(iOS 16.1, *)
   func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, result: @escaping FlutterResult) {
     let center = UNUserNotificationCenter.current()
+      // TODO: do we have to request this permission???
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-      
+
       if let error = error {
         result(FlutterError(code: "AUTHORIZATION_ERROR", message: "authorization error", details: error.localizedDescription))
       }
