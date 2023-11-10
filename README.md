@@ -255,6 +255,33 @@ To do this, you can update it using Push Notification on a server.
     ```
 - Update your activity with the token on your server (more information can be [**found here**](https://ohdarling88.medium.com/update-dynamic-island-and-live-activity-with-push-notification-38779803c145)).
 
+## Multiple notifications 🔀
+
+If you want to manage multiple live notifications you need to use a prefix for each value you want to use inside your content.
+
+On your Swift extension code, you can follow these steps:
+
+- Create a new extension to manage prefix creation (we gonna concatenate notification id with parameter key).
+
+```swift
+extension LiveActivitiesAppAttributes {
+  func prefixedKey(_ key: String) -> String {
+    return "\(id)_\(key)"
+  }
+}
+```
+
+- Replace each access to `UserDefaults` by your prefix.
+
+```swift
+// let matchName = sharedDefault.string(forKey: "matchName"); // replace this to this:
+let matchName = sharedDefault.string(forKey: context.attributes.prefixedKey("matchName"))
+```
+
+To set `matchName` for a specific notification, you just need to grab the notification id you want (ex. `35253464632`) and concatenate with your key by adding a `_`, example: `35253464632_matchName`.
+
+That's it 😇
+
 <br />
 
 ## 📘 Documentation
@@ -269,7 +296,7 @@ To do this, you can update it using Push Notification on a server.
 | ```.getAllActivitiesIds()``` | Get all activities ids created | ```Future<List<String>>``` List of all activities ids |
 | ```.endAllActivities()``` | End all live activities of the app | ```Future``` When all activities was ended |
 | ```.areActivitiesEnabled()``` | Check if live activities feature are supported & enabled | ```Future<bool>``` Live activities supported or not |
-| ```.getActivityState()``` | Get the activity current state | ```Future<LiveActivityState>``` An enum to know the status of the activity (```active```, ```dismissed``` or ```ended```) |
+| ```.getActivityState()``` | Get the activity current state | ```Future<LiveActivityState?>``` An enum to know the status of the activity (```active```, ```dismissed``` or ```ended```) |
 | ```.getPushToken()``` | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date) | ```String?``` The activity push token (can be null) |
 | ```.urlSchemeStream()``` | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data) | ```Future<UrlSchemeData>``` Url scheme data which handle ```scheme``` ```url``` ```host``` ```path``` ```queryItems``` |
 | ```.dispose()``` | Remove all pictures passed in the AppGroups directory in the current session, you can use the ```force``` parameters to remove **all** pictures | ```Future``` Picture removed |

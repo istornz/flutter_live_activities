@@ -60,7 +60,8 @@ class LiveActivities {
   }
 
   /// Get the activity state.
-  Future<LiveActivityState> getActivityState(String activityId) {
+  /// If the activity is not found, `null` is returned.
+  Future<LiveActivityState?> getActivityState(String activityId) {
     return LiveActivitiesPlatform.instance.getActivityState(activityId);
   }
 

@@ -93,14 +93,14 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
-  Future<LiveActivityState> getActivityState(String activityId) async {
-    final result = await methodChannel.invokeMethod<String>(
+  Future<LiveActivityState?> getActivityState(String activityId) async {
+    final result = await methodChannel.invokeMethod<String?>(
       'getActivityState',
       {
         'activityId': activityId,
       },
     );
-    return LiveActivityState.values.byName(result ?? 'unknown');
+    return result != null ? LiveActivityState.values.byName(result) : null;
   }
 
   @override
