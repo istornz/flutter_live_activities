@@ -143,6 +143,9 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
             case "endAllActivities":
                 endAllActivities(result: result)
                 break
+            case "isiOSAppOnMac":
+                result(ProcessInfo.processInfo.isiOSAppOnMac)
+                break
             default:
                 break
             }

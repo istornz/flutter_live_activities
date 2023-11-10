@@ -58,8 +58,7 @@ class _HomeState extends State<Home> {
       print('Activity update: $event');
     });
 
-    urlSchemeSubscription =
-        _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
+    urlSchemeSubscription = _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
       setState(() {
         if (schemeData.path == '/stats') {
           showDialog(
@@ -104,6 +103,10 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              FutureBuilder(
+                future: _liveActivitiesPlugin.isiOSAppOnMac(),
+                builder: (context, snapshot) => Text(snapshot.data.toString()),
+              ),
               if (_latestActivityId != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
@@ -145,15 +148,12 @@ class _HomeState extends State<Home> {
               if (_latestActivityId == null)
                 TextButton(
                   onPressed: () async {
-                    _footballGameLiveActivityModel =
-                        FootballGameLiveActivityModel(
+                    _footballGameLiveActivityModel = FootballGameLiveActivityModel(
                       matchName: 'World cup ⚽️',
                       teamAName: 'PSG',
                       teamAState: 'Home',
-                      teamALogo:
-                          LiveActivityImageFromAsset('assets/images/psg.png'),
-                      teamBLogo: LiveActivityImageFromAsset(
-                          'assets/images/chelsea.png'),
+                      teamALogo: LiveActivityImageFromAsset('assets/images/psg.png'),
+                      teamBLogo: LiveActivityImageFromAsset('assets/images/chelsea.png'),
                       teamBName: 'Chelsea',
                       teamBState: 'Guest',
                       matchStartDate: DateTime.now(),
@@ -165,8 +165,7 @@ class _HomeState extends State<Home> {
                       ),
                     );
 
-                    final activityId =
-                        await _liveActivitiesPlugin.createActivity(
+                    final activityId = await _liveActivitiesPlugin.createActivity(
                       _footballGameLiveActivityModel!.toMap(),
                     );
                     setState(() => _latestActivityId = activityId);
@@ -187,8 +186,7 @@ class _HomeState extends State<Home> {
               if (_latestActivityId == null)
                 TextButton(
                   onPressed: () async {
-                    final supported =
-                        await _liveActivitiesPlugin.areActivitiesEnabled();
+                    final supported = await _liveActivitiesPlugin.areActivitiesEnabled();
                     if (context.mounted) {
                       showDialog(
                         context: context,

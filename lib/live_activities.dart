@@ -81,6 +81,8 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.areActivitiesEnabled();
   }
 
+  Future<bool> isiOSAppOnMac() async => LiveActivitiesPlatform.instance.isiOSAppOnMac();
+
   /// Get a stream of url scheme data.
   /// Don't forget to add **CFBundleURLSchemes** to your Info.plist file.
   /// Return a Future of [scheme] [url] [host] [path] and [queryParameters].

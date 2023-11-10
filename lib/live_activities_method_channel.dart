@@ -107,6 +107,12 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
+  Future<bool> isiOSAppOnMac() async {
+    final result = await methodChannel.invokeMethod<bool?>('isiOSAppOnMac');
+    return result == true;
+  }
+
+  @override
   Stream<ActivityUpdate> get activityUpdateStream => activityStatusChannel
       .receiveBroadcastStream('activityUpdateStream')
       .distinct()
