@@ -1,6 +1,9 @@
 ## 1.9.0
 
-- ✨ Add the ability to handle multiple live notification (thanks @Clon1998 👍).
+- ✨ **BREAKING CHANGE**: Add the ability to handle multiple live notification (thanks @Clon1998 👍).
+
+Please follow this tutorial to add implement it: [https://github.com/istornz/flutter_live_activities#multiple-notifications-](https://github.com/istornz/flutter_live_activities#multiple-notifications-)
+ 
 - 🐛 Fix stall state for unknown activityId (thanks @Clon1998 👍).
 - 🐛 Now return `null` value when activity is not found in `getActivityState()`.
 
