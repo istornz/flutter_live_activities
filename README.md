@@ -86,6 +86,16 @@ struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
 }
 ```
 
+  - Create a Swift extension to handle prefixed keys
+
+```
+extension LiveActivitiesAppAttributes {
+  func prefixedKey(_ key: String) -> String {
+    return "\(id)_\(key)"
+  }
+}
+```
+
   - Create an ```UserDefaults``` with your group id to access Flutter data in your Swift code.
 
 ```swift
@@ -97,7 +107,7 @@ struct FootballMatchApp: Widget {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
       // create your live activity widget extension here
       // to access Flutter properties:
-      let myVariableFromFlutter = sharedDefault.string(forKey: "myVariableFromFlutter")!
+      let myVariableFromFlutter = sharedDefault.string(forKey: context.attributes.prefixedKey("myVariableFromFlutter"))!
 
       // [...]
     }
@@ -147,9 +157,9 @@ let sharedDefault = UserDefaults(suiteName: "YOUR_CREATED_APP_ID")!
 - Access to your typed data:
 
 ```swift
-let pizzaName = sharedDefault.string(forKey: "name")! // put the same key as your Dart map
-let pizzaPrice = sharedDefault.float(forKey: "price")
-let quantity = sharedDefault.integer(forKey: "quantity")
+let pizzaName = sharedDefault.string(forKey: context.attributes.prefixedKey("name"))! // put the same key as your Dart map
+let pizzaPrice = sharedDefault.float(forKey: context.attributes.prefixedKey("price"))
+let quantity = sharedDefault.integer(forKey: context.attributes.prefixedKey("quantity"))
 // [...]
 ```
 
@@ -178,7 +188,7 @@ _liveActivitiesPlugin.createActivity(activityModel);
 - In your Swift extension, display the image:
 
 ```swift
-if let assetImage = sharedDefault.string(forKey: "assetKey"), // <-- Put your key here
+if let assetImage = sharedDefault.string(forKey: context.attributes.prefixedKey("assetKey")), // <-- Put your key here
   let uiImage = UIImage(contentsOfFile: shop) {
   Image(uiImage: uiImage)
       .resizable()
@@ -254,29 +264,6 @@ To do this, you can update it using Push Notification on a server.
     print(activityToken);
     ```
 - Update your activity with the token on your server (more information can be [**found here**](https://ohdarling88.medium.com/update-dynamic-island-and-live-activity-with-push-notification-38779803c145)).
-
-## Multiple notifications 🔀
-
-If you want to manage multiple live notifications you need to use a prefix for each value you want to use inside your content.
-
-On your Swift extension code, you can follow these steps:
-
-- Create a new extension to manage prefix creation (we gonna concatenate notification id with parameter key).
-
-```swift
-extension LiveActivitiesAppAttributes {
-  func prefixedKey(_ key: String) -> String {
-    return "\(id)_\(key)"
-  }
-}
-```
-
-- Replace each access to `UserDefaults` by your prefix.
-
-```swift
-// let matchName = sharedDefault.string(forKey: "matchName"); // replace this to this:
-let matchName = sharedDefault.string(forKey: context.attributes.prefixedKey("matchName"))
-```
 
 To set `matchName` for a specific notification, you just need to grab the notification id you want (ex. `35253464632`) and concatenate with your key by adding a `_`, example: `35253464632_matchName`.
 
