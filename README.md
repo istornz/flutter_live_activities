@@ -86,9 +86,9 @@ struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
 }
 ```
 
-  - Create a Swift extension to handle prefixed keys
+  - Create a Swift extension to handle prefixed keys at the end of the file. 
 
-```
+```swift
 extension LiveActivitiesAppAttributes {
   func prefixedKey(_ key: String) -> String {
     return "\(id)_\(key)"
