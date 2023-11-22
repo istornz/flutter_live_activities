@@ -17,9 +17,9 @@ A Flutter plugin to use iOS 16.1+ **Live Activities** & iPhone 14 Pro **Dynamic 
 
 ## 🧐 What is it ?
 
-This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities).
+This plugin uses the [iOS ActivityKit API](https://developer.apple.com/documentation/activitykit/displaying-live-data-with-live-activities).
 
-**live_activities** can be used to show **dynamic live notification** & implement **dynamic island** feature on the iPhone 14 Pro / Max 🏝️
+**live_activities** can be used to show **dynamic live notification** & implement **dynamic island** feature on iPhones that support it 🏝️
 
 > ⚠️ **live_activities** is only intended to use with **iOS 16.1+** !
 > It will simply do nothing on other platform & < iOS 16.1
@@ -37,7 +37,7 @@ This plugin use [iOS ActivityKit API](https://developer.apple.com/documentation/
 
 ## 👻 Getting started
 
-Due to some **technical restriction**, it's not currently possible to only use Flutter 🫣.
+Due to **technical restriction**, it's not currently possible to only use Flutter 🫣.
 
 You need to **implement** in your Flutter iOS project a **Widget Extension** & develop in *Swift*/*Objective-C* your own **Live Activity** / **Dynamic Island** design.
 
@@ -47,17 +47,17 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
   - Open the Xcode workspace project ```ios/Runner.xcworkspace```.
   - Click on ```File``` -> ```New``` -> ```Target...```
     - Select ```Widget Extension``` & click on **Next**.
-    - Specify the product name (*MyApp*Widget for eg.) & be sure to select "**Runner**" in "Embed in Application" dropdown.
+    - Specify the product name (e.g., `MyAppWidget`) and be sure to select "**Runner**" in "Embed in Application" dropdown.
     - Click on **Finish**.
     - When selecting Finish, an alert will appear, you will need to click on **Activate**.
   
 <img alt="create widget extension xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/create_widget_extension.gif" width="700px" />
 
-  - Enable push notification capabilities on the main ```Runner``` app **only**!.
+  - Add the "Push Notifications" capabilities for the main ```Runner``` app **only**!.
 
   <img alt="enable push notification capabilities" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/push_capability.gif" width="700px" />
 
-  - Enable live activity by adding this line in ```Info.plist``` for both ```Runner``` & your ```Widget Extension```.
+  - Enable live activity by adding this line in ```Info.plist``` for both ```Runner``` and your ```Widget Extension```.
 
 ```xml
 <key>NSSupportsLiveActivities</key>
@@ -66,7 +66,9 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 
   <img alt="enable live activities xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/enable_live_activities.gif" width="700px" />
 
-  - Create App Group for both ```Runner``` & your ```Widget Extension```.
+  - Add the "App Group" capability for both ```Runner``` and your widget extension.
+    After you add the capability, check the checkmark next to the text field that contains an identifier of the form `group.example.myapp`.
+    This identifier will be used later and refered to as `YOUR_GROUP_ID`.
 
   <img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/app_group.gif" width="700px" />
 
@@ -127,7 +129,7 @@ struct FootballMatchApp: Widget {
 
   ```dart
   final _liveActivitiesPlugin = LiveActivities();
-  _liveActivitiesPlugin.init(appGroupId: "YOUR_CREATED_APP_ID");
+  _liveActivitiesPlugin.init(appGroupId: "YOUR_GROUP_ID");
   ```
 
   - Create your dynamic activity.
@@ -150,7 +152,7 @@ struct FootballMatchApp: Widget {
 
 - In your Swift extension, you need to create an ```UserDefaults``` instance to access data:
 ```swift
-let sharedDefault = UserDefaults(suiteName: "YOUR_CREATED_APP_ID")!
+let sharedDefault = UserDefaults(suiteName: "YOUR_GROUP_ID")!
 ```
 > ⚠️ Be sure to use the **SAME** group id in your Swift extension and your Flutter app!
 
@@ -199,7 +201,7 @@ if let assetImage = sharedDefault.string(forKey: context.attributes.prefixedKey(
 }
 ```
 
-## Communicate over Native 🧵 and Flutter 💙
+## Communicate between native 🧵 and Flutter 💙
 
 In order to pass some useful **data** between your **native** live activity / dynamic island with your **Flutter** app you just need to setup **URL scheme**.
 
@@ -292,16 +294,16 @@ That's it 😇
 
 ## 👥 Contributions
 
-Contributions are welcome. Contribute by creating a PR or create an issue 🎉.
+Contributions are welcome. Contribute by creating a PR or an issue 🎉.
 
 ## 🎯 Roadmap
 
 - [ ] Inject a Widget inside the notification with Flutter Engine ?
-- [x] Support push token. 
+- [x] Support push token.
 - [x] Pass media between extension & Flutter app.
 - [x] Support multiple type instead of ```String``` (Date, Number etc.).
 - [x] Pass data across native dynamic island and Flutter app.
 - [x] Pass data across native live activity notification and Flutter app.
 - [x] Cancel all activities.
 - [x] Get all activities ids.
-- [x] Check if live activities are supported.  
+- [x] Check if live activities are supported.
