@@ -399,7 +399,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
             }
           }
       } catch {
-          print("error: "+error);
+          print("error: ");
+          print(error);
       }
   }
   
