@@ -377,25 +377,29 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   
   @available(iOS 16.1, *)
   private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
-    Task {
-      for await state in activity.activityStateUpdates {
-        var response: Dictionary<String, Any> = Dictionary()
-        response["activityId"] = activity.id
-        switch state {
-        case .active:
-          monitorTokenChanges(activity)
-        case .dismissed, .ended:
-          response["status"] = "ended"
-          activityEventSink?.self(response)
-        case .stale:
-          response["status"] = "stale"
-          activityEventSink?.self(response)
-        @unknown default:
-          response["status"] = "unknown"
-          activityEventSink?.self(response)
-        }
+      try {
+          Task {
+            for await state in activity.activityStateUpdates {
+              var response: Dictionary<String, Any> = Dictionary()
+              response["activityId"] = activity.id
+              switch state {
+              case .active:
+                monitorTokenChanges(activity)
+              case .dismissed, .ended:
+                response["status"] = "ended"
+                activityEventSink?.self(response)
+              case .stale:
+                response["status"] = "stale"
+                activityEventSink?.self(response)
+              @unknown default:
+                response["status"] = "unknown"
+                activityEventSink?.self(response)
+              }
+            }
+          }
+      } catch {
+          print("error: "+error);
       }
-    }
   }
   
   @available(iOS 16.1, *)
