@@ -230,7 +230,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       if removeWhenAppIsKilled {
         appLifecycleLifeActiviyIds.append(deliveryActivity!.id)
       }
-      monitorLiveActivity(deliveryActivity!)
+//       monitorLiveActivity(deliveryActivity!)
       result(deliveryActivity!.id)
     }
   }
@@ -375,34 +375,34 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     var id = UUID()
   }
   
-  @available(iOS 16.1, *)
-  private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
-      do {
-          try
-          Task {
-            for await state in activity.activityStateUpdates {
-              var response: Dictionary<String, Any> = Dictionary()
-              response["activityId"] = activity.id
-              switch state {
-              case .active:
-                monitorTokenChanges(activity)
-              case .dismissed, .ended:
-                response["status"] = "ended"
-                activityEventSink?.self(response)
-              case .stale:
-                response["status"] = "stale"
-                activityEventSink?.self(response)
-              @unknown default:
-                response["status"] = "unknown"
-                activityEventSink?.self(response)
-              }
-            }
-          }
-      } catch {
-          print("error: ");
-          print(error);
-      }
-  }
+//   @available(iOS 16.1, *)
+//   private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
+//       do {
+//           try
+//           Task {
+//             for await state in activity.activityStateUpdates {
+//               var response: Dictionary<String, Any> = Dictionary()
+//               response["activityId"] = activity.id
+//               switch state {
+//               case .active:
+//                 monitorTokenChanges(activity)
+//               case .dismissed, .ended:
+//                 response["status"] = "ended"
+//                 activityEventSink?.self(response)
+//               case .stale:
+//                 response["status"] = "stale"
+//                 activityEventSink?.self(response)
+//               @unknown default:
+//                 response["status"] = "unknown"
+//                 activityEventSink?.self(response)
+//               }
+//             }
+//           }
+//       } catch {
+//           print("error: ");
+//           print(error);
+//       }
+//   }
   
   @available(iOS 16.1, *)
   private func monitorTokenChanges<T: ActivityAttributes>(_ activity: Activity<T>) {
