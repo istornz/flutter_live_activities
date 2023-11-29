@@ -377,7 +377,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   
   @available(iOS 16.1, *)
   private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
-      try {
+      do {
+          try
           Task {
             for await state in activity.activityStateUpdates {
               var response: Dictionary<String, Any> = Dictionary()
