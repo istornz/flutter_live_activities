@@ -1,6 +1,26 @@
 ## 1.9.0
 
-- ✨ Add the ability to handle multiple live notification (thanks @Clon1998 👍).
+- ✨ **BREAKING CHANGE**: Add the ability to handle multiple live notification (thanks @Clon1998 👍).
+
+Please follow this tutorial to add implement it:
+
+- Add the following Swift extension at the end of your extension code:
+
+```swift
+extension LiveActivitiesAppAttributes {
+  func prefixedKey(_ key: String) -> String {
+    return "\(id)_\(key)"
+  }
+}
+```
+
+- For each keys on your native Swift code, please changes the following lines:
+
+```swift
+let myVariableFromFlutter = sharedDefault.string(forKey: "myVariableFromFlutter") // repleace this by ...
+let myVariableFromFlutter = sharedDefault.string(forKey: context.attributes.prefixedKey("myVariableFromFlutter")) // <-- this
+```
+ 
 - 🐛 Fix stall state for unknown activityId (thanks @Clon1998 👍).
 - 🐛 Now return `null` value when activity is not found in `getActivityState()`.
 
