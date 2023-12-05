@@ -4,6 +4,7 @@ import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'live_activities_method_channel.dart';
+import 'models/alert_config.dart';
 
 abstract class LiveActivitiesPlatform extends PlatformInterface {
   /// Constructs a LiveActivitiesPlatform.
@@ -41,7 +42,8 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     throw UnimplementedError('createActivity() has not been implemented.');
   }
 
-  Future updateActivity(String activityId, Map<String, dynamic> data) {
+  Future updateActivity(String activityId, Map<String, dynamic> data,
+      [AlertConfig? alertConfig]) {
     throw UnimplementedError('updateActivity() has not been implemented.');
   }
 
