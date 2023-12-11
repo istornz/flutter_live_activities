@@ -96,8 +96,13 @@ class AppGroupsImageService {
   Future<void> removeImagesSession() async {
     for (String filePath in _assetsCopiedInAppGroups) {
       final file = File(filePath);
-      await file.delete();
+      try {
+        await file.delete();
+      } catch (e) {
+        print('Error deleting file: $e');
+      }
     }
+    _assetsCopiedInAppGroups.removeWhere((element) => true);
   }
 }
 
