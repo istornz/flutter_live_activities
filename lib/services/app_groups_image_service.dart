@@ -35,23 +35,16 @@ class AppGroupsImageService {
         late File file;
         late String fileName;
         if (value is LiveActivityImageFromAsset) {
-          final assetImagePath = value;
-          final byteData = await rootBundle.load(assetImagePath.path);
-          fileName = (assetImagePath.path.split('/').last);
-
-          file = File('${tempDir.path}/$fileName');
-          await file.writeAsBytes(byteData.buffer
-              .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+          fileName = (value.path.split('/').last);
         } else if (value is LiveActivityImageFromUrl) {
-          final urlImagePath = value;
-          fileName = (urlImagePath.url.split('/').last);
-
-          final ByteData imageData =
-              await NetworkAssetBundle(Uri.parse(urlImagePath.url)).load("");
-          final Uint8List bytes = imageData.buffer.asUint8List();
-          file = await File('${tempDir.path}/$fileName').create();
-          file.writeAsBytesSync(bytes);
+          fileName = (value.url.split('/').last);
+        } else if (value is LiveActivityImageFromMemory) {
+          fileName = value.imageName;
         }
+
+        final bytes = await value.loadImage();
+        file = await File('${tempDir.path}/$fileName').create();
+        file.writeAsBytesSync(bytes);
 
         if (value.resizeFactor != 1) {
           ImageProperties properties =
