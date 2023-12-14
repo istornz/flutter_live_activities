@@ -45,7 +45,7 @@ class LiveActivityImageFromUrl extends LiveActivityImage {
   Future<Uint8List> loadImage() async {
     final ByteData imageData =
         await NetworkAssetBundle(Uri.parse(url)).load("");
-    throw imageData.buffer.asUint8List();
+    return imageData.buffer.asUint8List();
   }
 }
 
