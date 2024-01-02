@@ -1,10 +1,9 @@
+import 'package:live_activities/live_activities_method_channel.dart';
 import 'package:live_activities/models/activity_update.dart';
+import 'package:live_activities/models/alert_config.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
-import 'live_activities_method_channel.dart';
-import 'models/alert_config.dart';
 
 abstract class LiveActivitiesPlatform extends PlatformInterface {
   /// Constructs a LiveActivitiesPlatform.

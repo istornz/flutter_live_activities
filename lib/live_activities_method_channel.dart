@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:live_activities/live_activities_platform_interface.dart';
 import 'package:live_activities/models/activity_update.dart';
+import 'package:live_activities/models/alert_config.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
-
-import 'live_activities_platform_interface.dart';
-import 'models/alert_config.dart';
 
 /// An implementation of [LiveActivitiesPlatform] that uses method channels.
 class MethodChannelLiveActivities extends LiveActivitiesPlatform {
