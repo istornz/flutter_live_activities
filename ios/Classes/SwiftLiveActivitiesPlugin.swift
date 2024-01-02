@@ -44,7 +44,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     urlSchemeSink = nil
     activityEventSink = nil
   }
-  
+
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
     if let args = arguments as? String{
       if (args == "urlSchemeStream") {
@@ -197,11 +197,11 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
     var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
     let prefix = liveDeliveryAttributes.id
-      
+
     for item in data {
         sharedDefault!.set(item.value, forKey: "\(prefix)_\(item.key)")
     }
- 
+
     if #available(iOS 16.2, *){
       let activityContent = ActivityContent(
         state: initialContentState,
@@ -257,7 +257,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       result(nil)
     }
   }
-  
+
+
   @available(iOS 16.1, *)
   func getActivityState(activityId: String, result: @escaping FlutterResult) {
     Task {
