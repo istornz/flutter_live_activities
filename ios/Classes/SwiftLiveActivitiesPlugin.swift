@@ -235,7 +235,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
+  func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         if activityId == activity.id {
