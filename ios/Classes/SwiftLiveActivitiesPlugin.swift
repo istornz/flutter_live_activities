@@ -2,6 +2,23 @@ import ActivityKit
 import Flutter
 import UIKit
 
+@available(iOS 16.1, *)
+class FlutterAlertConfig {
+  let _title:String
+  let _body:String
+  let _sound:String?
+
+  init(title:String, body:String, sound:String?) {
+    _title = title;
+    _body = body;
+      _sound = sound;
+  }
+
+  func getAlertConfig() -> AlertConfiguration {
+      return AlertConfiguration(title: LocalizedStringResource(stringLiteral: _title), body: LocalizedStringResource(stringLiteral: _body), sound: (_sound == nil) ? .default : AlertConfiguration.AlertSound.named(_sound!));
+  }
+}
+
 public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   private var urlSchemeSink: FlutterEventSink?
   private var appGroupId: String?
@@ -27,7 +44,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     urlSchemeSink = nil
     activityEventSink = nil
   }
-  
+
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
     if let args = arguments as? String{
       if (args == "urlSchemeStream") {
@@ -69,89 +86,96 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     
     if #available(iOS 16.1, *) {
       switch call.method {
-      case "init":
-        guard let args = call.arguments as? [String: Any] else {
-          return
-        }
-        
-        self.urlScheme = args["urlScheme"] as? String;
-        
-        if let appGroupId = args["appGroupId"] as? String {
-          self.appGroupId = appGroupId
-          sharedDefault = UserDefaults(suiteName: self.appGroupId)!
-          result(nil)
-        } else {
-          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'appGroupId' is valid", details: nil))
-        }
-        
-        break
-      case "createActivity":
-        initializationGuard(result: result)
-        guard let args = call.arguments as? [String: Any] else {
-          result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
-          return
-        }
-        
-        if let data = args["data"] as? [String: Any] {
-          let removeWhenAppIsKilled = args["removeWhenAppIsKilled"] as? Bool ?? false
-          let staleIn = args["staleIn"] as? Int? ?? nil
-          createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn, result: result)
-        } else {
-          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
-        }
-        break
-      case "updateActivity":
-        initializationGuard(result: result)
-        guard let args = call.arguments as? [String: Any] else {
-          result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
-          return
-        }
-        if let activityId = args["activityId"] as? String, let data = args["data"] as? [String: Any] {
-          updateActivity(activityId: activityId, data: data, result: result)
-        } else {
-          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' & 'data' are valid", details: nil))
-        }
-        break
-      case "endActivity":
-        guard let args = call.arguments as? [String: Any] else {
-          result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
-          return
-        }
-        if let activityId = args["activityId"] as? String {
-          endActivity(activityId: activityId, result: result)
-        } else {
-          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
-        }
-        break
-      case "getActivityState":
-        guard let args = call.arguments as? [String: Any] else {
-          result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
-          return
-        }
-        if let activityId = args["activityId"] as? String {
-          getActivityState(activityId: activityId, result: result)
-        } else {
-          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
-        }
-        break
-      case "getPushToken":
-        guard let args = call.arguments  as? [String: Any] else {
-          return
-        }
-        if let activityId = args["activityId"] as? String {
-          getPushToken(activityId: activityId, result: result)
-        } else {
-          result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
-        }
-        break
-      case "getAllActivitiesIds":
-        getAllActivitiesIds(result: result)
-        break
-      case "endAllActivities":
-        endAllActivities(result: result)
-        break
-      default:
-        break
+        case "init":
+          guard let args = call.arguments as? [String: Any] else {
+            return
+          }
+
+          self.urlScheme = args["urlScheme"] as? String;
+
+          if let appGroupId = args["appGroupId"] as? String {
+            self.appGroupId = appGroupId
+            sharedDefault = UserDefaults(suiteName: self.appGroupId)!
+            result(nil)
+          } else {
+            result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'appGroupId' is valid", details: nil))
+          }
+
+          break
+        case "createActivity":
+          initializationGuard(result: result)
+          guard let args = call.arguments as? [String: Any] else {
+            result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
+            return
+          }
+
+          if let data = args["data"] as? [String: Any] {
+            let removeWhenAppIsKilled = args["removeWhenAppIsKilled"] as? Bool ?? false
+            let staleIn = args["staleIn"] as? Int? ?? nil
+            createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn, result: result)
+          } else {
+            result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
+          }
+          break
+        case "updateActivity":
+          initializationGuard(result: result)
+          guard let args = call.arguments as? [String: Any] else {
+            result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
+            return
+          }
+          if let activityId = args["activityId"] as? String, let data = args["data"] as? [String: Any] {
+              let alertConfigMap = args["alertConfig"] as? [String:String?];
+              let alertTitle = alertConfigMap?["title"] as? String;
+              let alertBody = alertConfigMap?["body"] as? String;
+              let alertSound = alertConfigMap?["sound"] as? String;
+
+              let alertConfig = (alertTitle == nil || alertBody == nil) ? nil : FlutterAlertConfig(title: alertTitle!, body: alertBody!, sound: alertSound);
+
+            updateActivity(activityId: activityId, data: data, alertConfig: alertConfig, result: result)
+          } else {
+            result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId', 'data' are valid", details: nil))
+          }
+          break
+        case "endActivity":
+          guard let args = call.arguments as? [String: Any] else {
+            result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
+            return
+          }
+          if let activityId = args["activityId"] as? String {
+            endActivity(activityId: activityId, result: result)
+          } else {
+            result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
+          }
+          break
+        case "getActivityState":
+          guard let args = call.arguments as? [String: Any] else {
+            result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
+            return
+          }
+          if let activityId = args["activityId"] as? String {
+            getActivityState(activityId: activityId, result: result)
+          } else {
+            result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
+          }
+          break
+        case "getPushToken":
+          guard let args = call.arguments  as? [String: Any] else {
+            return
+          }
+          if let activityId = args["activityId"] as? String {
+            getPushToken(activityId: activityId, result: result)
+          } else {
+            result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
+          }
+          break
+        case "getAllActivitiesIds":
+          getAllActivitiesIds(result: result)
+          break
+        case "endAllActivities":
+          endAllActivities(result: result)
+          break
+        default:
+          break
       }
     } else {
       result(FlutterError(code: "WRONG_IOS_VERSION", message: "this version of iOS is not supported", details: nil))
@@ -173,11 +197,11 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
     var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
     let prefix = liveDeliveryAttributes.id
-      
+
     for item in data {
         sharedDefault!.set(item.value, forKey: "\(prefix)_\(item.key)")
     }
- 
+
     if #available(iOS 16.2, *){
       let activityContent = ActivityContent(
         state: initialContentState,
@@ -211,7 +235,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func updateActivity(activityId: String, data: [String: Any?], result: @escaping FlutterResult) {
+  func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         if activityId == activity.id {
@@ -226,14 +250,15 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           }
           
           let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
-          await activity.update(using: updatedStatus)
+          await activity.update(using: updatedStatus, alertConfiguration: alertConfig?.getAlertConfig())
           break;
         }
       }
       result(nil)
     }
   }
-  
+
+
   @available(iOS 16.1, *)
   func getActivityState(activityId: String, result: @escaping FlutterResult) {
     Task {
