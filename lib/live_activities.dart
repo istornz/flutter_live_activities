@@ -1,9 +1,9 @@
+import 'package:live_activities/live_activities_platform_interface.dart';
 import 'package:live_activities/models/activity_update.dart';
+import 'package:live_activities/models/alert_config.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:live_activities/services/app_groups_image_service.dart';
-
-import 'live_activities_platform_interface.dart';
 
 class LiveActivities {
   final AppGroupsImageService _appGroupsImageService = AppGroupsImageService();
@@ -45,9 +45,11 @@ class LiveActivities {
   /// You can get an activity id by calling [createActivity].
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Map is limited to String keys and values for now.
-  Future updateActivity(String activityId, Map<String, dynamic> data) async {
+  Future updateActivity(String activityId, Map<String, dynamic> data,
+      [AlertConfig? alertConfig]) async {
     await _appGroupsImageService.sendImageToAppGroups(data);
-    return LiveActivitiesPlatform.instance.updateActivity(activityId, data);
+    return LiveActivitiesPlatform.instance
+        .updateActivity(activityId, data, alertConfig);
   }
 
   /// End an iOS 16.1+ live activity.

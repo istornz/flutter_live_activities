@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:live_activities/live_activities_platform_interface.dart';
 import 'package:live_activities/models/activity_update.dart';
+import 'package:live_activities/models/alert_config.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
-
-import 'live_activities_platform_interface.dart';
 
 /// An implementation of [LiveActivitiesPlatform] that uses method channels.
 class MethodChannelLiveActivities extends LiveActivitiesPlatform {
@@ -48,10 +48,12 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
-  Future updateActivity(String activityId, Map<String, dynamic> data) async {
+  Future updateActivity(String activityId, Map<String, dynamic> data,
+      [AlertConfig? alertConfig]) async {
     return methodChannel.invokeMethod('updateActivity', {
       'activityId': activityId,
       'data': data,
+      'alertConfig': alertConfig?.toMap()
     });
   }
 
