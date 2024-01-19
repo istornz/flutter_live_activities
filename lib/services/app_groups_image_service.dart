@@ -52,6 +52,11 @@ class AppGroupsImageService {
           final imageWidth = descriptor.width;
           final imageHeight = descriptor.height;
 
+          assert(
+            imageWidth > 0,
+            'Please make sure you are using an image that is not corrupt or too small',
+          );
+
           final targetWidth = (imageWidth * value.resizeFactor).round();
 
           file = await FlutterNativeImage.compressImage(
