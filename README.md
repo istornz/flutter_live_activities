@@ -14,7 +14,7 @@
 
 <div align="center">
   <a href="https://radion-app.com" target="_blank" alt="Radion - Ultimate gaming app">
-    <img src="./images/radion.png" width="600px" alt="Radion banner - Ultimate gaming app" />
+    <img src="https://raw.githubusercontent.com/istornz/live_activities/main/images/radion.png" width="600px" alt="Radion banner - Ultimate gaming app" />
   </a>
 </div>
 <br />
@@ -45,25 +45,25 @@ This plugin uses the [iOS ActivityKit API](https://developer.apple.com/documenta
 
 Due to **technical restriction**, it's not currently possible to only use Flutter 🫣.
 
-You need to **implement** in your Flutter iOS project a **Widget Extension** & develop in *Swift*/*Objective-C* your own **Live Activity** / **Dynamic Island** design.
+You need to **implement** in your Flutter iOS project a **Widget Extension** & develop in _Swift_/_Objective-C_ your own **Live Activity** / **Dynamic Island** design.
 
 > ℹ️ You can check into the [**example repository**](https://github.com/istornz/live_activities/tree/main/example) for a full example app using Live Activities & Dynamic Island
 
 - ## 📱 Native
-  - Open the Xcode workspace project ```ios/Runner.xcworkspace```.
-  - Click on ```File``` -> ```New``` -> ```Target...```
-    - Select ```Widget Extension``` & click on **Next**.
+  - Open the Xcode workspace project `ios/Runner.xcworkspace`.
+  - Click on `File` -> `New` -> `Target...`
+    - Select `Widget Extension` & click on **Next**.
     - Specify the product name (e.g., `MyAppWidget`) and be sure to select "**Runner**" in "Embed in Application" dropdown.
     - Click on **Finish**.
     - When selecting Finish, an alert will appear, you will need to click on **Activate**.
-  
+
 <img alt="create widget extension xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/create_widget_extension.gif" width="700px" />
 
-  - Add the "Push Notifications" capabilities for the main ```Runner``` app **only**!.
+- Add the "Push Notifications" capabilities for the main `Runner` app **only**!.
 
   <img alt="enable push notification capabilities" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/push_capability.gif" width="700px" />
 
-  - Enable live activity by adding this line in ```Info.plist``` for both ```Runner``` and your ```Widget Extension```.
+- Enable live activity by adding this line in `Info.plist` for both `Runner` and your `Widget Extension`.
 
 ```xml
 <key>NSSupportsLiveActivities</key>
@@ -72,9 +72,9 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 
   <img alt="enable live activities xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/enable_live_activities.gif" width="700px" />
 
-  - Add the "App Group" capability for both ```Runner``` and your widget extension.
-    After you add the capability, check the checkmark next to the text field that contains an identifier of the form `group.example.myapp`.
-    This identifier will be used later and refered to as `YOUR_GROUP_ID`.
+- Add the "App Group" capability for both `Runner` and your widget extension.
+  After you add the capability, check the checkmark next to the text field that contains an identifier of the form `group.example.myapp`.
+  This identifier will be used later and refered to as `YOUR_GROUP_ID`.
 
   <img alt="enable live activity" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/app_group.gif" width="700px" />
 
@@ -82,19 +82,19 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 
 > ℹ️ You can check on this [resource](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235) or [here](https://betterprogramming.pub/create-live-activities-with-activitykit-on-ios-16-beta-4766a347035b) for more native informations.
 
-  - In your extension, you need to create an ```ActivityAttributes``` called **EXACTLY** ```LiveActivitiesAppAttributes``` (if you rename, activity will be created but not appear!)
+- In your extension, you need to create an `ActivityAttributes` called **EXACTLY** `LiveActivitiesAppAttributes` (if you rename, activity will be created but not appear!)
 
 ```swift
 struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
   public typealias LiveDeliveryData = ContentState // don't forget to add this line, otherwise, live activity will not display it.
 
   public struct ContentState: Codable, Hashable { }
-  
+
   var id = UUID()
 }
 ```
 
-  - Create a Swift extension to handle prefixed keys at the end of the file. 
+- Create a Swift extension to handle prefixed keys at the end of the file.
 
 ```swift
 extension LiveActivitiesAppAttributes {
@@ -104,7 +104,7 @@ extension LiveActivitiesAppAttributes {
 }
 ```
 
-  - Create an ```UserDefaults``` with your group id to access Flutter data in your Swift code.
+- Create an `UserDefaults` with your group id to access Flutter data in your Swift code.
 
 ```swift
 // Create shared default with custom group
@@ -150,16 +150,18 @@ struct FootballMatchApp: Widget {
   _liveActivitiesPlugin.createActivity(activityModel);
   ```
 
-  > You can pass all type of data you want but keep it mind it should be compatible with [```UserDefaults```](https://developer.apple.com/documentation/foundation/userdefaults)
+  > You can pass all type of data you want but keep it mind it should be compatible with [`UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults)
 
   <br />
-  
+
 ## Access Flutter basic data from Native 🧵
 
-- In your Swift extension, you need to create an ```UserDefaults``` instance to access data:
+- In your Swift extension, you need to create an `UserDefaults` instance to access data:
+
 ```swift
 let sharedDefault = UserDefaults(suiteName: "YOUR_GROUP_ID")!
 ```
+
 > ⚠️ Be sure to use the **SAME** group id in your Swift extension and your Flutter app!
 
 - Access to your typed data:
@@ -173,8 +175,8 @@ let quantity = sharedDefault.integer(forKey: context.attributes.prefixedKey("qua
 
 ## Access Flutter picture from Native 🧵
 
-- In your map, send a ```LiveActivityImageFromAsset``` or ```LiveActivityImageFromUrl``` object:
-  
+- In your map, send a `LiveActivityImageFromAsset` or `LiveActivityImageFromUrl` object:
+
 ```dart
 final Map<String, dynamic> activityModel = {
   'assetKey': LiveActivityImageFromAsset('assets/images/pizza_chorizo.png'),
@@ -187,11 +189,11 @@ final Map<String, dynamic> activityModel = {
 _liveActivitiesPlugin.createActivity(activityModel);
 ```
 
-ℹ️ Use ```LiveActivityImageFromAsset``` to load an image from your Flutter asset.
+ℹ️ Use `LiveActivityImageFromAsset` to load an image from your Flutter asset.
 
-ℹ️ Use ```LiveActivityImageFromUrl``` to load an image from an external url.
+ℹ️ Use `LiveActivityImageFromUrl` to load an image from an external url.
 
-> ⚠️ Image need to be in a small resolution to be displayed in your live activity/dynamic island, you can use ```resizeFactor``` to automatically resize the image 👍.
+> ⚠️ Image need to be in a small resolution to be displayed in your live activity/dynamic island, you can use `resizeFactor` to automatically resize the image 👍.
 
 - In your Swift extension, display the image:
 
@@ -281,20 +283,20 @@ That's it 😇
 
 ## 📘 Documentation
 
-| Name | Description | Returned value |
-| ---- | ----------- | -------- |
-| ```.init()``` | Initialize the Plugin by providing an App Group Id (see above)  | ```Future``` When the plugin is ready to create/update an activity |
-| ```.createActivity()``` | Create an iOS live activity  | ```String``` The activity identifier |
-| ```.updateActivity()``` | Update the live activity data by using the ```activityId``` provided  | ```Future``` When the activity was updated |
-| ```.endActivity()``` | End the live activity by using the ```activityId``` provided | ```Future``` When the activity was ended |
-| ```.getAllActivitiesIds()``` | Get all activities ids created | ```Future<List<String>>``` List of all activities ids |
-| ```.endAllActivities()``` | End all live activities of the app | ```Future``` When all activities was ended |
-| ```.areActivitiesEnabled()``` | Check if live activities feature are supported & enabled | ```Future<bool>``` Live activities supported or not |
-| ```.getActivityState()``` | Get the activity current state | ```Future<LiveActivityState?>``` An enum to know the status of the activity (```active```, ```dismissed``` or ```ended```) |
-| ```.getPushToken()``` | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date) | ```String?``` The activity push token (can be null) |
-| ```.urlSchemeStream()``` | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data) | ```Future<UrlSchemeData>``` Url scheme data which handle ```scheme``` ```url``` ```host``` ```path``` ```queryItems``` |
-| ```.dispose()``` | Remove all pictures passed in the AppGroups directory in the current session, you can use the ```force``` parameters to remove **all** pictures | ```Future``` Picture removed |
-| ```.activityUpdateStream``` | Get notified with a stream about live activity push token & status | ```Stream<ActivityUpdate>``` Status updates for new push tokens or when the activity ends |
+| Name                      | Description                                                                                                                                 | Returned value                                                                                             |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `.init()`                 | Initialize the Plugin by providing an App Group Id (see above)                                                                              | `Future` When the plugin is ready to create/update an activity                                             |
+| `.createActivity()`       | Create an iOS live activity                                                                                                                 | `String` The activity identifier                                                                           |
+| `.updateActivity()`       | Update the live activity data by using the `activityId` provided                                                                            | `Future` When the activity was updated                                                                     |
+| `.endActivity()`          | End the live activity by using the `activityId` provided                                                                                    | `Future` When the activity was ended                                                                       |
+| `.getAllActivitiesIds()`  | Get all activities ids created                                                                                                              | `Future<List<String>>` List of all activities ids                                                          |
+| `.endAllActivities()`     | End all live activities of the app                                                                                                          | `Future` When all activities was ended                                                                     |
+| `.areActivitiesEnabled()` | Check if live activities feature are supported & enabled                                                                                    | `Future<bool>` Live activities supported or not                                                            |
+| `.getActivityState()`     | Get the activity current state                                                                                                              | `Future<LiveActivityState?>` An enum to know the status of the activity (`active`, `dismissed` or `ended`) |
+| `.getPushToken()`         | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date)                       | `String?` The activity push token (can be null)                                                            |
+| `.urlSchemeStream()`      | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data)        | `Future<UrlSchemeData>` Url scheme data which handle `scheme` `url` `host` `path` `queryItems`             |
+| `.dispose()`              | Remove all pictures passed in the AppGroups directory in the current session, you can use the `force` parameters to remove **all** pictures | `Future` Picture removed                                                                                   |
+| `.activityUpdateStream`   | Get notified with a stream about live activity push token & status                                                                          | `Stream<ActivityUpdate>` Status updates for new push tokens or when the activity ends                      |
 
 <br />
 
@@ -307,7 +309,7 @@ Contributions are welcome. Contribute by creating a PR or an issue 🎉.
 - [ ] Inject a Widget inside the notification with Flutter Engine ?
 - [x] Support push token.
 - [x] Pass media between extension & Flutter app.
-- [x] Support multiple type instead of ```String``` (Date, Number etc.).
+- [x] Support multiple type instead of `String` (Date, Number etc.).
 - [x] Pass data across native dynamic island and Flutter app.
 - [x] Pass data across native live activity notification and Flutter app.
 - [x] Cancel all activities.
