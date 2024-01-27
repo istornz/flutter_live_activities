@@ -174,7 +174,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.9.2"
+    version: "1.9.1"
   matcher:
     dependency: transitive
     description:
