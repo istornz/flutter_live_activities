@@ -1,3 +1,13 @@
+## 1.9.1
+
+* ✨ Add update with alert config (thanks @charlesRmajor 👍).
+* ✨ Add an option to use preloaded images (thanks @Niklas-Sommer 👍).
+* ✨ Add Android support - currently only used to check if live activities is supported (thanks @ggirotto 👍).
+* ✨ Example app support Material 3.
+* 🐛 Fix tests.
+* 📝 Update README.md.
+* ⬆️ Upgrade dependencies.
+
 ## 1.9.0
 
 - ✨ **BREAKING CHANGE**: Add the ability to handle multiple live notification (thanks @Clon1998 👍).
