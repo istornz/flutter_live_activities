@@ -52,9 +52,16 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if (call.method == "areActivitiesEnabled") {
+        if call.method == "areActivitiesEnabled" {
             if #available(iOS 16.1, *) {
                 result(ActivityAuthorizationInfo().areActivitiesEnabled)
+            } else {
+                result(false)
+            }
+            return
+        } else if call.method == "isiOSAppOnMac" {
+            if #available(iOS 14.0, *) {
+                result(ProcessInfo.processInfo.isiOSAppOnMac)
             } else {
                 result(false)
             }
@@ -142,9 +149,6 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
                 break
             case "endAllActivities":
                 endAllActivities(result: result)
-                break
-            case "isiOSAppOnMac":
-                result(ProcessInfo.processInfo.isiOSAppOnMac)
                 break
             default:
                 break
