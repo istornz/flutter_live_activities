@@ -229,7 +229,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       if removeWhenAppIsKilled {
         appLifecycleLifeActiviyIds.append(deliveryActivity!.id)
       }
-      monitorLiveActivity(deliveryActivity!)
+//       monitorLiveActivity(deliveryActivity!)
       result(deliveryActivity!.id)
     }
   }
