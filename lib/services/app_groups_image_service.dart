@@ -50,6 +50,12 @@ class AppGroupsImageService {
               await FlutterNativeImage.getImageProperties(file.path);
 
           final targetWidth = (properties.width! * value.resizeFactor).round();
+          file = await _compressToSize(
+            file.path,
+            150,
+            75,
+          );
+
           file = await FlutterNativeImage.compressImage(
             file.path,
             targetWidth: targetWidth,
@@ -82,7 +88,59 @@ class AppGroupsImageService {
   Future<void> removeImagesSession() async {
     for (String filePath in _assetsCopiedInAppGroups) {
       final file = File(filePath);
-      await file.delete();
+      try {
+        await file.delete();
+      } catch (e) {
+        print('Error deleting file: $e');
+      }
     }
+    _assetsCopiedInAppGroups.removeWhere((element) => true);
   }
+}
+
+Future<File> _compressToSize(
+  String path,
+  int targetWidthPixels,
+  int maxSizeKb,
+) async {
+  File compressedFile = await _compressImageToWidth(path, targetWidthPixels);
+  int maxSizeBytes = maxSizeKb * 1000;
+  int loopLimit = 4;
+  while ((compressedFile.lengthSync() > maxSizeBytes) && loopLimit-- > 0) {
+    int percentage =
+        ((maxSizeBytes / compressedFile.lengthSync()) * 100).round();
+    compressedFile = await FlutterNativeImage.compressImage(
+      path,
+      percentage: percentage,
+    );
+  }
+  if (compressedFile.lengthSync() > maxSizeBytes) {
+    throw Exception('Could not compress image to size');
+  }
+  return compressedFile;
+}
+
+/// Throws exception if we can't get width and height attributes
+Future<File> _compressImageToWidth(String path, int targetWidth) async {
+  ImageProperties properties =
+      await FlutterNativeImage.getImageProperties(path);
+  int? originalWidth = properties.width;
+  int? originalHeight = properties.height;
+
+  if (originalWidth == null || originalHeight == null) {
+    throw Exception('Could not get width and height of image');
+  }
+
+  if (originalWidth < targetWidth) {
+    return File(path);
+  }
+
+  // Height multiplier
+  final double heightMultiplier = targetWidth / originalWidth * originalHeight;
+  // TODO: replace this with a less janky plugin?
+  return FlutterNativeImage.compressImage(
+    path,
+    targetWidth: targetWidth,
+    targetHeight: heightMultiplier.round(),
+  );
 }
