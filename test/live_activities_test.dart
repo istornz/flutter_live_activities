@@ -31,12 +31,6 @@ class MockLiveActivitiesPlatform
   }
 
   @override
-  Future updateActivity(String activityId, Map<String, dynamic> data,
-      [AlertConfig? alertConfig]) {
-    return Future.value();
-  }
-
-  @override
   Future<bool> areActivitiesEnabled() {
     return Future.value(true);
   }
@@ -82,6 +76,12 @@ class MockLiveActivitiesPlatform
       'token': 'ACTIVITY_TOKEN',
     };
     return Stream.value(ActivityUpdate.fromMap(map));
+  }
+
+  @override
+  Future updateActivity(String activityId, Map<String, dynamic> data,
+      [AlertConfig? alertConfig]) {
+    return Future.value();
   }
 }
 

@@ -95,7 +95,13 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Live Activities (Flutter)'),
+        title: const Text(
+          'Live Activities (Flutter)',
+          style: TextStyle(
+            fontSize: 19,
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.green,
       ),
       body: SizedBox.expand(
