@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:app_group_directory/app_group_directory.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
@@ -46,15 +47,22 @@ class AppGroupsImageService {
         file.writeAsBytesSync(bytes);
 
         if (value.resizeFactor != 1) {
-          ImageProperties properties =
-              await FlutterNativeImage.getImageProperties(file.path);
+          final buffer = await ImmutableBuffer.fromUint8List(bytes);
+          final descriptor = await ImageDescriptor.encoded(buffer);
+          final imageWidth = descriptor.width;
+          final imageHeight = descriptor.height;
 
-          final targetWidth = (properties.width! * value.resizeFactor).round();
+          assert(
+            imageWidth > 0,
+            'Please make sure you are using an image that is not corrupt or too small',
+          );
+
+          final targetWidth = (imageWidth * value.resizeFactor).round();
+
           file = await FlutterNativeImage.compressImage(
             file.path,
             targetWidth: targetWidth,
-            targetHeight:
-                (properties.height! * targetWidth / properties.width!).round(),
+            targetHeight: (imageHeight * targetWidth / imageWidth).round(),
           );
         }
 
