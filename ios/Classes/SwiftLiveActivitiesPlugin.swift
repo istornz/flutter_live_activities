@@ -124,6 +124,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
             return
           }
           if let activityId = args["activityId"] as? String, let data = args["data"] as? [String: Any] {
+              let staleIn = args["staleIn"] as? Int? ?? nil
               let alertConfigMap = args["alertConfig"] as? [String:String?];
               let alertTitle = alertConfigMap?["title"] as? String;
               let alertBody = alertConfigMap?["body"] as? String;
@@ -131,7 +132,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
 
               let alertConfig = (alertTitle == nil || alertBody == nil) ? nil : FlutterAlertConfig(title: alertTitle!, body: alertBody!, sound: alertSound);
 
-            updateActivity(activityId: activityId, data: data, alertConfig: alertConfig, result: result)
+            updateActivity(activityId: activityId, data: data, alertConfig: alertConfig, staleIn: staleIn, result: result)
           } else {
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId', 'data' are valid", details: nil))
           }
@@ -205,7 +206,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     if #available(iOS 16.2, *){
       let activityContent = ActivityContent(
         state: initialContentState,
-        staleDate: staleIn != nil ? Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now) : nil)
+        staleDate: getStaleDate(staleIn))
       do {
         deliveryActivity = try Activity.request(
           attributes: liveDeliveryAttributes,
@@ -229,13 +230,13 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       if removeWhenAppIsKilled {
         appLifecycleLifeActiviyIds.append(deliveryActivity!.id)
       }
-//       monitorLiveActivity(deliveryActivity!)
+      monitorLiveActivity(deliveryActivity!)
       result(deliveryActivity!.id)
     }
   }
   
   @available(iOS 16.1, *)
-  func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, result: @escaping FlutterResult) {
+  func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, staleIn: Int?, result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         if activityId == activity.id {
@@ -250,7 +251,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
           }
           
           let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
-          await activity.update(using: updatedStatus, alertConfiguration: alertConfig?.getAlertConfig())
+          await activity.update(ActivityContent<LiveActivitiesAppAttributes.ContentState>(state: updatedStatus, staleDate: getStaleDate(staleIn)), alertConfiguration: alertConfig?.getAlertConfig())
           break;
         }
       }
@@ -376,34 +377,34 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     var id = UUID()
   }
   
-//   @available(iOS 16.1, *)
-//   private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
-//       do {
-//           try
-//           Task {
-//             for await state in activity.activityStateUpdates {
-//               var response: Dictionary<String, Any> = Dictionary()
-//               response["activityId"] = activity.id
-//               switch state {
-//               case .active:
-//                 monitorTokenChanges(activity)
-//               case .dismissed, .ended:
-//                 response["status"] = "ended"
-//                 activityEventSink?.self(response)
-//               case .stale:
-//                 response["status"] = "stale"
-//                 activityEventSink?.self(response)
-//               @unknown default:
-//                 response["status"] = "unknown"
-//                 activityEventSink?.self(response)
-//               }
-//             }
-//           }
-//       } catch {
-//           print("error: ");
-//           print(error);
-//       }
-//   }
+  @available(iOS 16.1, *)
+  private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
+      do {
+          try
+          Task {
+            for await state in activity.activityStateUpdates {
+              var response: Dictionary<String, Any> = Dictionary()
+              response["activityId"] = activity.id
+              switch state {
+              case .active:
+                monitorTokenChanges(activity)
+              case .dismissed, .ended:
+                response["status"] = "ended"
+                activityEventSink?.self(response)
+              case .stale:
+                response["status"] = "stale"
+                activityEventSink?.self(response)
+              @unknown default:
+                response["status"] = "unknown"
+                activityEventSink?.self(response)
+              }
+            }
+          }
+      } catch {
+          print("error: ");
+          print(error);
+      }
+  }
   
   @available(iOS 16.1, *)
   private func monitorTokenChanges<T: ActivityAttributes>(_ activity: Activity<T>) {
@@ -417,5 +418,12 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         activityEventSink?.self(response)
       }
     }
+  }
+
+  func getStaleDate(staleIn: Int?) -> Date? {
+    if staleIn != nil {
+      return Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now)
+    }
+    return nil
   }
 }

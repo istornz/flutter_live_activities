@@ -42,7 +42,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   }
 
   Future updateActivity(String activityId, Map<String, dynamic> data,
-      [AlertConfig? alertConfig]) {
+      {Duration? staleIn, AlertConfig? alertConfig}) {
     throw UnimplementedError('updateActivity() has not been implemented.');
   }
 

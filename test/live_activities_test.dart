@@ -79,8 +79,11 @@ class MockLiveActivitiesPlatform
   }
 
   @override
-  Future updateActivity(String activityId, Map<String, dynamic> data,
-      [AlertConfig? alertConfig]) {
+  Future updateActivity(
+    String activityId, 
+    Map<String, dynamic> data,{
+      Duration? staleIn,
+      AlertConfig? alertConfig}) {
     return Future.value();
   }
 }

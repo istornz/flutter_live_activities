@@ -45,11 +45,18 @@ class LiveActivities {
   /// You can get an activity id by calling [createActivity].
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Map is limited to String keys and values for now.
-  Future updateActivity(String activityId, Map<String, dynamic> data,
-      [AlertConfig? alertConfig]) async {
+  /// 
+  /// [StaleIn] indicates if a StaleDate should be added to the activity. If the value is null or the Duration
+  /// is less than 1 minute then no staleDate will be used. The parameter only affects the live activity on
+  /// iOS 16.2+ and does nothing on on iOS 16.1
+  Future updateActivity(
+    String activityId, 
+    Map<String, dynamic> data,{
+      Duration? staleIn,
+      AlertConfig? alertConfig}) async {
     await _appGroupsImageService.sendImageToAppGroups(data);
     return LiveActivitiesPlatform.instance
-        .updateActivity(activityId, data, alertConfig);
+        .updateActivity(activityId, data, alertConfig: alertConfig, staleIn: staleIn);
   }
 
   /// End an iOS 16.1+ live activity.

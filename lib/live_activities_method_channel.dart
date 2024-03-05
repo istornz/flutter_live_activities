@@ -31,29 +31,32 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     });
   }
 
+  // If the duration is less than 1 minute then pass a null value instead of using 0 minutes
+  int? getStaleInMinutes(Duration? staleIn) {
+    return (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
+  }
+
   @override
   Future<String?> createActivity(
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
   }) async {
-    // If the duration is less than 1 minute then pass a null value instead of using 0 minutes
-    final staleInMinutes =
-        (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
     return methodChannel.invokeMethod<String>('createActivity', {
       'data': data,
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
-      'staleIn': staleInMinutes,
+      'staleIn': getStaleInMinutes(staleIn),
     });
   }
 
   @override
   Future updateActivity(String activityId, Map<String, dynamic> data,
-      [AlertConfig? alertConfig]) async {
+      {Duration? staleIn, AlertConfig? alertConfig}) async {
     return methodChannel.invokeMethod('updateActivity', {
       'activityId': activityId,
       'data': data,
-      'alertConfig': alertConfig?.toMap()
+      'alertConfig': alertConfig?.toMap(),
+      'staleIn': getStaleInMinutes(staleIn),
     });
   }
 
