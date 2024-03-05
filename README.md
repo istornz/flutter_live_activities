@@ -19,7 +19,7 @@
 </div>
 <br />
 
-A Flutter plugin to use iOS 16.1+ **Live Activities** & iPhone 14 Pro **Dynamic Island** features.
+A Flutter plugin to use iOS 16.2+ **Live Activities** & iPhone 14 Pro **Dynamic Island** features.
 
 ## 🧐 What is it ?
 
@@ -27,8 +27,8 @@ This plugin uses the [iOS ActivityKit API](https://developer.apple.com/documenta
 
 **live_activities** can be used to show **dynamic live notification** & implement **dynamic island** feature on iPhones that support it 🏝️
 
-> ⚠️ **live_activities** is only intended to use with **iOS 16.1+** !
-> It will simply do nothing on other platform & < iOS 16.1
+> ⚠️ **live_activities** is only intended to use with **iOS 16.2+** !
+> It will simply do nothing on other platform & < iOS 16.2
 
 <br />
 <div align="center" style="display: flex;align-items: center;justify-content: center;">

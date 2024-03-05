@@ -2,7 +2,7 @@ import ActivityKit
 import Flutter
 import UIKit
 
-@available(iOS 16.1, *)
+@available(iOS 16.2, *)
 class FlutterAlertConfig {
   let _title:String
   let _body:String
@@ -76,7 +76,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if (call.method == "areActivitiesEnabled") {
-      if #available(iOS 16.1, *) {
+      if #available(iOS 16.2, *) {
         result(ActivityAuthorizationInfo().areActivitiesEnabled)
       } else {
         result(false)
@@ -84,7 +84,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       return
     }
     
-    if #available(iOS 16.1, *) {
+    if #available(iOS 16.2, *) {
       switch call.method {
         case "init":
           guard let args = call.arguments as? [String: Any] else {
@@ -183,7 +183,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, result: @escaping FlutterResult) {
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
@@ -234,7 +234,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, staleIn: Int?, result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
@@ -259,7 +259,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
 
 
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   func getActivityState(activityId: String, result: @escaping FlutterResult) {
     Task {
       if let matchingActivity = Activity<LiveActivitiesAppAttributes>.activities.first(where: { $0.id == activityId }) {
@@ -282,7 +282,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   func getPushToken(activityId: String, result: @escaping FlutterResult) {
     Task {
       var pushToken: String?;
@@ -297,7 +297,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   func endActivity(activityId: String, result: @escaping FlutterResult) {
     appLifecycleLifeActiviyIds.removeAll { $0 == activityId }
     Task {
@@ -306,7 +306,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   func endAllActivities(result: @escaping FlutterResult) {
     Task {
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
@@ -317,7 +317,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   func getAllActivitiesIds(result: @escaping FlutterResult) {
     var activitiesId: [String] = []
     for activity in Activity<LiveActivitiesAppAttributes>.activities {
@@ -327,7 +327,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     result(activitiesId)
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   private func endActivitiesWithId(activityIds: [String]) async {
     for activity in Activity<LiveActivitiesAppAttributes>.activities {
       if (activityIds.contains { $0 == activity.id }) {
@@ -359,7 +359,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   public func applicationWillTerminate(_ application: UIApplication) {
-    if #available(iOS 16.1, *) {
+    if #available(iOS 16.2, *) {
       Task {
         await self.endActivitiesWithId(activityIds: self.appLifecycleLifeActiviyIds)
       }
@@ -376,7 +376,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     var id = UUID()
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
       do {
           try
@@ -405,7 +405,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       }
   }
   
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   private func monitorTokenChanges<T: ActivityAttributes>(_ activity: Activity<T>) {
     Task {
       for await data in activity.pushTokenUpdates {
@@ -419,7 +419,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
 
-  @available(iOS 16.1, *)
+  @available(iOS 16.2, *)
   func getStaleDate(_ staleIn: Int?) -> Date? {
     if staleIn != nil {
       return Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now)

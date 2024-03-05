@@ -12,7 +12,7 @@ import SwiftUI
 @main
 struct Widgets: WidgetBundle {
   var body: some Widget {
-    if #available(iOS 16.1, *) {
+    if #available(iOS 16.2, *) {
       FootballMatchApp()
     }
   }
@@ -30,7 +30,7 @@ struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
 // Create shared default with custom group
 let sharedDefault = UserDefaults(suiteName: "group.dimitridessus.liveactivities")!
 
-@available(iOSApplicationExtension 16.1, *)
+@available(iOSApplicationExtension 16.2, *)
 struct FootballMatchApp: Widget {
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in

@@ -1,5 +1,5 @@
 name: live_activities
-description: A Flutter plugin to use iOS 16.1+ Live Activities & iPhone 14 Pro Dynamic Island features
+description: A Flutter plugin to use iOS 16.2+ Live Activities & iPhone 14 Pro Dynamic Island features
 version: 1.9.1+1
 homepage: https://dimitridessus.fr/
 repository: https://github.com/istornz/live_activities
