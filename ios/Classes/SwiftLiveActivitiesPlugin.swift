@@ -192,7 +192,6 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         result(FlutterError(code: "AUTHORIZATION_ERROR", message: "authorization error", details: error.localizedDescription))
       }
     }
-
     
     let liveDeliveryAttributes = LiveActivitiesAppAttributes()
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
@@ -420,6 +419,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
   }
 
+  @available(iOS 16.1, *)
   func getStaleDate(staleIn: Int?) -> Date? {
     if staleIn != nil {
       return Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now)
