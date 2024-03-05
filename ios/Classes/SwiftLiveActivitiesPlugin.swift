@@ -420,7 +420,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
 
   @available(iOS 16.1, *)
-  func getStaleDate(staleIn: Int?) -> Date? {
+  func getStaleDate(_ staleIn: Int?) -> Date? {
     if staleIn != nil {
       return Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now)
     }
