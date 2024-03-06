@@ -20,14 +20,13 @@ class LiveActivities {
     );
   }
 
-  /// Create an iOS 16.2+ live activity.
+  /// Create a live activity.
   /// When the activity is created, an activity id is returned.
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Image are limited by size, be sure to pass only small images (you can use ```resizeFactor```).
   ///
   /// [StaleIn] indicates if a StaleDate should be added to the activity. If the value is null or the Duration
-  /// is less than 1 minute then no staleDate will be used. The parameter only affects the live activity on
-  /// iOS 16.2+ and does nothing on on iOS 16.2
+  /// is less than 1 minute then no staleDate will be used.
   Future<String?> createActivity(
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
@@ -41,14 +40,13 @@ class LiveActivities {
     );
   }
 
-  /// Update an iOS 16.2+ live activity.
+  /// Update a live activity.
   /// You can get an activity id by calling [createActivity].
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Map is limited to String keys and values for now.
   ///
   /// [StaleIn] indicates if a StaleDate should be added to the activity. If the value is null or the Duration
-  /// is less than 1 minute then no staleDate will be used. The parameter only affects the live activity on
-  /// iOS 16.2+ and does nothing on on iOS 16.2
+  /// is less than 1 minute then no staleDate will be used.
   Future updateActivity(String activityId, Map<String, dynamic> data,
       {Duration? staleIn, AlertConfig? alertConfig}) async {
     await _appGroupsImageService.sendImageToAppGroups(data);
@@ -56,7 +54,7 @@ class LiveActivities {
         alertConfig: alertConfig, staleIn: staleIn);
   }
 
-  /// End an iOS 16.2+ live activity.
+  /// End a live activity.
   /// You can get an activity id by calling [createActivity].
   Future endActivity(String activityId) {
     return LiveActivitiesPlatform.instance.endActivity(activityId);
@@ -74,18 +72,18 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.getPushToken(activityId);
   }
 
-  /// Get all iOS 16.2+ live activity ids.
+  /// Get all live activity ids.
   /// You can get an activity id by calling [createActivity].
   Future<List<String>> getAllActivitiesIds() {
     return LiveActivitiesPlatform.instance.getAllActivitiesIds();
   }
 
-  /// End all iOS 16.2+ live activities.
+  /// End all live activities.
   Future endAllActivities() {
     return LiveActivitiesPlatform.instance.endAllActivities();
   }
 
-  /// Check if iOS 16.2+ live activities are enabled.
+  /// Check if live activities are enabled.
   Future<bool> areActivitiesEnabled() async {
     return LiveActivitiesPlatform.instance.areActivitiesEnabled();
   }
