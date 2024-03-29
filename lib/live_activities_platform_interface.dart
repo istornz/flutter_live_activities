@@ -58,6 +58,10 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     throw UnimplementedError('endAllActivities() has not been implemented.');
   }
 
+  Future<Map<String, LiveActivityState>> getAllActivities() {
+    throw UnimplementedError('getAllActivities() has not been implemented.');
+  }
+
   Future<bool> areActivitiesEnabled() {
     throw UnimplementedError(
         'areActivitiesEnabled() has not been implemented.');
