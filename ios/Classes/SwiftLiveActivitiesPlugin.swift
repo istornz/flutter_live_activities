@@ -171,6 +171,9 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         case "getAllActivitiesIds":
           getAllActivitiesIds(result: result)
           break
+        case "getAllActivities":
+          getAllActivities(result: result)
+          break
         case "endAllActivities":
           endAllActivities(result: result)
           break
@@ -263,18 +266,8 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   func getActivityState(activityId: String, result: @escaping FlutterResult) {
     Task {
       if let matchingActivity = Activity<LiveActivitiesAppAttributes>.activities.first(where: { $0.id == activityId }) {
-        switch (matchingActivity.activityState) {
-        case .active:
-          result("active")
-        case .ended:
-          result("ended")
-        case .dismissed:
-          result("dismissed")
-        case .stale:
-          result("stale")
-        @unknown default:
-          result("unknown")
-        }
+        var state = activityStateToString(activityState: matchingActivity.activityState)
+        result(state)
       } else {
         // No matching activity was found
         result(nil)
@@ -325,6 +318,16 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
     
     result(activitiesId)
+  }
+
+  @available(iOS 16.1, *)
+  func getAllActivities(result: @escaping FlutterResult) {
+    var activitiesState: [String: String] = [:] // Corrected here
+    for activity in Activity<LiveActivitiesAppAttributes>.activities {
+      activitiesState[activity.id] = activityStateToString(activityState: activity.activityState)
+    }
+
+    result(activitiesState)
   }
   
   @available(iOS 16.1, *)
@@ -411,5 +414,21 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         activityEventSink?.self(response)
       }
     }
+  }
+
+  @available(iOS 16.1, *)
+  private func activityStateToString(activityState: ActivityState) -> String {
+      switch activityState {
+      case .active:
+          return "active"
+      case .ended:
+          return "ended"
+      case .dismissed:
+          return "dismissed"
+      case .stale:
+          return "stale"
+      @unknown default:
+          return "unknown"
+      }
   }
 }

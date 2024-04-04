@@ -77,6 +77,14 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
+  Future<Map<String, LiveActivityState>> getAllActivities() async {
+    final result =
+        await methodChannel.invokeMapMethod<String, String>('getAllActivities');
+
+    return result?.map((key, value) => MapEntry(key, LiveActivityState.values.byName(value))) ?? <String, LiveActivityState>{};
+  }
+
+  @override
   Future<bool> areActivitiesEnabled() async {
     final result =
         await methodChannel.invokeMethod<bool>('areActivitiesEnabled');

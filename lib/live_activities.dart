@@ -81,6 +81,11 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.endAllActivities();
   }
 
+  /// Get all iOS 16.1+ live activities and their state.
+  Future<Map<String, LiveActivityState>> getAllActivities() {
+    return LiveActivitiesPlatform.instance.getAllActivities();
+  }
+
   /// Check if iOS 16.1+ live activities are enabled.
   Future<bool> areActivitiesEnabled() async {
     return LiveActivitiesPlatform.instance.areActivitiesEnabled();
