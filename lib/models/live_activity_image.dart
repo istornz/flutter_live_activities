@@ -1,6 +1,6 @@
 abstract class LiveActivityImage {
   int minHeight = 50;
-  int minWidth = 90;
+  int minWidth = 50;
 
   LiveActivityImage(this.minHeight, this.minWidth);
 }
@@ -14,7 +14,7 @@ class LiveActivityImageFromAsset extends LiveActivityImage {
   LiveActivityImageFromAsset(
     this.path, {
     int minHeight = 50,
-    int minWidth = 90,
+    int minWidth = 50,
   }) : super(minHeight, minWidth);
 }
 
@@ -27,6 +27,6 @@ class LiveActivityImageFromUrl extends LiveActivityImage {
   LiveActivityImageFromUrl(
     this.url, {
     int minHeight = 50,
-    int minWidth = 50,
+    int minWidth = 90,
   }) : super(minHeight, minWidth);
 }
