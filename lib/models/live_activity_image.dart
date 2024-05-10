@@ -26,7 +26,7 @@ class LiveActivityImageFromUrl extends LiveActivityImage {
 
   LiveActivityImageFromUrl(
     this.url, {
-    int minHeight = 50,
-    int minWidth = 90,
+    int minHeight = 60,
+    int minWidth = 200,
   }) : super(minHeight, minWidth);
 }
