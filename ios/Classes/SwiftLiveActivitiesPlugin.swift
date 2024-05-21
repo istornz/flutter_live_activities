@@ -383,20 +383,30 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
     Task {
       for await state in activity.activityStateUpdates {
-        var response: Dictionary<String, Any> = Dictionary()
-        response["activityId"] = activity.id
         switch state {
         case .active:
           monitorTokenChanges(activity)
         case .dismissed, .ended:
-          response["status"] = "ended"
-          activityEventSink?.self(response)
+          DispatchQueue.main.async {
+              var response: Dictionary<String, Any> = Dictionary()
+              response["activityId"] = activity.id
+              response["status"] = "ended"
+              self.activityEventSink?.self(response)
+          }
         case .stale:
-          response["status"] = "stale"
-          activityEventSink?.self(response)
+          DispatchQueue.main.async {
+              var response: Dictionary<String, Any> = Dictionary()
+              response["activityId"] = activity.id
+              response["status"] = "stale"
+              self.activityEventSink?.self(response)
+          }
         @unknown default:
-          response["status"] = "unknown"
-          activityEventSink?.self(response)
+          DispatchQueue.main.async {
+              var response: Dictionary<String, Any> = Dictionary()
+              response["activityId"] = activity.id
+              response["status"] = "unknown"
+              self.activityEventSink?.self(response)
+          }
         }
       }
     }
@@ -406,12 +416,14 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   private func monitorTokenChanges<T: ActivityAttributes>(_ activity: Activity<T>) {
     Task {
       for await data in activity.pushTokenUpdates {
-        var response: Dictionary<String, Any> = Dictionary()
-        let pushToken = data.map {String(format: "%02x", $0)}.joined()
-        response["token"] = pushToken
-        response["activityId"] = activity.id
-        response["status"] = "active"
-        activityEventSink?.self(response)
+        DispatchQueue.main.async {
+          var response: Dictionary<String, Any> = Dictionary()
+          let pushToken = data.map {String(format: "%02x", $0)}.joined()
+          response["token"] = pushToken
+          response["activityId"] = activity.id
+          response["status"] = "active"
+          self.activityEventSink?.self(response)
+        }
       }
     }
   }
