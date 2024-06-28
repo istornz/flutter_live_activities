@@ -1,3 +1,10 @@
+## 1.9.2
+* ✨ Simplified fetching of ActivityState of all created live activities (thanks to @Clon1998 👍).
+* 🐛 Fixes background thread invocation of event streams (thanks to @ggirotto 👍).
+* 🐛 Replaced getImageProperties with dart buffer and descriptor (thanks to @anumb 👍).
+* 🐛 Fix tests.
+* ⬆️ Upgrade dependencies.
+
 ## 1.9.1
 
 * ✨ Add update with alert config (thanks @charlesRmajor 👍).

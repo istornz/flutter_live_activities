@@ -83,6 +83,11 @@ class MockLiveActivitiesPlatform
       [AlertConfig? alertConfig]) {
     return Future.value();
   }
+
+  @override
+  Future<Map<String, LiveActivityState>> getAllActivities() {
+    return Future.value({'ACTIVITY_ID': LiveActivityState.active});
+  }
 }
 
 void main() {
@@ -112,8 +117,14 @@ void main() {
     expect(await liveActivitiesPlugin.endAllActivities(), null);
   });
 
-  test('getAllActivities', () async {
+  test('getAllActivitiesIds', () async {
     expect(await liveActivitiesPlugin.getAllActivitiesIds(), ['ACTIVITY_ID']);
+  });
+
+  test('getAllActivities', () async {
+    expect(await liveActivitiesPlugin.getAllActivities(), {
+      'ACTIVITY_ID': LiveActivityState.active,
+    });
   });
 
   test('areActivitiesEnabled', () async {
