@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -86,6 +87,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<bool> areActivitiesEnabled() async {
+    if (!Platform.isIOS) {
+      return false;
+    }
+
     final result =
         await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
     return result ?? false;
