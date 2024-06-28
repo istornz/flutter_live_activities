@@ -1,3 +1,6 @@
+## 1.9.3
+* 🐛 Force returning false for `areActivitiesEnabled()` when no iOS devices.
+
 ## 1.9.2
 * ✨ Simplified fetching of ActivityState of all created live activities (thanks to @Clon1998 👍).
 * 🐛 Fixes background thread invocation of event streams (thanks to @ggirotto 👍).
