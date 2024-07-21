@@ -88,6 +88,13 @@ class MockLiveActivitiesPlatform
   Future<Map<String, LiveActivityState>> getAllActivities() {
     return Future.value({'ACTIVITY_ID': LiveActivityState.active});
   }
+  @override
+  Future createOrUpdateActivity(String customId, Map<String, dynamic> data, {
+    bool removeWhenAppIsKilled = false,
+    Duration? staleIn,
+  }) {
+    return Future.value();
+  }
 }
 
 void main() {

@@ -54,6 +54,16 @@ class LiveActivities {
         .updateActivity(activityId, data, alertConfig);
   }
 
+  Future createOrUpdateActivity(String customId, Map<String, dynamic> data, {
+    bool removeWhenAppIsKilled = false,
+    Duration? staleIn,
+  }) async {
+    await _appGroupsImageService.sendImageToAppGroups(data);
+    return LiveActivitiesPlatform.instance
+        .createOrUpdateActivity(customId, data, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn);
+  }
+
+
   /// End an iOS 16.1+ live activity.
   /// You can get an activity id by calling [createActivity].
   Future endActivity(String activityId) {
