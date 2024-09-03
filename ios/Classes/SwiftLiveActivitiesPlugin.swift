@@ -54,6 +54,9 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if call.method == "areActivitiesEnabled" {
             if #available(iOS 16.1, *) {
+                if ProcessInfo.processInfo.isiOSAppOnMac {
+                    return result(false)
+                }
                 result(ActivityAuthorizationInfo().areActivitiesEnabled)
             } else {
                 result(false)
@@ -68,6 +71,11 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
             return
         }
         
+        if #available(iOS 14.0, *) {
+            if ProcessInfo.processInfo.isiOSAppOnMac {
+                return result(nil)
+            }
+        }
         if #available(iOS 16.1, *) {
             switch call.method {
             case "init":
@@ -337,8 +345,10 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     
     public func applicationWillTerminate(_ application: UIApplication) {
         if #available(iOS 16.1, *) {
-            Task {
-                await self.endActivitiesWithId(activityIds: self.appLifecycleLifeActiviyIds)
+            if !ProcessInfo.processInfo.isiOSAppOnMac {
+                Task {
+                    await self.endActivitiesWithId(activityIds: self.appLifecycleLifeActiviyIds)
+                }
             }
         }
     }
