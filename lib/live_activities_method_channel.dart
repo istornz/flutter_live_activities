@@ -82,7 +82,9 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     final result =
         await methodChannel.invokeMapMethod<String, String>('getAllActivities');
 
-    return result?.map((key, value) => MapEntry(key, LiveActivityState.values.byName(value))) ?? <String, LiveActivityState>{};
+    return result?.map((key, value) =>
+            MapEntry(key, LiveActivityState.values.byName(value))) ??
+        <String, LiveActivityState>{};
   }
 
   @override
