@@ -1,3 +1,7 @@
+## 1.9.4
+* 🍱 Convert images to webp.
+* ⬆️ Upgrade dependencies.
+
 ## 1.9.3
 * 🐛 Force returning false for `areActivitiesEnabled()` when no iOS devices.
 
