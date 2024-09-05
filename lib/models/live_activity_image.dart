@@ -1,14 +1,16 @@
-import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 
+/// Interface for images displayed on live activity widget / dynamic island.
+/// The image can be loaded from an asset, an url or from memory.
 abstract class LiveActivityImage {
+  /// You can use the ```resizeFactor``` to resize the image (1 is the original size).
   num resizeFactor;
 
   LiveActivityImage(
     this.resizeFactor,
   );
 
+  /// Load the image.
   Future<Uint8List> loadImage();
 }
 
@@ -16,6 +18,7 @@ abstract class LiveActivityImage {
 /// Image need to have small resolution to be displayed on live activity widget / dynamic island.
 /// You can use the ```resizeFactor``` to resize the image (1 is the original size).
 class LiveActivityImageFromAsset extends LiveActivityImage {
+  /// Path to the image asset.
   final String path;
 
   LiveActivityImageFromAsset(

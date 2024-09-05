@@ -12,6 +12,7 @@ class LiveActivities {
   /// Create an App Group inside "Runner" target & "Extension" in Xcode.
   /// Be sure to set the *SAME* App Group in both targets.
   /// [urlScheme] is optional and is the scheme sub-component of the URL.
+  /// [appGroupId] is the App Group identifier.
   Future init({required String appGroupId, String? urlScheme}) {
     _appGroupsImageService.appGroupId = appGroupId;
     return LiveActivitiesPlatform.instance.init(
@@ -87,7 +88,7 @@ class LiveActivities {
   }
 
   /// Check if iOS 16.1+ live activities are enabled.
-  Future<bool> areActivitiesEnabled() async {
+  Future<bool> areActivitiesEnabled() {
     return LiveActivitiesPlatform.instance.areActivitiesEnabled();
   }
 
