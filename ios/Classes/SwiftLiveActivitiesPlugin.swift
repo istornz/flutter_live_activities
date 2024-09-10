@@ -76,11 +76,12 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if (call.method == "areActivitiesEnabled") {
-      if #available(iOS 16.1, *) {
-        result(ActivityAuthorizationInfo().areActivitiesEnabled)
-      } else {
-        result(false)
+      guard #available(iOS 16.1, *), !ProcessInfo.processInfo.isiOSAppOnMac else {
+          result(false)
+          return
       }
+      
+      result(ActivityAuthorizationInfo().areActivitiesEnabled)
       return
     }
     

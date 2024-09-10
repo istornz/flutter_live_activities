@@ -1,3 +1,6 @@
+## 1.9.5
+* 🐛 Fix `areActivitiesEnabled()` on unsupported devices.
+
 ## 1.9.4
 * 🍱 Convert images to webp.
 * ⬆️ Upgrade dependencies.
