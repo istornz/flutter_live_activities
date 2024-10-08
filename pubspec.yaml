@@ -25,7 +25,7 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
   app_group_directory:
-    git: https://github.com/nhathuynh2803/app_group_directory
+    git: https://github.com/SnapDrive/app_group_directory
   path_provider: ^2.1.4
   image: ^4.2.0
 
