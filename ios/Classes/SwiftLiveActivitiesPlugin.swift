@@ -38,7 +38,50 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     urlSchemeChannel.setStreamHandler(instance)
     activityStatusChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
+
+    print("LiveActivitiesPlugin is registered TEST123")
+    if #available(iOS 17.2, *) {
+              Task {
+                  for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
+                      let token = data.map {String(format: "%02x", $0)}.joined()
+                              print("Activity PushToStart Token: \(token)")
+                              //send this token to your notification server
+
+                              // PushToken über den Flutter Channel senden
+                              channel.invokeMethod("onPushTokenReceived", arguments: token)
+                      }
+
+                  for await activity in Activity<LiveActivitiesAppAttributes>.activityUpdates {
+                      // Upon finding one, listen for its push token (it is not available immediately!)
+                      for await pushToken in activity.pushTokenUpdates {
+                          let pushTokenString = pushToken.reduce("") { $0 + String(format: "%02x", $1) }
+                          print("New activity detected with push token: \(pushTokenString)")
+                      }
+                  }
+              }
+          }
   }
+
+  public func getPushToStartToken() {
+      if #available(iOS 17.2, *) {
+          Task {
+              for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
+                  let token = data.map {String(format: "%02x", $0)}.joined()
+                          print("Activity PushToStart Token: \(token)")
+                          //send this token to your notification server
+                  }
+
+              for await activity in Activity<LiveActivitiesAppAttributes>.activityUpdates {
+                  // Upon finding one, listen for its push token (it is not available immediately!)
+                  for await pushToken in activity.pushTokenUpdates {
+                      let pushTokenString = pushToken.reduce("") { $0 + String(format: "%02x", $1) }
+                      print("New activity detected with push token: \(pushTokenString)")
+                  }
+              }
+          }
+      }
+  }
+
   
   public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
     urlSchemeSink = nil
