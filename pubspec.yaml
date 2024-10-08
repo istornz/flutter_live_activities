@@ -24,7 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
-  app_group_directory: ^2.0.0
+  app_group_directory:
+    git: https://github.com/nhathuynh2803/app_group_directory
   path_provider: ^2.1.4
   flutter_native_image: ^0.0.6+1
 
