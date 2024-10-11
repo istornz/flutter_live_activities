@@ -1,3 +1,8 @@
+## 2.0.0
+* ✨ Use new custom iOS [App Group Directory dependency](https://pub.dev/packages/flutter_app_group_directory) (this will fix namespace for Android gradle builds).
+* ✨ Removed deprecated flutter_native_image dependency and replaced by image (thanks to @SnapDrive 👍)
+* ⬆️ Upgrade dependencies.
+
 ## 1.9.5
 * 🐛 Fix `areActivitiesEnabled()` on unsupported devices.
 

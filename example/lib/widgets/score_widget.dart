@@ -5,11 +5,11 @@ class ScoreWidget extends StatelessWidget {
   final int score;
   final Function(int) onScoreChanged;
   const ScoreWidget({
-    Key? key,
+    super.key,
     required this.teamName,
     required this.score,
     required this.onScoreChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
