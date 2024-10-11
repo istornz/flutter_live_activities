@@ -2,9 +2,10 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:app_group_directory/app_group_directory.dart';
-import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:live_activities/models/live_activity_image.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
+
 
 const kPictureFolderName = 'LiveActivitiesPictures';
 
@@ -59,11 +60,13 @@ class AppGroupsImageService {
 
           final targetWidth = (imageWidth * value.resizeFactor).round();
 
-          file = await FlutterNativeImage.compressImage(
+          /*file = await FlutterNativeImage.compressImage(
             file.path,
             targetWidth: targetWidth,
             targetHeight: (imageHeight * targetWidth / imageWidth).round(),
-          );
+          );*/
+
+          file = await compressImage(file, targetWidth);
         }
 
         final finalDestination = '${appGroupPicture.path}/$fileName';
@@ -93,4 +96,29 @@ class AppGroupsImageService {
       await file.delete();
     }
   }
+}
+Future<File> compressImage(File file, int targetWidth) async {
+  // Lade das Bild von der Datei
+  final bytes = await file.readAsBytes();
+  final image = img.decodeImage(bytes);
+
+  if (image == null) {
+    throw Exception("Das Bild konnte nicht geladen werden.");
+  }
+
+  // Berechne die Zielhöhe basierend auf den Bilddimensionen
+  final imageWidth = image.width;
+  final imageHeight = image.height;
+  final targetHeight = (imageHeight * targetWidth / imageWidth).round();
+
+  // Skaliere das Bild auf die Zielgröße
+  final resizedImage = img.copyResize(image, width: targetWidth, height: targetHeight);
+
+  // Komprimiere das Bild als JPEG
+  final compressedBytes = img.encodeJpg(resizedImage, quality: 85);
+
+  // Speichere das komprimierte Bild in einer neuen Datei
+  final compressedFile = File(file.path)..writeAsBytesSync(compressedBytes);
+
+  return compressedFile;
 }
