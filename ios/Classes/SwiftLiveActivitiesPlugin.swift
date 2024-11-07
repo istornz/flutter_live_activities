@@ -47,8 +47,10 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
                               print("Activity PushToStart Token: \(token)")
                               //send this token to your notification server
 
-                              // PushToken über den Flutter Channel senden
-                              channel.invokeMethod("onPushTokenReceived", arguments: token)
+                              DispatchQueue.main.async {
+                                  // PushToken über den Flutter Channel senden
+                                  channel.invokeMethod("onPushTokenReceived", arguments: token)
+                              }
                       }
 
                   for await activity in Activity<LiveActivitiesAppAttributes>.activityUpdates {
