@@ -82,7 +82,7 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 
 > ℹ️ You can check on this [resource](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235) or [here](https://betterprogramming.pub/create-live-activities-with-activitykit-on-ios-16-beta-4766a347035b) for more native informations.
 
-- In your extension, you need to create an `ActivityAttributes` called **EXACTLY** `LiveActivitiesAppAttributes` (if you rename, activity will be created but not appear!)
+- Inside your extension `ExtensionNameLiveActivity.swift` file, you need to create an `ActivityAttributes` called **EXACTLY** `LiveActivitiesAppAttributes` (if you rename, activity will be created but not appear!)
 
 ```swift
 struct LiveActivitiesAppAttributes: ActivityAttributes, Identifiable {
