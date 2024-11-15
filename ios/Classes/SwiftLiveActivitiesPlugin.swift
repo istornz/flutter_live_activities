@@ -24,7 +24,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   private var appGroupId: String?
   private var urlScheme: String?
   private var sharedDefault: UserDefaults?
-  private var appLifecycleLifeActiviyIds = [String]()
+  private var appLifecycleLiveActivityIds = [String]()
   private var activityEventSink: FlutterEventSink?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -39,16 +39,14 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     activityStatusChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
 
-    print("LiveActivitiesPlugin is registered TEST123")
     if #available(iOS 17.2, *) {
               Task {
                   for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
                       let token = data.map {String(format: "%02x", $0)}.joined()
                               print("Activity PushToStart Token: \(token)")
-                              //send this token to your notification server
+                              // send this token to your notification server
 
                               DispatchQueue.main.async {
-                                  // PushToken über den Flutter Channel senden
                                   channel.invokeMethod("onPushTokenReceived", arguments: token)
                               }
                       }
@@ -276,7 +274,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     }
     if (deliveryActivity != nil) {
       if removeWhenAppIsKilled {
-        appLifecycleLifeActiviyIds.append(deliveryActivity!.id)
+        appLifecycleLiveActivityIds.append(deliveryActivity!.id)
       }
       monitorLiveActivity(deliveryActivity!)
       result(deliveryActivity!.id)
@@ -338,7 +336,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   
   @available(iOS 16.1, *)
   func endActivity(activityId: String, result: @escaping FlutterResult) {
-    appLifecycleLifeActiviyIds.removeAll { $0 == activityId }
+    appLifecycleLiveActivityIds.removeAll { $0 == activityId }
     Task {
       await endActivitiesWithId(activityIds: [activityId])
       result(nil)
@@ -351,7 +349,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       for activity in Activity<LiveActivitiesAppAttributes>.activities {
         await activity.end(dismissalPolicy: .immediate)
       }
-      appLifecycleLifeActiviyIds.removeAll()
+      appLifecycleLiveActivityIds.removeAll()
       result(nil)
     }
   }
@@ -410,7 +408,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   public func applicationWillTerminate(_ application: UIApplication) {
     if #available(iOS 16.1, *) {
       Task {
-        await self.endActivitiesWithId(activityIds: self.appLifecycleLifeActiviyIds)
+        await self.endActivitiesWithId(activityIds: self.appLifecycleLiveActivityIds)
       }
     }
   }
