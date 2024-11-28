@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:live_activities/live_activities.dart';
-import 'package:live_activities/models/live_activity_image.dart';
+import 'package:live_activities/models/live_activity_file.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:live_activities_example/models/football_game_live_activity_model.dart';
 import 'package:live_activities_example/widgets/score_widget.dart';
@@ -52,6 +52,7 @@ class _HomeState extends State<Home> {
 
     _liveActivitiesPlugin.init(
       appGroupId: 'group.dimitridessus.liveactivities',
+      urlScheme: 'la'
     );
 
     _liveActivitiesPlugin.activityUpdateStream.listen((event) {
@@ -156,10 +157,12 @@ class _HomeState extends State<Home> {
                       matchName: 'World cup ⚽️',
                       teamAName: 'PSG',
                       teamAState: 'Home',
-                      teamALogo: LiveActivityImageFromAsset(
+                      ruleFile:
+                          LiveActivityFileFromAsset('assets/files/rules.txt'),
+                      teamALogo: LiveActivityFileFromAsset.image(
                         'assets/images/psg.png',
                       ),
-                      teamBLogo: LiveActivityImageFromAsset(
+                      teamBLogo: LiveActivityFileFromAsset.image(
                         'assets/images/chelsea.png',
                       ),
                       teamBName: 'Chelsea',

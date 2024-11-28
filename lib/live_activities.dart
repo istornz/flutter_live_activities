@@ -3,10 +3,10 @@ import 'package:live_activities/models/activity_update.dart';
 import 'package:live_activities/models/alert_config.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
-import 'package:live_activities/services/app_groups_image_service.dart';
+import 'package:live_activities/services/app_groups_file_service.dart';
 
 class LiveActivities {
-  final AppGroupsImageService _appGroupsImageService = AppGroupsImageService();
+  final AppGroupsFileService _appGroupsFileService = AppGroupsFileService();
 
   /// This is required to initialize the plugin.
   /// Create an App Group inside "Runner" target & "Extension" in Xcode.
@@ -14,7 +14,7 @@ class LiveActivities {
   /// [urlScheme] is optional and is the scheme sub-component of the URL.
   /// [appGroupId] is the App Group identifier.
   Future init({required String appGroupId, String? urlScheme}) {
-    _appGroupsImageService.appGroupId = appGroupId;
+    _appGroupsFileService.init(appGroupId: appGroupId);
     return LiveActivitiesPlatform.instance.init(
       appGroupId,
       urlScheme: urlScheme,
@@ -24,7 +24,8 @@ class LiveActivities {
   /// Create an iOS 16.1+ live activity.
   /// When the activity is created, an activity id is returned.
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
-  /// Image are limited by size, be sure to pass only small images (you can use ```resizeFactor```).
+  /// Files like images are limited by size,
+  /// be sure to pass only small file size (you can use ```resizeFactor``` for images).
   ///
   /// [StaleIn] indicates if a StaleDate should be added to the activity. If the value is null or the Duration
   /// is less than 1 minute then no staleDate will be used. The parameter only affects the live activity on
@@ -34,7 +35,7 @@ class LiveActivities {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
   }) async {
-    await _appGroupsImageService.sendImageToAppGroups(data);
+    await _appGroupsFileService.sendFilesToAppGroups(data);
     return LiveActivitiesPlatform.instance.createActivity(
       data,
       removeWhenAppIsKilled: removeWhenAppIsKilled,
@@ -48,7 +49,7 @@ class LiveActivities {
   /// Map is limited to String keys and values for now.
   Future updateActivity(String activityId, Map<String, dynamic> data,
       [AlertConfig? alertConfig]) async {
-    await _appGroupsImageService.sendImageToAppGroups(data);
+    await _appGroupsFileService.sendFilesToAppGroups(data);
     return LiveActivitiesPlatform.instance
         .updateActivity(activityId, data, alertConfig);
   }
@@ -100,13 +101,13 @@ class LiveActivities {
   }
 
   /// Remove all files copied in app group directory.
-  /// This is recommended after you send image, files are stored but never deleted.
-  /// You can set force param to remove **ALL** images in app group directory.
+  /// This is recommended after you send files, files are stored but never deleted.
+  /// You can set force param to remove **ALL** files in app group directory.
   Future<void> dispose({bool force = false}) async {
     if (force) {
-      return _appGroupsImageService.removeAllImages();
+      return _appGroupsFileService.removeAllFiles();
     } else {
-      return _appGroupsImageService.removeImagesSession();
+      return _appGroupsFileService.removeFilesSession();
     }
   }
 

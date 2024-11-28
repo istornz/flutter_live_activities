@@ -11,7 +11,7 @@ class FlutterAlertConfig {
   init(title:String, body:String, sound:String?) {
     _title = title;
     _body = body;
-      _sound = sound;
+    _sound = sound;
   }
 
   func getAlertConfig() -> AlertConfiguration {

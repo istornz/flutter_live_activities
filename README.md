@@ -173,27 +173,34 @@ let quantity = sharedDefault.integer(forKey: context.attributes.prefixedKey("qua
 // [...]
 ```
 
-## Access Flutter picture from Native 🧵
+## Access Flutter files like pictures from Native 🧵
 
-- In your map, send a `LiveActivityImageFromAsset` or `LiveActivityImageFromUrl` object:
+- In your map, send a `LiveActivityFileFromAsset`, `LiveActivityFileFromUrl` or `LiveActivityFileFromMemory` object:
+
+You can use the factory `.image()` to use options like resizing image.
 
 ```dart
 final Map<String, dynamic> activityModel = {
-  'assetKey': LiveActivityImageFromAsset('assets/images/pizza_chorizo.png'),
-  'url': LiveActivityImageFromUrl(
+  'txtFile': LiveActivityFileFromAsset('assets/files/rules.txt'),
+  'assetKey': LiveActivityFileFromAsset.image('assets/images/pizza_chorizo.png'),
+  'url': LiveActivityFileFromUrl.image(
     'https://cdn.pixabay.com/photo/2015/10/01/17/17/car-967387__480.png',
-    resizeFactor: 0.3,
+    imageOptions: LiveActivityImageFileOptions(
+      resizeFactor: 0.2
+    )
   ),
 };
 
 _liveActivitiesPlugin.createActivity(activityModel);
 ```
 
-ℹ️ Use `LiveActivityImageFromAsset` to load an image from your Flutter asset.
+ℹ️ Use `LiveActivityFileFromAsset` to load a file from your Flutter asset.
 
-ℹ️ Use `LiveActivityImageFromUrl` to load an image from an external url.
+ℹ️ Use `LiveActivityFileFromUrl` to load a file from an external url.
 
-> ⚠️ Image need to be in a small resolution to be displayed in your live activity/dynamic island, you can use `resizeFactor` to automatically resize the image 👍.
+ℹ️ Use `LiveActivityFileFromMemory` to load a file from the memory (from a `Uint8List` object).
+
+> ⚠️ File like picture need to be in a small resolution to be displayed in your live activity/dynamic island, you can use `resizeFactor` to automatically resize the image 👍.
 
 - In your Swift extension, display the image:
 
@@ -282,8 +289,9 @@ That's it 😇
 <br />
 
 ## 📘 Documentation
+
 | Name                      | Description                                                                                                                                 | Returned value                                                                                             |
-|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `.init()`                 | Initialize the Plugin by providing an App Group Id (see above)                                                                              | `Future` When the plugin is ready to create/update an activity                                             |
 | `.createActivity()`       | Create an iOS live activity                                                                                                                 | `String` The activity identifier                                                                           |
 | `.updateActivity()`       | Update the live activity data by using the `activityId` provided                                                                            | `Future` When the activity was updated                                                                     |

@@ -45,8 +45,10 @@ abstract class ActivityUpdate {
 
 class ActiveActivityUpdate extends ActivityUpdate {
   @visibleForTesting
-  ActiveActivityUpdate(
-      {required super.activityId, required this.activityToken});
+  ActiveActivityUpdate({
+    required super.activityId,
+    required this.activityToken,
+  });
 
   final String activityToken;
 

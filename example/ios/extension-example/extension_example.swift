@@ -35,6 +35,7 @@ struct FootballMatchApp: Widget {
   var body: some WidgetConfiguration {
     ActivityConfiguration(for: LiveActivitiesAppAttributes.self) { context in
       let matchName = sharedDefault.string(forKey: context.attributes.prefixedKey("matchName"))!
+      let ruleFile = sharedDefault.string(forKey: context.attributes.prefixedKey("ruleFile"))!
       
       let teamAName = sharedDefault.string(forKey: context.attributes.prefixedKey("teamAName"))!
       let teamAState = sharedDefault.string(forKey: context.attributes.prefixedKey("teamAState"))!
@@ -46,6 +47,7 @@ struct FootballMatchApp: Widget {
       let teamBScore = sharedDefault.integer(forKey: context.attributes.prefixedKey("teamBScore"))
       let teamBLogo = sharedDefault.string(forKey: context.attributes.prefixedKey("teamBLogo"))!
       
+      let rule = (try? String(contentsOfFile: ruleFile, encoding: .utf8)) ?? ""
       let matchStartDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: context.attributes.prefixedKey("matchStartDate")) / 1000)
       let matchEndDate = Date(timeIntervalSince1970: sharedDefault.double(forKey: context.attributes.prefixedKey("matchEndDate")) / 1000)
       let matchRemainingTime = matchStartDate...matchEndDate
@@ -74,7 +76,7 @@ struct FootballMatchApp: Widget {
             .frame(width: 70, height: 120)
             .padding(.bottom, 8)
             .padding(.top, 8)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .background(.white.opacity(0.4), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             
             ZStack {
               if let uiImageTeamA = UIImage(contentsOfFile: teamALogo)
@@ -103,7 +105,7 @@ struct FootballMatchApp: Widget {
                 .fontWeight(.bold)
             }
             .padding(.horizontal, 5.0)
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .background(.white.opacity(0.4), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
             
             HStack(alignment: .center, spacing: 2.0) {
               Text(timerInterval: matchRemainingTime, countsDown: true)
@@ -121,6 +123,10 @@ struct FootballMatchApp: Widget {
               Text(matchName)
                 .font(.footnote)
                 .foregroundStyle(.white)
+                .padding(.bottom, 5)
+              Text(rule)
+                .font(.footnote)
+                .foregroundStyle(.white.opacity(0.5))
             }
           }
           .padding(.vertical, 6.0)
@@ -145,7 +151,7 @@ struct FootballMatchApp: Widget {
             .frame(width: 70, height: 120)
             .padding(.bottom, 8)
             .padding(.top, 8)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .background(.white.opacity(0.4), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             
             ZStack {
               if let uiImageTeamB = UIImage(contentsOfFile: teamBLogo)
