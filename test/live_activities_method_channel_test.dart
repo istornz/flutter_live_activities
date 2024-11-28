@@ -14,8 +14,6 @@ void main() {
       switch (methodCall.method) {
         case 'createActivity':
           return 'ACTIVITY_ID';
-        case 'areActivitiesEnabled':
-          return true;
         case 'getAllActivitiesIds':
           return ['ACTIVITY_ID'];
         case 'getActivityState':
@@ -61,7 +59,7 @@ void main() {
   });
 
   test('areActivitiesEnabled', () async {
-    expect(await platform.areActivitiesEnabled(), true);
+    expect(await platform.areActivitiesEnabled(), false);
   });
 
   test('getActivityState', () async {

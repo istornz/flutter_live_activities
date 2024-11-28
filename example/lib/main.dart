@@ -51,9 +51,7 @@ class _HomeState extends State<Home> {
     super.initState();
 
     _liveActivitiesPlugin.init(
-      appGroupId: 'group.dimitridessus.liveactivities',
-      urlScheme: 'la'
-    );
+        appGroupId: 'group.dimitridessus.liveactivities', urlScheme: 'la');
 
     _liveActivitiesPlugin.activityUpdateStream.listen((event) {
       print('Activity update: $event');
@@ -163,8 +161,9 @@ class _HomeState extends State<Home> {
                         'assets/images/psg.png',
                       ),
                       teamBLogo: LiveActivityFileFromAsset.image(
-                        'assets/images/chelsea.png',
-                      ),
+                          'assets/images/chelsea.png',
+                          imageOptions:
+                              LiveActivityImageFileOptions(resizeFactor: 0.2)),
                       teamBName: 'Chelsea',
                       teamBState: 'Guest',
                       matchStartDate: DateTime.now(),

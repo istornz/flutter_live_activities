@@ -216,6 +216,15 @@ if let assetImage = sharedDefault.string(forKey: context.attributes.prefixedKey(
 }
 ```
 
+- To display a txt file content:
+
+```swift
+let ruleFile = sharedDefault.string(forKey: context.attributes.prefixedKey("txtFile"))! // <-- Put your key here
+let rule = (try? String(contentsOfFile: ruleFile, encoding: .utf8)) ?? ""
+
+// [...] display the rule txt string variable here
+```
+
 ## Communicate between native 🧵 and Flutter 💙
 
 In order to pass some useful **data** between your **native** live activity / dynamic island with your **Flutter** app you just need to setup **URL scheme**.

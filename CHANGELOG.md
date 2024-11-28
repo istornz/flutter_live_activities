@@ -1,3 +1,41 @@
+## 2.1.0
+* ✨ You can now send generic files instead of just pictures.
+  
+To send a file you can do the following on the Dart code:
+
+```dart
+LiveActivityFileFromAsset('assets/files/rules.txt')
+```
+
+And in your Swift code:
+
+```swift
+let ruleFile = sharedDefault.string(forKey: context.attributes.prefixedKey("yourFileKey"))!
+let rule = (try? String(contentsOfFile: ruleFile, encoding: .utf8)) ?? ""
+```
+
+> Check the example for a full demo.
+
+**BREAKING CHANGES**
+
+You must replace your images to:
+- `LiveActivityFileFromAsset.image()`
+- `LiveActivityFileFromMemory.image()`
+- `LiveActivityFileFromUrl.image()`
+
+In order to use `resizeFactor` you must do the following now:
+
+```dart
+LiveActivityFileFromAsset.image(
+  'assets/images/chelsea.png',
+  imageOptions: LiveActivityImageFileOptions(
+    resizeFactor: 0.2
+  )
+),
+```
+
+* 🐛 Example works again with scheme.
+
 ## 2.0.1
 * 🐛 Fix channel message sent from native to Flutter on a non-platform thread (thanks to @aswanath 👍)
 * 🗑️ Clean some code.
