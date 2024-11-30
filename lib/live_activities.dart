@@ -58,7 +58,7 @@ class LiveActivities {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
   }) async {
-    await _appGroupsImageService.sendImageToAppGroups(data);
+    await _appGroupsFileService.sendFilesToAppGroups(data);
     return LiveActivitiesPlatform.instance
         .createOrUpdateActivity(customId, data, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn);
   }
