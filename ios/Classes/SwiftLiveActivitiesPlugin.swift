@@ -221,6 +221,21 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
         case "endAllActivities":
           endAllActivities(result: result)
           break
+        case "createOrUpdateActivity":
+          initializationGuard(result: result)
+          guard let args = call.arguments as? [String: Any] else {
+            result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
+            return
+          }
+
+          if let data = args["data"] as? [String: Any], let customId = args["customId"] as? String {
+            let removeWhenAppIsKilled = args["removeWhenAppIsKilled"] as? Bool ?? false
+            let staleIn = args["staleIn"] as? Int? ?? nil
+            createOrUpdateActivity(data: data, customId: customId, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn, result: result)
+          } else {
+            result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data', 'customId' is valid", details: nil))
+          }
+          break
         default:
           break
       }
@@ -230,7 +245,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   }
   
   @available(iOS 16.1, *)
-  func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, result: @escaping FlutterResult) {
+  func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, customId: String? = nil, result: @escaping FlutterResult) {
     let center = UNUserNotificationCenter.current()
     center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
       if let error = error {
@@ -238,7 +253,12 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
       }
     }
     
-    let liveDeliveryAttributes = LiveActivitiesAppAttributes()
+    let liveDeliveryAttributes: LiveActivitiesAppAttributes
+    if let customId = customId, let uuid = UUID(uuidString: customId) {
+        liveDeliveryAttributes = LiveActivitiesAppAttributes(id: uuid)
+    } else {
+        liveDeliveryAttributes = LiveActivitiesAppAttributes()
+    }
     let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
     var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
     let prefix = liveDeliveryAttributes.id
@@ -282,27 +302,59 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
   @available(iOS 16.1, *)
   func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, result: @escaping FlutterResult) {
     Task {
-      for activity in Activity<LiveActivitiesAppAttributes>.activities {
-        if activityId == activity.id {
+        let activities = await MainActor.run { Activity<LiveActivitiesAppAttributes>.activities }
+        guard let activity = activities.first(where: { $0.id == activityId }) else {
+            result(FlutterError(code: "ACTIVITY_ERROR", message: "Activity not found", details: nil))
+            return
+        }
+
           let prefix = activity.attributes.id
 
-          for item in data {
-            if (item.value != nil && !(item.value is NSNull)) {
-              sharedDefault!.set(item.value, forKey: "\(prefix)_\(item.key)")
+        await MainActor.run {
+            for (key, value) in data {
+                if let value = value, !(value is NSNull) {
+                    sharedDefault?.set(value, forKey: "\(prefix)_\(key)")
             } else {
-              sharedDefault!.removeObject(forKey: "\(prefix)_\(item.key)")
+                    sharedDefault?.removeObject(forKey: "\(prefix)_\(key)")
+                }
             }
           }
           
           let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
           await activity.update(using: updatedStatus, alertConfiguration: alertConfig?.getAlertConfig())
-          break;
-        }
-      }
+
       result(nil)
     }
   }
 
+  @available(iOS 16.1, *)
+  func createOrUpdateActivity(data: [String: Any], customId: String, removeWhenAppIsKilled: Bool, staleIn: Int?, result: @escaping FlutterResult) {
+    Task {
+        guard let customUUID = UUID(uuidString: customId) else {
+            result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'customId' is valid", details: nil))
+            return
+        }
+
+        var activities: [Activity<LiveActivitiesAppAttributes>] = []
+        for _ in 0..<3 { // Try up to 3 times
+            activities = await MainActor.run { Activity<LiveActivitiesAppAttributes>.activities }
+            if !activities.isEmpty {
+                break
+            }
+            try? await Task.sleep(for: .seconds(0.1))
+        }
+
+        let existingActivity = activities.first {
+          $0.attributes.id == customUUID && $0.activityState != .dismissed && $0.activityState != .ended
+        }
+
+        if let activityId = existingActivity?.id {
+            updateActivity(activityId: activityId, data: data, alertConfig: nil, result: result)
+      } else {
+        createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn, customId: customId, result: result)
+      }
+    }
+  }
 
   @available(iOS 16.1, *)
   func getActivityState(activityId: String, result: @escaping FlutterResult) {
