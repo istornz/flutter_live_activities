@@ -46,11 +46,14 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     throw UnimplementedError('updateActivity() has not been implemented.');
   }
 
-  Future createOrUpdateActivity(String customId, Map<String, dynamic> data, {
+  Future createOrUpdateActivity(
+    String customId,
+    Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
   }) {
-    throw UnimplementedError('createOrUpdateActivity() has not been implemented.');
+    throw UnimplementedError(
+        'createOrUpdateActivity() has not been implemented.');
   }
 
   Future endActivity(String activityId) {

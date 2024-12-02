@@ -5,18 +5,22 @@ import 'package:live_activities/models/live_activity_file.dart';
 import 'package:live_activities/services/image_file_service.dart';
 import 'package:path_provider/path_provider.dart';
 
+/// Folder name to store files in the app groups directory
 const kFileFolderName = 'LiveActivitiesFiles';
 
+/// Service to handle all processes to files that are sent to the app groups
 class AppGroupsFileService {
   final _imageService = ImageFileService();
 
   String? _appGroupId;
   final List<String> _assetsCopiedInAppGroups = [];
 
+  /// Initialize the service with the app group id
   init({required String appGroupId}) {
     _appGroupId = appGroupId;
   }
 
+  /// Send files to the app groups directory
   Future sendFilesToAppGroups(Map<String, dynamic> data) async {
     if (_appGroupId == null) {
       throw Exception('appGroupId is null. Please call init() first.');
@@ -54,11 +58,13 @@ class AppGroupsFileService {
     }
   }
 
+  /// Remove all files from the app group directory
   Future<void> removeAllFiles() async {
     final laFilesDir = await _liveActivitiesFilesDirectory();
     laFilesDir.deleteSync(recursive: true);
   }
 
+  /// Remove all files that were copied to the app groups in this session
   Future<void> removeFilesSession() async {
     for (String filePath in _assetsCopiedInAppGroups) {
       final file = File(filePath);

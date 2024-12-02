@@ -3,7 +3,9 @@ import 'dart:ui';
 
 import 'package:image/image.dart' as img;
 
+/// Service to handle all processes to image files
 class ImageFileService {
+  /// Resize the image to a specific factor
   Future resizeImage(File file, num resizeFactor) async {
     final bytes = file.readAsBytesSync();
     final buffer = await ImmutableBuffer.fromUint8List(bytes);

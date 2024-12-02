@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:live_activities/models/live_activity_state.dart';
 
+/// Abstract class to represent an activity update
 abstract class ActivityUpdate {
+  /// The id of the activity
   ActivityUpdate({required this.activityId});
 
+  /// The id of the activity
   final String activityId;
 
+  /// Factory to create an activity update from a map
   factory ActivityUpdate.fromMap(Map<String, dynamic> map) {
     final status = LiveActivityState.values.byName(map['status']);
     final activityId = map['activityId'] as String;
@@ -23,6 +27,7 @@ abstract class ActivityUpdate {
     }
   }
 
+  /// Map the activity update to a specific type
   TResult map<TResult extends Object?>({
     required TResult Function(ActiveActivityUpdate value) active,
     required TResult Function(EndedActivityUpdate value) ended,
@@ -30,6 +35,7 @@ abstract class ActivityUpdate {
     required TResult Function(UnknownActivityUpdate value) unknown,
   });
 
+  /// Map the activity update to a specific type or return null
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(ActiveActivityUpdate value)? active,
     TResult Function(EndedActivityUpdate value)? ended,
@@ -43,13 +49,16 @@ abstract class ActivityUpdate {
   }
 }
 
+/// Class to represent an active activity update
 class ActiveActivityUpdate extends ActivityUpdate {
+  /// Constructor for an active activity update
   @visibleForTesting
   ActiveActivityUpdate({
     required super.activityId,
     required this.activityToken,
   });
 
+  /// The token of the activity
   final String activityToken;
 
   @override
@@ -78,7 +87,9 @@ class ActiveActivityUpdate extends ActivityUpdate {
   }
 }
 
+/// Class to represent an ended activity update
 class EndedActivityUpdate extends ActivityUpdate {
+  /// Constructor for an ended activity update
   @visibleForTesting
   EndedActivityUpdate({required super.activityId});
 
@@ -103,7 +114,9 @@ class EndedActivityUpdate extends ActivityUpdate {
   }
 }
 
+/// Class to represent a stale activity update
 class StaleActivityUpdate extends ActivityUpdate {
+  /// Constructor for a stale activity update
   @visibleForTesting
   StaleActivityUpdate({required super.activityId});
 
@@ -128,7 +141,9 @@ class StaleActivityUpdate extends ActivityUpdate {
   }
 }
 
+/// Class to represent an unknown activity update
 class UnknownActivityUpdate extends ActivityUpdate {
+  /// Constructor for an unknown activity update
   @visibleForTesting
   UnknownActivityUpdate({required super.activityId});
 

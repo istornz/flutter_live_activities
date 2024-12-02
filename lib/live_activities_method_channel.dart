@@ -57,13 +57,16 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       'alertConfig': alertConfig?.toMap()
     });
   }
+
   @override
-  Future createOrUpdateActivity(String customId, Map<String, dynamic> data, {
+  Future createOrUpdateActivity(
+    String customId,
+    Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
   }) async {
     final staleInMinutes =
-    (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
+        (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
     return methodChannel.invokeMethod('createOrUpdateActivity', {
       'customId': customId,
       'data': data,

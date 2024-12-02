@@ -1,3 +1,7 @@
+## 2.2.0
+* ✨ Added a new method `createOrUpdateActivity()`, you can use it to create or update by passing an activity ID (thanks to @Clon1998 👍).
+* ⬆️ Upgrade dependencies.
+
 ## 2.1.0
 * ✨ You can now send generic files instead of just pictures.
   
