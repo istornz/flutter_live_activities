@@ -1,2 +1,3 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.flutter_live_activities">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.example.live_activities">
 </manifest>

@@ -299,24 +299,56 @@ That's it 😇
 
 ## 📘 Documentation
 
-| Name                      | Description                                                                                                                                 | Returned value                                                                                             |
-| ------------------------- |---------------------------------------------------------------------------------------------------------------------------------------------| ---------------------------------------------------------------------------------------------------------- |
-| `.init()`                 | Initialize the Plugin by providing an App Group Id (see above)                                                                              | `Future` When the plugin is ready to create/update an activity                                             |
-| `.createActivity()`       | Create an iOS live activity                                                                                                                 | `String` The activity identifier                                                                           |
-| `.createOrUpdateActivity()`       | Create or updates an (existing) live activity based on the provided `UUID` via `customId`                                           | `String` The activity identifier                                                                           |
-| `.updateActivity()`       | Update the live activity data by using the `activityId` provided                                                                            | `Future` When the activity was updated                                                                     |
-| `.endActivity()`          | End the live activity by using the `activityId` provided                                                                                    | `Future` When the activity was ended                                                                       |
-| `.getAllActivitiesIds()`  | Get all activities ids created                                                                                                              | `Future<List<String>>` List of all activities ids                                                          |
-| `.getAllActivities()`     | Get a Map of activitiyIds and the `ActivityState`                                                                                           | `Future<Map<String, LiveActivityState>>` Map of all activitiyId -> `LiveActivityState`                     |
-| `.endAllActivities()`     | End all live activities of the app                                                                                                          | `Future` When all activities was ended                                                                     |
-| `.areActivitiesEnabled()` | Check if live activities feature are supported & enabled                                                                                    | `Future<bool>` Live activities supported or not                                                            |
-| `.getActivityState()`     | Get the activity current state                                                                                                              | `Future<LiveActivityState?>` An enum to know the status of the activity (`active`, `dismissed` or `ended`) |
-| `.getPushToken()`         | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date)                       | `String?` The activity push token (can be null)                                                            |
-| `.urlSchemeStream()`      | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data)        | `Future<UrlSchemeData>` Url scheme data which handle `scheme` `url` `host` `path` `queryItems`             |
-| `.dispose()`              | Remove all pictures passed in the AppGroups directory in the current session, you can use the `force` parameters to remove **all** pictures | `Future` Picture removed                                                                                   |
-| `.activityUpdateStream`   | Get notified with a stream about live activity push token & status                                                                          | `Stream<ActivityUpdate>` Status updates for new push tokens or when the activity ends                      |
+| Name                        | Description                                                                                                                                 | Returned value                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `.init()`                   | Initialize the Plugin by providing an App Group Id (see above)                                                                              | `Future` When the plugin is ready to create/update an activity                                             |
+| `.createActivity()`         | Create an iOS live activity                                                                                                                 | `String` The activity identifier                                                                           |
+| `.createOrUpdateActivity()` | Create or updates an (existing) live activity based on the provided `UUID` via `customId`                                                   | `String` The activity identifier                                                                           |
+| `.updateActivity()`         | Update the live activity data by using the `activityId` provided                                                                            | `Future` When the activity was updated                                                                     |
+| `.endActivity()`            | End the live activity by using the `activityId` provided                                                                                    | `Future` When the activity was ended                                                                       |
+| `.getAllActivitiesIds()`    | Get all activities ids created                                                                                                              | `Future<List<String>>` List of all activities ids                                                          |
+| `.getAllActivities()`       | Get a Map of activitiyIds and the `ActivityState`                                                                                           | `Future<Map<String, LiveActivityState>>` Map of all activitiyId -> `LiveActivityState`                     |
+| `.endAllActivities()`       | End all live activities of the app                                                                                                          | `Future` When all activities was ended                                                                     |
+| `.areActivitiesEnabled()`   | Check if live activities feature are supported & enabled                                                                                    | `Future<bool>` Live activities supported or not                                                            |
+| `.getActivityState()`       | Get the activity current state                                                                                                              | `Future<LiveActivityState?>` An enum to know the status of the activity (`active`, `dismissed` or `ended`) |
+| `.getPushToken()`           | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date)                       | `String?` The activity push token (can be null)                                                            |
+| `.urlSchemeStream()`        | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data)        | `Future<UrlSchemeData>` Url scheme data which handle `scheme` `url` `host` `path` `queryItems`             |
+| `.dispose()`                | Remove all pictures passed in the AppGroups directory in the current session, you can use the `force` parameters to remove **all** pictures | `Future` Picture removed                                                                                   |
+| `.activityUpdateStream`     | Get notified with a stream about live activity push token & status                                                                          | `Stream<ActivityUpdate>` Status updates for new push tokens or when the activity ends                      |
 
 <br />
+
+## 🤔 Questions
+
+### Do I have to code in Swift?
+
+> Yes you need to implement your activity in Swift but no worries, there is a lot of cool tutorials:
+> - [https://canopas.com/integrating-live-activity-and-dynamic-island-in-i-os-a-complete-guide](https://canopas.com/integrating-live-activity-and-dynamic-island-in-i-os-a-complete-guide)
+> - [https://blorenzop.medium.com/live-activities-swift-6e95ee15863e](https://blorenzop.medium.com/live-activities-swift-6e95ee15863e)
+> - [https://medium.com/kinandcartacreated/how-to-build-ios-live-activity-d1b2f238819e](https://medium.com/kinandcartacreated/how-to-build-ios-live-activity-d1b2f238819e)
+
+### I have an issue when building my app on iOS: `Error (Xcode): Cycle inside Runner; building could produce unreliable results.`
+
+> This error occurs due to a build script ordering issue. Follow [this guide](https://stackoverflow.com/a/77178579/5078902) to resolve it.
+
+### I can't see my live activity when I create it...
+
+> It can be related to multiple issues, please be sure to:
+>
+> - App Groups Capability: Set up the `App Groups` capability for **BOTH** the `Runner` and your `extension` targets.
+> - Same App Group: Use the **SAME** app group for both the `Runner` and `extension` targets.
+> - Push Notification Capability: Verify that the `Push Notification` capability is enabled for the `Runner` target.
+> - ActivityAttributes Definition: In your extension’s `ExtensionNameLiveActivity.swift` file, ensure you create an ActivityAttributes named **EXACTLY** `LiveActivitiesAppAttributes`.
+> - Asset Size Limit: Images in live activities **must be under or equal 4 KB**. Use the resize factor argument to reduce image size if necessary.
+> - Supports Live Activities: Be sure to set the `NSSupportsLiveActivities` property to `true` in `Info.plist` files for **BOTH** `Runner` and your `extension`.
+> - iOS Version Requirement: The device must run **iOS 16.1 or later**.
+> - Device Activity Check: Confirm that the `areActivitiesEnabled()` method returns true on your device.
+
+### Is Android supported?
+
+> Currently, no, but the plugin does not crash when run on Android. This means you can safely install it in a hybrid app.
+> 
+> Simply call `areActivitiesEnabled()` before creating your activity to ensure it can be displayed on the user's device. 😊
 
 ## 👥 Contributions
 
@@ -324,7 +356,8 @@ Contributions are welcome. Contribute by creating a PR or an issue 🎉.
 
 ## 🎯 Roadmap
 
-- [ ] Inject a Widget inside the notification with Flutter Engine ?
+- [ ] Inject a Widget inside the notification with Flutter Engine?
+- [x] Migrate to Swift Package Manager.
 - [x] Support push token.
 - [x] Pass media between extension & Flutter app.
 - [x] Support multiple type instead of `String` (Date, Number etc.).

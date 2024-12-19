@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
-  flutter_app_group_directory: ^1.0.2+2
+  flutter_app_group_directory: ^1.1.0
   path_provider: ^2.1.5
   image: ^4.3.0
 
@@ -39,5 +39,5 @@ flutter:
       ios:
         pluginClass: LiveActivitiesPlugin
       android:
-        package: com.flutter_live_activities
-        pluginClass: FlutterLiveActivitiesPlugin
+        package: com.example.live_activities
+        pluginClass: LiveActivitiesPlugin
