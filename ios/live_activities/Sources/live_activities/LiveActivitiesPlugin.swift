@@ -19,7 +19,7 @@ class FlutterAlertConfig {
   }
 }
 
-public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
   private var urlSchemeSink: FlutterEventSink?
   private var appGroupId: String?
   private var urlScheme: String?
@@ -32,7 +32,7 @@ public class SwiftLiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHa
     let urlSchemeChannel = FlutterEventChannel(name: "live_activities/url_scheme", binaryMessenger: registrar.messenger())
     let activityStatusChannel = FlutterEventChannel(name: "live_activities/activity_status", binaryMessenger: registrar.messenger())
     
-    let instance = SwiftLiveActivitiesPlugin()
+    let instance = LiveActivitiesPlugin()
     
     registrar.addMethodCallDelegate(instance, channel: channel)
     urlSchemeChannel.setStreamHandler(instance)
