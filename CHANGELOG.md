@@ -1,3 +1,8 @@
+## 2.3.0
+* 🏗️ Move to Swift Package Manager.
+* 🏗️ Regenerate example app.
+* ⬆️ Upgrade dependencies.
+
 ## 2.2.0
 * ✨ Added a new method `createOrUpdateActivity()`, you can use it to create or update by passing an activity ID (thanks to @Clon1998 👍).
 * ⬆️ Upgrade dependencies.
