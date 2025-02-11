@@ -118,5 +118,5 @@ class LiveActivityFileFromMemory extends LiveActivityFile {
   }
 
   @override
-  String get fileName => throw UnimplementedError();
+  String get fileName => imageName;
 }
