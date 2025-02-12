@@ -343,6 +343,7 @@ That's it 😇
 > - Supports Live Activities: Be sure to set the `NSSupportsLiveActivities` property to `true` in `Info.plist` files for **BOTH** `Runner` and your `extension`.
 > - iOS Version Requirement: The device must run **iOS 16.1 or later**.
 > - Device Activity Check: Confirm that the `areActivitiesEnabled()` method returns true on your device.
+> - Minimum Deployment Target: Confirm that the `extensions` deployment target is not set lower than your devices. 
 
 ### Is Android supported?
 
