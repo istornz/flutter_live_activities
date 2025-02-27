@@ -1,3 +1,8 @@
+## 2.3.1
+* 🐛 `LiveActivityFileFromMemory` can't share image with AppGroup (thanks to @EArminjon 👍).
+* 📝 Added minor version check when not being able to see the Live Activity (thanks to @dasanten 👍).
+* ⬆️ Upgrade dependencies.
+
 ## 2.3.0
 * 🏗️ Move to Swift Package Manager.
 * 🏗️ Regenerate example app.
