@@ -6,7 +6,6 @@
 <div align="center" style="display: flex;align-items: center;justify-content: center;">
   <a href="https://pub.dev/packages/live_activities"><img src="https://img.shields.io/pub/points/live_activities?style=for-the-badge" style="margin-right: 10px" /></a>
   <a href="https://pub.dev/packages/live_activities"><img src="https://img.shields.io/pub/likes/live_activities?style=for-the-badge" style="margin-right: 10px" /></a>
-  <a href="https://pub.dev/packages/live_activities"><img src="https://img.shields.io/pub/popularity/live_activities?style=for-the-badge" style="margin-right: 10px" /></a>
   <a href="https://pub.dev/packages/live_activities"><img src="https://img.shields.io/pub/v/live_activities?style=for-the-badge" style="margin-right: 10px" /></a>
   <a href="https://github.com/istornz/live_activities"><img src="https://img.shields.io/github/stars/istornz/live_activities?style=for-the-badge" /></a>
 </div>
