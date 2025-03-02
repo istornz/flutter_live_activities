@@ -49,12 +49,12 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** & d
 > ℹ️ You can check into the [**example repository**](https://github.com/istornz/live_activities/tree/main/example) for a full example app using Live Activities & Dynamic Island
 
 - ## 📱 Native
-    - Open the Xcode workspace project `ios/Runner.xcworkspace`.
-    - Click on `File` -> `New` -> `Target...`
-        - Select `Widget Extension` & click on **Next**.
+  - Open the Xcode workspace project `ios/Runner.xcworkspace`.
+  - Click on `File` -> `New` -> `Target...`
+    - Select `Widget Extension` & click on **Next**.
     - Specify the product name (e.g., `MyAppWidget`) and be sure to select "**Runner**" in "Embed in Application" dropdown.
-        - Click on **Finish**.
-        - When selecting Finish, an alert will appear, you will need to click on **Activate**.
+    - Click on **Finish**.
+    - When selecting Finish, an alert will appear, you will need to click on **Activate**.
 
 <img alt="create widget extension xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/create_widget_extension.webp" width="700px" />
 
@@ -124,20 +124,20 @@ struct FootballMatchApp: Widget {
 
 - ## 💙 Flutter
 
-    - Import the plugin.
+  - Import the plugin.
 
   ```dart
   import 'package:live_activities/live_activities.dart';
   ```
 
-    - Initialize the Plugin by passing the created **App Group Id** (created above).
+  - Initialize the Plugin by passing the created **App Group Id** (created above).
 
   ```dart
   final _liveActivitiesPlugin = LiveActivities();
   _liveActivitiesPlugin.init(appGroupId: "YOUR_GROUP_ID");
   ```
 
-    - Create your dynamic activity.
+  - Create your dynamic activity.
 
   ```dart
   final Map<String, dynamic> activityModel = {
@@ -183,10 +183,10 @@ final Map<String, dynamic> activityModel = {
   'txtFile': LiveActivityFileFromAsset('assets/files/rules.txt'),
   'assetKey': LiveActivityFileFromAsset.image('assets/images/pizza_chorizo.png'),
   'url': LiveActivityFileFromUrl.image(
-      'https://cdn.pixabay.com/photo/2015/10/01/17/17/car-967387__480.png',
-      imageOptions: LiveActivityImageFileOptions(
-          resizeFactor: 0.2
-      )
+    'https://cdn.pixabay.com/photo/2015/10/01/17/17/car-967387__480.png',
+    imageOptions: LiveActivityImageFileOptions(
+      resizeFactor: 0.2
+    )
   ),
 };
 
@@ -270,24 +270,24 @@ You can update live activity directly in your app using the `updateActivity()` m
 To do this, you can update it using Push Notification on a server.
 
 - Get the push token:
-    - Listen on the activity updates (recommended):
-      ```dart
-      _liveActivitiesPlugin.activityUpdateStream.listen((event) {
-        event.map(
-          active: (activity) {
-            // Get the token
-            print(activity.activityToken);
-          },
-          ended: (activity) {},
-          unknown: (activity) {},
-        );
-      });
-      ```
-    - Get directly the push token (not recommended, because the token may change in the future):
-      ```dart
-      final activityToken = await _liveActivitiesPlugin.getPushToken(_latestActivityId!);
-      print(activityToken);
-      ```
+  - Listen on the activity updates (recommended):
+    ```dart
+    _liveActivitiesPlugin.activityUpdateStream.listen((event) {
+      event.map(
+        active: (activity) {
+          // Get the token
+          print(activity.activityToken);
+        },
+        ended: (activity) {},
+        unknown: (activity) {},
+      );
+    });
+    ```
+  - Get directly the push token (not recommended, because the token may change in the future):
+    ```dart
+    final activityToken = await _liveActivitiesPlugin.getPushToken(_latestActivityId!);
+    print(activityToken);
+    ```
 - Update your activity with the token on your server (more information can be [**found here**](https://ohdarling88.medium.com/update-dynamic-island-and-live-activity-with-push-notification-38779803c145)).
 
 To set `matchName` for a specific notification, you just need to grab the notification id you want (ex. `35253464632`) and concatenate with your key by adding a `_`, example: `35253464632_matchName`.
@@ -418,12 +418,12 @@ server needs to use Apple's APNs with the appropriate authentication to deliver 
 > - Supports Live Activities: Be sure to set the `NSSupportsLiveActivities` property to `true` in `Info.plist` files for **BOTH** `Runner` and your `extension`.
 > - iOS Version Requirement: The device must run **iOS 16.1 or later**.
 > - Device Activity Check: Confirm that the `areActivitiesEnabled()` method returns true on your device.
-> - Minimum Deployment Target: Confirm that the `extensions` deployment target is not set lower than your devices.
+> - Minimum Deployment Target: Confirm that the `extensions` deployment target is not set lower than your devices. 
 
 ### Is Android supported?
 
 > Currently, no, but the plugin does not crash when run on Android. This means you can safely install it in a hybrid app.
->
+> 
 > Simply call `areActivitiesEnabled()` before creating your activity to ensure it can be displayed on the user's device. 😊
 
 ## 👥 Contributions
