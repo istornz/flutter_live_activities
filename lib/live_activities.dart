@@ -105,6 +105,11 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.areActivitiesEnabled();
   }
 
+  /// Checks if iOS 17.2+ which allows push start for live activities.
+  Future<bool> allowsPushStart() {
+    return LiveActivitiesPlatform.instance.allowsPushStart();
+  }
+
   /// Get a stream of url scheme data.
   /// Don't forget to add **CFBundleURLSchemes** to your Info.plist file.
   /// Return a Future of [scheme] [url] [host] [path] and [queryParameters].
@@ -147,4 +152,29 @@ class LiveActivities {
   /// ```
   Stream<ActivityUpdate> get activityUpdateStream =>
       LiveActivitiesPlatform.instance.activityUpdateStream;
+
+  /// A stream of push-to-start tokens for iOS 17.2+ Live Activities.
+  /// This stream emits tokens that can be used to start a Live Activity remotely via push notifications.
+  ///
+  /// When iOS generates or updates a push-to-start token, it will be emitted through this stream.
+  /// You should send this token to your push notification server to enable remote Live Activity creation.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// liveActivities.pushToStartTokenUpdateStream.listen((token) {
+  ///   // Send token to your server
+  ///   print('Received push-to-start token: $token');
+  /// });
+  /// ```
+  ///
+  /// This feature is only available on iOS 17.2 and later. Use [allowsPushStart] to check support.
+  Stream<String> get pushToStartTokenUpdateStream  async* {
+    final allowed = await allowsPushStart();
+
+    if (!allowed) {
+      throw Exception('Push-to-start is not allowed on this device');
+    }
+
+    yield* LiveActivitiesPlatform.instance.pushToStartTokenUpdateStream;
+  }
 }

@@ -77,6 +77,11 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
         'areActivitiesEnabled() has not been implemented.');
   }
 
+  Future<bool> allowsPushStart() {
+    throw UnimplementedError(
+        'supportsStartActivities() has not been implemented.');
+  }
+
   Stream<UrlSchemeData> urlSchemeStream() {
     throw UnimplementedError('urlSchemeStream() has not been implemented.');
   }
@@ -91,4 +96,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
 
   Stream<ActivityUpdate> get activityUpdateStream =>
       throw UnimplementedError('pushTokenUpdates has not been implemented');
+
+  Stream<String> get pushToStartTokenUpdateStream =>
+      throw UnimplementedError('pushToStartTokenUpdateStream has not been implemented');
 }

@@ -26,66 +26,27 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   private var sharedDefault: UserDefaults?
   private var appLifecycleLiveActivityIds = [String]()
   private var activityEventSink: FlutterEventSink?
+  private var pushToStartTokenEventSink: FlutterEventSink?
   
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "live_activities", binaryMessenger: registrar.messenger())
     let urlSchemeChannel = FlutterEventChannel(name: "live_activities/url_scheme", binaryMessenger: registrar.messenger())
     let activityStatusChannel = FlutterEventChannel(name: "live_activities/activity_status", binaryMessenger: registrar.messenger())
+    let pushToStartTokenUpdatesChannel = FlutterEventChannel(name: "live_activities/push_to_start_token_updates", binaryMessenger: registrar.messenger())
     
     let instance = LiveActivitiesPlugin()
     
     registrar.addMethodCallDelegate(instance, channel: channel)
     urlSchemeChannel.setStreamHandler(instance)
     activityStatusChannel.setStreamHandler(instance)
+    pushToStartTokenUpdatesChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
-
-    if #available(iOS 17.2, *) {
-              Task {
-                  for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
-                      let token = data.map {String(format: "%02x", $0)}.joined()
-                              print("Activity PushToStart Token: \(token)")
-                              // send this token to your notification server
-
-                              DispatchQueue.main.async {
-                                  channel.invokeMethod("onPushTokenReceived", arguments: token)
-                              }
-                      }
-
-                  for await activity in Activity<LiveActivitiesAppAttributes>.activityUpdates {
-                      // Upon finding one, listen for its push token (it is not available immediately!)
-                      for await pushToken in activity.pushTokenUpdates {
-                          let pushTokenString = pushToken.reduce("") { $0 + String(format: "%02x", $1) }
-                          print("New activity detected with push token: \(pushTokenString)")
-                      }
-                  }
-              }
-          }
   }
 
-  public func getPushToStartToken() {
-      if #available(iOS 17.2, *) {
-          Task {
-              for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
-                  let token = data.map {String(format: "%02x", $0)}.joined()
-                          print("Activity PushToStart Token: \(token)")
-                          //send this token to your notification server
-                  }
-
-              for await activity in Activity<LiveActivitiesAppAttributes>.activityUpdates {
-                  // Upon finding one, listen for its push token (it is not available immediately!)
-                  for await pushToken in activity.pushTokenUpdates {
-                      let pushTokenString = pushToken.reduce("") { $0 + String(format: "%02x", $1) }
-                      print("New activity detected with push token: \(pushTokenString)")
-                  }
-              }
-          }
-      }
-  }
-
-  
   public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
     urlSchemeSink = nil
     activityEventSink = nil
+    pushToStartTokenEventSink = nil
   }
 
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
@@ -94,6 +55,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         urlSchemeSink = events
       } else if (args == "activityUpdateStream") {
         activityEventSink = events
+      } else if (args == "pushToStartTokenUpdateStream") {
+        pushToStartTokenEventSink = events
+        startObservingPushToStartTokens()
       }
     }
     
@@ -106,7 +70,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         urlSchemeSink = nil
       } else if (args == "activityUpdateStream") {
         activityEventSink = nil
-      }
+      } else if (args == "pushToStartTokenUpdateStream") {
+         pushToStartTokenEventSink = nil
+       }
     }
     return nil
   }
@@ -125,6 +91,17 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
       }
       
       result(ActivityAuthorizationInfo().areActivitiesEnabled)
+      return
+    }
+
+    if (call.method == "allowsPushStart") {
+      guard #available(iOS 17.2, *), !ProcessInfo.processInfo.isiOSAppOnMac else {
+          result(false)
+          return
+      }
+
+      // This is iOS 17.2+ so push-to-start is supported
+      result(true)
       return
     }
     
@@ -403,7 +380,22 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
       result(nil)
     }
   }
-  
+
+  private func startObservingPushToStartTokens() {
+    if #available(iOS 17.2, *) {
+      Task {
+        for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
+          let token = data.map { String(format: "%02x", $0) }.joined()
+          print("Activity PushToStart Token: \(token)")
+
+          DispatchQueue.main.async {
+            self.pushToStartTokenEventSink?(token)
+          }
+        }
+      }
+    }
+  }
+
   @available(iOS 16.1, *)
   func getAllActivitiesIds(result: @escaping FlutterResult) {
     var activitiesId: [String] = []
