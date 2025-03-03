@@ -17,12 +17,13 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   final methodChannel = const MethodChannel('live_activities');
 
   @visibleForTesting
-  final activityStatusChannel =
-      const EventChannel('live_activities/activity_status');
+  final activityStatusChannel = const EventChannel('live_activities/activity_status');
 
   @visibleForTesting
-  final EventChannel urlSchemeChannel =
-      const EventChannel('live_activities/url_scheme');
+  final EventChannel urlSchemeChannel = const EventChannel('live_activities/url_scheme');
+
+  @visibleForTesting
+  final EventChannel pushToStartTokenUpdatesChannel = const EventChannel('live_activities/push_to_start_token_updates');
 
   @override
   Future init(String appGroupId, {String? urlScheme}) async {
@@ -39,8 +40,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     Duration? staleIn,
   }) async {
     // If the duration is less than 1 minute then pass a null value instead of using 0 minutes
-    final staleInMinutes =
-        (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
+    final staleInMinutes = (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
     return methodChannel.invokeMethod<String>('createActivity', {
       'data': data,
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
@@ -49,13 +49,9 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
-  Future updateActivity(String activityId, Map<String, dynamic> data,
-      [AlertConfig? alertConfig]) async {
-    return methodChannel.invokeMethod('updateActivity', {
-      'activityId': activityId,
-      'data': data,
-      'alertConfig': alertConfig?.toMap()
-    });
+  Future updateActivity(String activityId, Map<String, dynamic> data, [AlertConfig? alertConfig]) async {
+    return methodChannel
+        .invokeMethod('updateActivity', {'activityId': activityId, 'data': data, 'alertConfig': alertConfig?.toMap()});
   }
 
   @override
@@ -65,8 +61,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
   }) async {
-    final staleInMinutes =
-        (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
+    final staleInMinutes = (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
     return methodChannel.invokeMethod('createOrUpdateActivity', {
       'customId': customId,
       'data': data,
@@ -89,18 +84,15 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<List<String>> getAllActivitiesIds() async {
-    final result =
-        await methodChannel.invokeListMethod<String>('getAllActivitiesIds');
+    final result = await methodChannel.invokeListMethod<String>('getAllActivitiesIds');
     return result ?? [];
   }
 
   @override
   Future<Map<String, LiveActivityState>> getAllActivities() async {
-    final result =
-        await methodChannel.invokeMapMethod<String, String>('getAllActivities');
+    final result = await methodChannel.invokeMapMethod<String, String>('getAllActivities');
 
-    return result?.map((key, value) =>
-            MapEntry(key, LiveActivityState.values.byName(value))) ??
+    return result?.map((key, value) => MapEntry(key, LiveActivityState.values.byName(value))) ??
         <String, LiveActivityState>{};
   }
 
@@ -110,16 +102,24 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       return false;
     }
 
-    final result =
-        await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
+    final result = await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
+    return result ?? false;
+  }
+
+  @override
+  Future<bool> allowsPushStart() async {
+    if (!Platform.isIOS) {
+      return false;
+    }
+
+    final result = await methodChannel.invokeMethod<bool>('allowsPushStart');
     return result ?? false;
   }
 
   @override
   Stream<UrlSchemeData> urlSchemeStream() {
     return urlSchemeChannel.receiveBroadcastStream('urlSchemeStream').map(
-          (dynamic event) =>
-              UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
+          (dynamic event) => UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
         );
   }
 
@@ -150,4 +150,8 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       .receiveBroadcastStream('activityUpdateStream')
       .distinct()
       .map((event) => ActivityUpdate.fromMap(Map<String, dynamic>.from(event)));
+
+  @override
+  Stream<String> get pushToStartTokenUpdateStream =>
+      pushToStartTokenUpdatesChannel.receiveBroadcastStream('pushToStartTokenUpdateStream').distinct().cast<String>();
 }

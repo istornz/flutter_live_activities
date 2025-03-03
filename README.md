@@ -296,24 +296,100 @@ That's it 😇
 
 <br />
 
+## Push-to-Start Live Activities (iOS 17.2+) 🚀
+
+iOS 17.2 introduces the ability
+to [create Live Activities remotely](https://developer.apple.com/documentation/activitykit/starting-and-updating-live-activities-with-activitykit-push-notifications#Start-new-Live-Activities-with-ActivityKit-push-notifications)
+via push notifications before the user has even
+opened your app. This is called "push-to-start" functionality.
+
+### Check Support
+
+First, check if the device supports push-to-start:
+
+```dart
+
+final isPushToStartSupported = await _liveActivitiesPlugin.allowsPushStart();
+if (isPushToStartSupported) {
+  // Device supports push-to-start (iOS 17.2+)
+}
+```
+
+### Listen for Push-to-Start Tokens
+
+To use push-to-start, you need to listen for push-to-start tokens:
+
+```dart
+_liveActivitiesPlugin.pushToStartTokenUpdateStream.listen((token) {
+  // Send this token to your server
+  print('Received push-to-start token: $token');
+    
+  // Your server can use this token to create a Live Activity
+  // without the user having to open your app first
+});
+```
+
+### Server Implementation
+
+On your server, you'll need to send a push notification with the following
+payload [structure](https://developer.apple.com/documentation/activitykit/starting-and-updating-live-activities-with-activitykit-push-notifications#Construct-the-payload-that-starts-a-Live-Activity):
+
+```json
+{
+  "aps": {
+    "timestamp": 1234,
+    "event": "start",
+    "content-state": {
+      "currentHealthLevel": 100,
+      "eventDescription": "Adventure has begun!"
+    },
+    "attributes-type": "AdventureAttributes",
+    "attributes": {
+      "currentHealthLevel": 100,
+      "eventDescription": "Adventure has begun!"
+    },
+    "alert": {
+      "title": {
+        "loc-key": "%@ is on an adventure!",
+        "loc-args": [
+          "Power Panda"
+        ]
+      },
+      "body": {
+        "loc-key": "%@ found a sword!",
+        "loc-args": [
+          "Power Panda"
+        ]
+      },
+      "sound": "chime.aiff"
+    }
+  }
+}
+```
+
+The push notification should be sent to the push-to-start token you received from the pushToStartTokenUpdateStream. Your
+server needs to use Apple's APNs with the appropriate authentication to deliver these notifications.
+
 ## 📘 Documentation
 
-| Name                        | Description                                                                                                                                 | Returned value                                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `.init()`                   | Initialize the Plugin by providing an App Group Id (see above)                                                                              | `Future` When the plugin is ready to create/update an activity                                             |
-| `.createActivity()`         | Create an iOS live activity                                                                                                                 | `String` The activity identifier                                                                           |
-| `.createOrUpdateActivity()` | Create or updates an (existing) live activity based on the provided `UUID` via `customId`                                                   | `String` The activity identifier                                                                           |
-| `.updateActivity()`         | Update the live activity data by using the `activityId` provided                                                                            | `Future` When the activity was updated                                                                     |
-| `.endActivity()`            | End the live activity by using the `activityId` provided                                                                                    | `Future` When the activity was ended                                                                       |
-| `.getAllActivitiesIds()`    | Get all activities ids created                                                                                                              | `Future<List<String>>` List of all activities ids                                                          |
-| `.getAllActivities()`       | Get a Map of activitiyIds and the `ActivityState`                                                                                           | `Future<Map<String, LiveActivityState>>` Map of all activitiyId -> `LiveActivityState`                     |
-| `.endAllActivities()`       | End all live activities of the app                                                                                                          | `Future` When all activities was ended                                                                     |
-| `.areActivitiesEnabled()`   | Check if live activities feature are supported & enabled                                                                                    | `Future<bool>` Live activities supported or not                                                            |
-| `.getActivityState()`       | Get the activity current state                                                                                                              | `Future<LiveActivityState?>` An enum to know the status of the activity (`active`, `dismissed` or `ended`) |
-| `.getPushToken()`           | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date)                       | `String?` The activity push token (can be null)                                                            |
-| `.urlSchemeStream()`        | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data)        | `Future<UrlSchemeData>` Url scheme data which handle `scheme` `url` `host` `path` `queryItems`             |
-| `.dispose()`                | Remove all pictures passed in the AppGroups directory in the current session, you can use the `force` parameters to remove **all** pictures | `Future` Picture removed                                                                                   |
-| `.activityUpdateStream`     | Get notified with a stream about live activity push token & status                                                                          | `Stream<ActivityUpdate>` Status updates for new push tokens or when the activity ends                      |
+| Name                            | Description                                                                                                                                 | Returned value                                                                                             |
+|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| `.init()`                       | Initialize the Plugin by providing an App Group Id (see above)                                                                              | `Future` When the plugin is ready to create/update an activity                                             |
+| `.createActivity()`             | Create an iOS live activity                                                                                                                 | `String` The activity identifier                                                                           |
+| `.createOrUpdateActivity()`     | Create or updates an (existing) live activity based on the provided `UUID` via `customId`                                                   | `String` The activity identifier                                                                           |
+| `.updateActivity()`             | Update the live activity data by using the `activityId` provided                                                                            | `Future` When the activity was updated                                                                     |
+| `.endActivity()`                | End the live activity by using the `activityId` provided                                                                                    | `Future` When the activity was ended                                                                       |
+| `.getAllActivitiesIds()`        | Get all activities ids created                                                                                                              | `Future<List<String>>` List of all activities ids                                                          |
+| `.getAllActivities()`           | Get a Map of activitiyIds and the `ActivityState`                                                                                           | `Future<Map<String, LiveActivityState>>` Map of all activitiyId -> `LiveActivityState`                     |
+| `.endAllActivities()`           | End all live activities of the app                                                                                                          | `Future` When all activities was ended                                                                     |
+| `.areActivitiesEnabled()`       | Check if live activities feature are supported & enabled                                                                                    | `Future<bool>` Live activities supported or not                                                            |
+| `.allowsPushStart()`            | Check if device supports push-to-start for Live Activities (iOS 17.2+)                                                                      | `Future<bool>` Whether push-to-start is supported                                                          |
+| `.getActivityState()`           | Get the activity current state                                                                                                              | `Future<LiveActivityState?>` An enum to know the status of the activity (`active`, `dismissed` or `ended`) |
+| `.getPushToken()`               | Get the activity push token synchronously (prefer using `activityUpdateStream` instead to keep push token up to date)                       | `String?` The activity push token (can be null)                                                            |
+| `.urlSchemeStream()`            | Subscription to handle every url scheme (ex: when the app is opened from a live activity / dynamic island button, you can pass data)        | `Future<UrlSchemeData>` Url scheme data which handle `scheme` `url` `host` `path` `queryItems`             |
+| `.dispose()`                    | Remove all pictures passed in the AppGroups directory in the current session, you can use the `force` parameters to remove **all** pictures | `Future` Picture removed                                                                                   |
+| `.activityUpdateStream`         | Get notified with a stream about live activity push token & status                                                                          | `Stream<ActivityUpdate>` Status updates for new push tokens or when the activity ends                      |
+| `.pushToStartTokenUpdateStream` | Stream of push-to-start tokens for creating Live Activities remotely (iOS 17.2+)                                                            | `Stream<String>` Stream of tokens for push-to-start capability                                             |
 
 <br />
 

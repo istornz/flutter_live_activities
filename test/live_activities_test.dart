@@ -98,6 +98,16 @@ class MockLiveActivitiesPlatform
   }) {
     return Future.value();
   }
+
+  @override
+  Future<bool> allowsPushStart() {
+    return Future.value(true);
+  }
+
+  @override
+  Stream<String> get pushToStartTokenUpdateStream {
+    return Stream.value('PUSH_TO_START_TOKEN');
+  }
 }
 
 void main() {
@@ -189,5 +199,16 @@ void main() {
         result.mapOrNull(active: (state) => state.activityToken);
 
     expect(correctMappingNotNull, 'ACTIVITY_TOKEN');
+  });
+
+  test('allowsPushStart', () async {
+    expect(await liveActivitiesPlugin.allowsPushStart(), true);
+  });
+
+  test('pushToStartTokenUpdateStream', () async {
+    expect(
+      await liveActivitiesPlugin.pushToStartTokenUpdateStream.first,
+      'PUSH_TO_START_TOKEN',
+    );
   });
 }
