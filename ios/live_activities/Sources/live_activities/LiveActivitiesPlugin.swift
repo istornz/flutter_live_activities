@@ -410,13 +410,13 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             let token = data.map { String(format: "%02x", $0) }.joined()
             print("Activity PushToStart Token: \(token)")
 
-          DispatchQueue.main.async {
-            self.pushToStartTokenEventSink?(token)
+            DispatchQueue.main.async {
+                eventSink?(token)
+            }
           }
         }
       }
     }
-  }
 
   @available(iOS 16.1, *)
   func getAllActivitiesIds(result: @escaping FlutterResult) {
