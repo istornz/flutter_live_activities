@@ -146,6 +146,12 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
+  Future<String?> getPushToStartToken() async {
+    final result = await methodChannel.invokeMethod<String?>('getPushToStartToken');
+    return result;
+  }
+
+  @override
   Stream<ActivityUpdate> get activityUpdateStream => activityStatusChannel
       .receiveBroadcastStream('activityUpdateStream')
       .distinct()
