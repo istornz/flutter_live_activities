@@ -387,36 +387,36 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
   }
 
-    @available(iOS 17.2, *)
-    func getPushToStartToken(result: @escaping FlutterResult) {
-        Task {
-            if let pushTokenData = Activity<LiveActivitiesAppAttributes>.pushToStartToken {
-                // Convert Data to hex string
-                let pushToken = pushTokenData.map { String(format: "%02x", $0) }.joined()
-                result(pushToken)
-            } else {
-                result(nil)
-            }
-        }
+  @available(iOS 17.2, *)
+  func getPushToStartToken(result: @escaping FlutterResult) {
+    Task {
+      if let pushTokenData = Activity<LiveActivitiesAppAttributes>.pushToStartToken {
+        // Convert Data to hex string
+        let pushToken = pushTokenData.map { String(format: "%02x", $0) }.joined()
+        result(pushToken)
+      } else {
+        result(nil)
+      }
     }
-    
-    private func startObservingPushToStartTokens() {
-      if #available(iOS 17.2, *) {
-        // Capture self weakly to avoid reference cycles
-          let eventSink = self.pushToStartTokenEventSink
-        
-        Task {
-          for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
-            let token = data.map { String(format: "%02x", $0) }.joined()
-            print("Activity PushToStart Token: \(token)")
+  }
 
-            DispatchQueue.main.async {
-                eventSink?(token)
-            }
+  private func startObservingPushToStartTokens() {
+    if #available(iOS 17.2, *) {
+      // Capture self weakly to avoid reference cycles
+      let eventSink = self.pushToStartTokenEventSink
+
+      Task {
+        for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
+          let token = data.map { String(format: "%02x", $0) }.joined()
+          print("Activity PushToStart Token: \(token)")
+
+          DispatchQueue.main.async {
+              eventSink?(token)
           }
         }
       }
     }
+  }
 
   @available(iOS 16.1, *)
   func getAllActivitiesIds(result: @escaping FlutterResult) {
