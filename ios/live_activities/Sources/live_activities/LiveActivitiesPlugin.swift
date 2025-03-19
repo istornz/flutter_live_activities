@@ -215,9 +215,10 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
           break
         case "getPushToStartToken":
           if #available(iOS 17.2, *) {
-            getPushToStartToken(result: result)
+            let token = getPushToStartToken()
+            result(token)
           } else {
-              result(nil)
+            result(nil)
           }
         default:
           break
@@ -388,15 +389,13 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   }
 
   @available(iOS 17.2, *)
-  func getPushToStartToken(result: @escaping FlutterResult) {
-    Task {
-      if let pushTokenData = Activity<LiveActivitiesAppAttributes>.pushToStartToken {
-        // Convert Data to hex string
-        let pushToken = pushTokenData.map { String(format: "%02x", $0) }.joined()
-        result(pushToken)
-      } else {
-        result(nil)
-      }
+  func getPushToStartToken() -> String? {
+    if let pushTokenData = Activity<LiveActivitiesAppAttributes>.pushToStartToken {
+      // Convert Data to hex string
+      let pushToken = pushTokenData.map { String(format: "%02x", $0) }.joined()
+      return pushToken
+    } else {
+      return nil
     }
   }
 
@@ -406,6 +405,12 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
       let eventSink = self.pushToStartTokenEventSink
 
       Task {
+        if let curToken = getPushToStartToken() {
+          DispatchQueue.main.async {
+            eventSink?(curToken)
+          }
+        }
+
         for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
           let token = data.map { String(format: "%02x", $0) }.joined()
           print("Activity PushToStart Token: \(token)")
