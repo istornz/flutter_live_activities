@@ -494,8 +494,6 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   
   @available(iOS 16.1, *)
   private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
-    let eventSink = self.pushToStartTokenEventSink
-    let activityId = activity.id
     Task {
       for await state in activity.activityStateUpdates {
         switch state {
@@ -504,23 +502,23 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         case .dismissed, .ended:
           DispatchQueue.main.async {
               var response: Dictionary<String, Any> = Dictionary()
-              response["activityId"] = activityId
+              response["activityId"] = activity.id
               response["status"] = "ended"
-              eventSink?.self(response)
+              self.activityEventSink?.self(response)
           }
         case .stale:
           DispatchQueue.main.async {
               var response: Dictionary<String, Any> = Dictionary()
-              response["activityId"] = activityId
+              response["activityId"] = activity.id
               response["status"] = "stale"
-              eventSink?.self(response)
+              self.activityEventSink?.self(response)
           }
         @unknown default:
           DispatchQueue.main.async {
               var response: Dictionary<String, Any> = Dictionary()
-              response["activityId"] = activityId
+              response["activityId"] = activity.id
               response["status"] = "unknown"
-              eventSink?.self(response)
+              self.activityEventSink?.self(response)
           }
         }
       }
@@ -529,17 +527,15 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   
   @available(iOS 16.1, *)
   private func monitorTokenChanges<T: ActivityAttributes>(_ activity: Activity<T>) {
-    let eventSink = self.pushToStartTokenEventSink
-    let activityId = activity.id
     Task {
       for await data in activity.pushTokenUpdates {
         DispatchQueue.main.async {
           var response: Dictionary<String, Any> = Dictionary()
           let pushToken = data.map {String(format: "%02x", $0)}.joined()
           response["token"] = pushToken
-          response["activityId"] = activityId
+          response["activityId"] = activity.id
           response["status"] = "active"
-          eventSink?.self(response)
+          self.activityEventSink?.self(response)
         }
       }
     }
