@@ -1,3 +1,7 @@
+## 2.3.2
+* ✨ Ability to get the "pushToStartToken" (thanks to @Clon1998 👍).
+* ⬆️ Upgrade dependencies.
+
 ## 2.3.1
 * 🐛 `LiveActivityFileFromMemory` can't share image with AppGroup (thanks to @EArminjon 👍).
 * 📝 Added minor version check when not being able to see the Live Activity (thanks to @dasanten 👍).
