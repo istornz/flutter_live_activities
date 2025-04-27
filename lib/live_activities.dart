@@ -168,7 +168,7 @@ class LiveActivities {
   /// ```
   ///
   /// This feature is only available on iOS 17.2 and later. Use [allowsPushStart] to check support.
-  Stream<String> get pushToStartTokenUpdateStream  async* {
+  Stream<String> get pushToStartTokenUpdateStream async* {
     final allowed = await allowsPushStart();
 
     if (!allowed) {
