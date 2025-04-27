@@ -213,6 +213,13 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data', 'customId' is valid", details: nil))
           }
           break
+        case "getPushToStartToken":
+          if #available(iOS 17.2, *) {
+            let token = getPushToStartToken()
+            result(token)
+          } else {
+            result(nil)
+          }
         default:
           break
       }
@@ -381,15 +388,35 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
   }
 
+  @available(iOS 17.2, *)
+  func getPushToStartToken() -> String? {
+    if let pushTokenData = Activity<LiveActivitiesAppAttributes>.pushToStartToken {
+      // Convert Data to hex string
+      let pushToken = pushTokenData.map { String(format: "%02x", $0) }.joined()
+      return pushToken
+    } else {
+      return nil
+    }
+  }
+
   private func startObservingPushToStartTokens() {
     if #available(iOS 17.2, *) {
+      // Capture self weakly to avoid reference cycles
+      let eventSink = self.pushToStartTokenEventSink
+
       Task {
+        if let curToken = getPushToStartToken() {
+          DispatchQueue.main.async {
+            eventSink?(curToken)
+          }
+        }
+
         for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
           let token = data.map { String(format: "%02x", $0) }.joined()
           print("Activity PushToStart Token: \(token)")
 
           DispatchQueue.main.async {
-            self.pushToStartTokenEventSink?(token)
+              eventSink?(token)
           }
         }
       }
@@ -467,6 +494,8 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   
   @available(iOS 16.1, *)
   private func monitorLiveActivity<T : ActivityAttributes>(_ activity: Activity<T>) {
+    let eventSink = self.pushToStartTokenEventSink
+    let activityId = activity.id
     Task {
       for await state in activity.activityStateUpdates {
         switch state {
@@ -475,23 +504,23 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         case .dismissed, .ended:
           DispatchQueue.main.async {
               var response: Dictionary<String, Any> = Dictionary()
-              response["activityId"] = activity.id
+              response["activityId"] = activityId
               response["status"] = "ended"
-              self.activityEventSink?.self(response)
+              eventSink?.self(response)
           }
         case .stale:
           DispatchQueue.main.async {
               var response: Dictionary<String, Any> = Dictionary()
-              response["activityId"] = activity.id
+              response["activityId"] = activityId
               response["status"] = "stale"
-              self.activityEventSink?.self(response)
+              eventSink?.self(response)
           }
         @unknown default:
           DispatchQueue.main.async {
               var response: Dictionary<String, Any> = Dictionary()
-              response["activityId"] = activity.id
+              response["activityId"] = activityId
               response["status"] = "unknown"
-              self.activityEventSink?.self(response)
+              eventSink?.self(response)
           }
         }
       }
@@ -500,15 +529,17 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   
   @available(iOS 16.1, *)
   private func monitorTokenChanges<T: ActivityAttributes>(_ activity: Activity<T>) {
+    let eventSink = self.pushToStartTokenEventSink
+    let activityId = activity.id
     Task {
       for await data in activity.pushTokenUpdates {
         DispatchQueue.main.async {
           var response: Dictionary<String, Any> = Dictionary()
           let pushToken = data.map {String(format: "%02x", $0)}.joined()
           response["token"] = pushToken
-          response["activityId"] = activity.id
+          response["activityId"] = activityId
           response["status"] = "active"
-          self.activityEventSink?.self(response)
+          eventSink?.self(response)
         }
       }
     }
