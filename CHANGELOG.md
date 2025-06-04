@@ -1,3 +1,13 @@
+## 2.4.0 add live activity for android
+* ✨ Add support for Android Live Activities (thanks to @EArminjon 👍).
+* 📝 Update README.md for local and remote Live activities.
+  
+**BREAKING CHANGES**
+
+- On both platforms, activityID is now a required parameter for `createActivity` and `createOrUpdateActivity()`.
+- Bump iOS minimum version to 13
+- Bump Android minimum version to 24
+
 ## 2.3.2
 * ✨ Ability to get the "pushToStartToken" (thanks to @Clon1998 👍).
 * ⬆️ Upgrade dependencies.

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:live_activities/live_activities_platform_interface.dart';
 import 'package:live_activities/models/activity_update.dart';
 import 'package:live_activities/models/alert_config.dart';
@@ -31,12 +32,16 @@ class LiveActivities {
   /// is less than 1 minute then no staleDate will be used. The parameter only affects the live activity on
   /// iOS 16.2+ and does nothing on on iOS 16.1
   Future<String?> createActivity(
+    String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
   }) async {
-    await _appGroupsFileService.sendFilesToAppGroups(data);
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await _appGroupsFileService.sendFilesToAppGroups(data);
+    }
     return LiveActivitiesPlatform.instance.createActivity(
+      activityId,
       data,
       removeWhenAppIsKilled: removeWhenAppIsKilled,
       staleIn: staleIn,
@@ -49,20 +54,24 @@ class LiveActivities {
   /// Map is limited to String keys and values for now.
   Future updateActivity(String activityId, Map<String, dynamic> data,
       [AlertConfig? alertConfig]) async {
-    await _appGroupsFileService.sendFilesToAppGroups(data);
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await _appGroupsFileService.sendFilesToAppGroups(data);
+    }
     return LiveActivitiesPlatform.instance
         .updateActivity(activityId, data, alertConfig);
   }
 
   Future createOrUpdateActivity(
-    String customId,
+    String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
   }) async {
-    await _appGroupsFileService.sendFilesToAppGroups(data);
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await _appGroupsFileService.sendFilesToAppGroups(data);
+    }
     return LiveActivitiesPlatform.instance.createOrUpdateActivity(
-        customId, data,
+        activityId, data,
         removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn);
   }
 
