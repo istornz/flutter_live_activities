@@ -141,10 +141,12 @@ class CustomLiveActivityManager(context: Context) :
             .setOngoing(true).setContentTitle("$team1Name vs $team2Name")
             .setContentIntent(pendingIntent)
             .setContentText("$team1Score : $team2Score")
+            .setStyle(Notification.BigTextStyle())
             .setCustomContentView(remoteViews)
             .setCustomBigContentView(remoteViews)
             .setPriority(Notification.PRIORITY_LOW)
             .setCategory(Notification.CATEGORY_EVENT)
-            .setVisibility(Notification.VISIBILITY_PUBLIC).build()
+            .setVisibility(Notification.VISIBILITY_PUBLIC)
+            .build()
     }
 }
