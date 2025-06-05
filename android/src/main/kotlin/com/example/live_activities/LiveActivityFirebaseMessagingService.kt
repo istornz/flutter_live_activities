@@ -36,7 +36,6 @@ class LiveActivityFirebaseMessagingService : FirebaseMessagingService() {
                 val timestamp =
                     (args["timestamp"] as? String)?.toLongOrNull() ?: 0L
 
-                println("Using data: $data")
                 when (event) {
                     "update" -> {
                         liveActivityManager.updateActivity(id, timestamp, data)

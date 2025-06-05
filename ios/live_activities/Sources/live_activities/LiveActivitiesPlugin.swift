@@ -386,7 +386,6 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
       Task {
         for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
           let token = data.map { String(format: "%02x", $0) }.joined()
-          print("Activity PushToStart Token: \(token)")
 
           DispatchQueue.main.async {
             self.pushToStartTokenEventSink?(token)
