@@ -52,7 +52,11 @@ class LiveActivityFirebaseMessagingService : FirebaseMessagingService() {
                 }
 
             } catch (e: Exception) {
-                Log.e("FCM", "Erreur lors du parsing ou du traitement FCM", e)
+                Log.e(
+                    "LiveActivityFirebaseMessagingService",
+                    "Error while parsing or processing FCM",
+                    e
+                )
             }
         }
     }
