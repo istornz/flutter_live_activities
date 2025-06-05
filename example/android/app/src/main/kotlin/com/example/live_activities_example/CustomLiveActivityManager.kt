@@ -143,7 +143,7 @@ class CustomLiveActivityManager(context: Context) :
             .setContentText("$team1Score : $team2Score")
             .setCustomContentView(remoteViews)
             .setCustomBigContentView(remoteViews)
-            .setPriority(Notification.PRIORITY_MAX)
+            .setPriority(Notification.PRIORITY_LOW)
             .setCategory(Notification.CATEGORY_EVENT)
             .setVisibility(Notification.VISIBILITY_PUBLIC).build()
     }

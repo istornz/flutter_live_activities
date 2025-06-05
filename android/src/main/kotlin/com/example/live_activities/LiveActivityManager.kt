@@ -4,7 +4,6 @@ import android.util.Log
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.NotificationManager.IMPORTANCE_MAX
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationManagerCompat
@@ -26,7 +25,7 @@ open class LiveActivityManager(private val context: Context) {
     private fun createNotificationChannel(
         channelName: String,
         channelDescription: String,
-        channelImportance: Int = IMPORTANCE_MAX,
+        channelImportance: Int = NotificationManager.IMPORTANCE_LOW,
     ) {
         this.channelName = channelName
         val existingChannel =
@@ -38,7 +37,7 @@ open class LiveActivityManager(private val context: Context) {
                 channelName, channelDescription, channelImportance
             ).apply {
                 setSound(null, null)
-                vibrationPattern = longArrayOf(0L)
+                enableVibration(false)
             }
 
             val notificationManager =
