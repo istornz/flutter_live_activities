@@ -5,8 +5,8 @@
 **BREAKING CHANGES**
 
 - On both platforms, activityID is now a required parameter for `createActivity` and `createOrUpdateActivity()`.
-- Bump iOS minimum version to 13
-- Bump Android minimum version to 24
+- Bump **iOS** minimum version to **13**.
+- Bump **Android** minimum version to **24**.
 
 ## 2.3.2
 * ✨ Ability to get the "pushToStartToken" (thanks to @Clon1998 👍).
