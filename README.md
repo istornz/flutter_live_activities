@@ -18,9 +18,9 @@
 </div>
 <br />
 
-A Flutter plugin that enables the use of Android (API level 24+) RemoteViews and
-iOS (16.1+) Live Activities, including support for the iPhone 14 Pro’s Dynamic
-Island features.
+A Flutter plugin that enables the use of Android (API level 24+) **RemoteViews** and
+iOS (16.1+) **Live Activities**, including support for the **iPhone Dynamic
+Island** features.
 
 ## 🧐 What is it ?
 
@@ -34,7 +34,7 @@ to create **live activities** on iOS and **remote views** on Android.
 implement **dynamic island** feature on iPhones that support it 🏝️
 
 > ⚠️ **live_activities** is only intended to use with **iOS 16.1+** or Android
-> API 24+.
+> **API 24+**.
 > It will simply do nothing prior these versions.
 
 ### iOS
@@ -53,10 +53,10 @@ implement **dynamic island** feature on iPhones that support it 🏝️
 
 <div align="center" style="display: flex;align-items: center;justify-content: center;">
   <div align="center" style="display: flex;flex-direction: column; align-items: center;justify-content: center;margin-right: 20px">
-    <img alt="flutter android live activities collapsed" src="images/showcase/static/android_collapsed.png" width="300px" />
-    <img alt="flutter android live activities expanded" src="images/showcase/static/android_expanded.png" width="300px" style="margin-bottom: 20px" />
+    <img alt="flutter android live activities collapsed" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/showcase/static/android_collapsed.png" width="300px" />
+    <img alt="flutter android live activities expanded" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/showcase/static/android_expanded.png" width="300px" style="margin-bottom: 20px" />
   </div>
-  <img alt="flutter ios 16 live activities preview dynamic island" src="images/showcase/animations/android-demo.gif" width="250px" style="margin-right: 20px" />
+  <img alt="flutter ios 16 live activities preview dynamic island" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/showcase/animations/android-demo.gif" width="250px" style="margin-right: 20px" />
 </div>
 <br />
 
@@ -71,21 +71,22 @@ You need to **implement** in your Flutter iOS project a **Widget Extension** &
 develop in _Swift_/_Objective-C_ your own **Live Activity** / **Dynamic Island**
 design.
 
-> ℹ️ You can check into the [**example repository
-**](https://github.com/istornz/live_activities/tree/main/example) for a full
+> ℹ️ You can check into the **[example repository
+> ](https://github.com/istornz/live_activities/tree/main/example)** for a full
 > example app using Live Activities & Dynamic Island
 
 - ## 📱 Native
-    - Open the Xcode workspace project `ios/Runner.xcworkspace`.
-    - Click on `File` -> `New` -> `Target...`
-        - Select `Widget Extension` & click on **Next**.
-        - Specify the product name (e.g., `MyAppWidget`) and be sure to select "
-          **Runner**" in "Embed in Application" dropdown.
-        - Click on **Finish**.
-        - When selecting Finish, an alert will appear, you will need to click on
-          **Activate**.
 
-<img alt="create widget extension xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/create_widget_extension.webp" width="700px" />
+  - Open the Xcode workspace project `ios/Runner.xcworkspace`.
+  - Click on `File` -> `New` -> `Target...`
+    - Select `Widget Extension` & click on **Next**.
+    - Specify the product name (e.g., `MyAppWidget`) and be sure to select "
+      **Runner**" in "Embed in Application" dropdown.
+    - Click on **Finish**.
+    - When selecting Finish, an alert will appear, you will need to click on
+      **Activate**.
+
+  <img alt="create widget extension xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/create_widget_extension.webp" width="700px" />
 
 - Add the "Push Notifications" capabilities for the main `Runner` app **only**!.
 
@@ -94,11 +95,10 @@ design.
 - Enable live activity by adding this line in `Info.plist` for both `Runner` and
   your `Widget Extension`.
 
-```xml
-
-<key>NSSupportsLiveActivities</key>
-<true/>
-```
+  ```xml
+  <key>NSSupportsLiveActivities</key>
+  <true/>
+  ```
 
   <img alt="enable live activities xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/enable_live_activities.webp" width="700px" />
 
@@ -111,12 +111,7 @@ design.
 
   <br />
 
-> ℹ️ You can check on
->
-this [resource](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235)
->
-or [here](https://betterprogramming.pub/create-live-activities-with-activitykit-on-ios-16-beta-4766a347035b)
-> for more native informations.
+> ℹ️ You can check on this **[resource](https://levelup.gitconnected.com/how-to-create-live-activities-widget-for-ios-16-2c07889f1235)** or **[here](https://betterprogramming.pub/create-live-activities-with-activitykit-on-ios-16-beta-4766a347035b)** for more native informations.
 
 - Inside your extension `ExtensionNameLiveActivity.swift` file, you need to
   create an `ActivityAttributes` called **EXACTLY**
@@ -165,22 +160,21 @@ struct FootballMatchApp: Widget {
 
 ### Android
 
-You need to **implement** in your Flutter Android project a *
-*CustomLiveActivityManager** which will extends plugin one & develop in
-_Kotlin_/_Java_ your own **RemoveView** logic and design.
-Don't be afraid, you will just need to create one **Xml** and one **Kotlin**
-files.
+You need to **implement** in your Flutter Android project a **CustomLiveActivityManager** which will extends plugin one & develop in
+_Kotlin_ / _Java_ your own **RemoveView** logic and design.
+
+Don't be afraid, you will just need to create one **XML** and one **Kotlin** files.
 
 - ## 📱 Native
-    - Open your MainActivity.kt inside
-      `android/app/src/main/kotlin/.../MainActivity.kt`.
-    - Give to `LiveActivityManagerHolder` an instance of `LiveActivityManager`,
-      it will contain your logic.
-    - Create the Kotlin file of your custom `LiveActivityManager`.
-    - Create the XML file of your custom `RemoteView` inside
-      `android/app/src/main/res/layout/live_activity.xml`.
+  - Open your MainActivity.kt inside
+    `android/app/src/main/kotlin/.../MainActivity.kt`.
+  - Give to `LiveActivityManagerHolder` an instance of `LiveActivityManager`,
+    it will contain your logic.
+  - Create the Kotlin file of your custom `LiveActivityManager`.
+  - Create the XML file of your custom `RemoteView` inside
+    `android/app/src/main/res/layout/live_activity.xml`.
 
-MainActivity.kt example:
+`MainActivity.kt` example:
 
 ```kotlin
 package your.package.name
@@ -200,7 +194,7 @@ class MainActivity : FlutterActivity() {
 }
 ```
 
-CustomLiveActivityManager.kt example:
+`CustomLiveActivityManager.kt` example:
 
 ```kotlin
 package your.package.name
@@ -366,7 +360,7 @@ class CustomLiveActivityManager(context: Context) :
 }
 ```
 
-live_activity.xml example:
+`live_activity.xml` example:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -469,21 +463,21 @@ live_activity.xml example:
 
 - ## 💙 Flutter
 
-    - Import the plugin.
+  - Import the plugin.
 
   ```dart
   import 'package:live_activities/live_activities.dart';
   ```
 
-    - Initialize the Plugin by passing the created **App Group Id** (created
-      above).
+  - Initialize the Plugin by passing the created **App Group Id** (created
+    above).
 
   ```dart
   final _liveActivitiesPlugin = LiveActivities();
   _liveActivitiesPlugin.init(appGroupId: "YOUR_GROUP_ID");
   ```
 
-    - Create your dynamic activity.
+  - Create your dynamic activity.
 
   ```dart
   final Map<String, dynamic> activityModel = {
@@ -496,9 +490,8 @@ live_activity.xml example:
   ```
 
   > You can pass all type of data you want but keep it mind it should be
-  compatible with [
-  `UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults)
-  for iOS.
+  > compatible with [`UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults)
+  > for iOS.
 
   <br />
 
@@ -595,8 +588,8 @@ dynamic island with your **Flutter** app you just need to setup **URL scheme**.
 
 > **ex:** for an app named `Strava`, you could use `str`.
 
-- Add a custom url scheme in Xcode by navigating to **Runner** > **Runner** > *
-  *URL Types** > **URL Schemes**
+- Add a custom url scheme in Xcode by navigating to **Runner** > **Runner** > \*
+  \*URL Types** > **URL Schemes\*\*
 
 <img alt="add url scheme xcode" src="https://raw.githubusercontent.com/istornz/live_activities/main/images/tutorial/url_scheme.webp" width="700px" />
 
@@ -610,7 +603,7 @@ Link(destination: URL(string: "la://my.app/order?=123")!) { // Replace "la" with
 ```
 
 > ⚠️ Don't forget to put the **URL Scheme** you have typed in the **previous
-step**. (`str://` in the previous example)
+> step**. (`str://` in the previous example)
 
 - In your Flutter App, you need to init the custom scheme you provided before
 
@@ -639,36 +632,34 @@ notification...
 To do this, you can update it using Push Notification on a server.
 
 - Get the push token:
-    - Listen on the activity updates (recommended):
-      ```dart
-      _liveActivitiesPlugin.activityUpdateStream.listen((event) {
-        event.map(
-          active: (activity) {
-            // Get the token
-            print(activity.activityToken);
-          },
-          ended: (activity) {},
-          unknown: (activity) {},
-        );
-      });
-      ```
-    - Get directly the push token (not recommended, because the token may change
-      in the future):
-      ```dart
-      final activityToken = await _liveActivitiesPlugin.getPushToken(_latestActivityId!);
-      print(activityToken);
-      ```
-- Update your activity with the token on your server (more information can be [*
-  *found here
-  **](https://ohdarling88.medium.com/update-dynamic-island-and-live-activity-with-push-notification-38779803c145)).
+  - Listen on the activity updates (recommended):
+    ```dart
+    _liveActivitiesPlugin.activityUpdateStream.listen((event) {
+      event.map(
+        active: (activity) {
+          // Get the token
+          print(activity.activityToken);
+        },
+        ended: (activity) {},
+        unknown: (activity) {},
+      );
+    });
+    ```
+  - Get directly the push token (not recommended, because the token may change
+    in the future):
+    ```dart
+    final activityToken = await _liveActivitiesPlugin.getPushToken(_latestActivityId!);
+    print(activityToken);
+    ```
+- Update your activity with the token on your server (more information can be [\*
+  \*found here
+  \*\*](https://ohdarling88.medium.com/update-dynamic-island-and-live-activity-with-push-notification-38779803c145)).
 
 To set `matchName` for a specific notification, you just need to grab the
 notification id you want (ex. `35253464632`) and concatenate with your key by
 adding a `_`, example: `35253464632_matchName`.
 
 That's it 😇
-
-<br />
 
 ## Push-to-Start Live Activities (iOS 17.2+) 🚀
 
@@ -685,9 +676,7 @@ We recommend to send a classic notification to yours users which invite them to
 open your app. Then you can launch the live activity and send to your server the
 necessary (activityID + PushToken).
 
-### Check Support
-
-First, check if the device supports push-to-start:
+- First, check if the device supports push-to-start:
 
 ```dart
 final isPushToStartSupported = await _liveActivitiesPlugin.allowsPushStart();
@@ -697,9 +686,7 @@ if (isPushToStartSupported) {
 }
 ```
 
-### Listen for Push-to-Start Tokens
-
-To use push-to-start, you need to listen for push-to-start tokens:
+- To use push-to-start, you need to listen for push-to-start tokens:
 
 ```dart
 _liveActivitiesPlugin.pushToStartTokenUpdateStream.listen((String token) {
@@ -716,16 +703,16 @@ _liveActivitiesPlugin.pushToStartTokenUpdateStream.listen((String token) {
 On your server, you'll need to send a push notification with the following
 payload [structure](https://developer.apple.com/documentation/activitykit/starting-and-updating-live-activities-with-activitykit-push-notifications#Construct-the-payload-that-starts-a-Live-Activity):
 
-FCM example payload : 
+FCM example payload :
 
-```json
+```dart
 {
-  "token": "user_fcm_token", // Replace with the user's FCM token
-  "data": { // All fields inside data must be strings
-    "timestamp": "1749113270446", // Required, Must be in milliseconds since epoch
-    "event": eventType, // Required, can be "start", "update" or "end"
-    "content-state": JSON.stringify({ // Dynamic data to be passed to the Live Activity, must be stringified
-    "activity-id": "live_activity_id", // Required, it must be a String, you should use a something like match.id
+  "token": "user_fcm_token",            // Replace with the user's FCM token
+  "data": {                             // All fields inside data must be strings
+    "timestamp": "1749113270446",       // Required, Must be in milliseconds since epoch
+    "event": eventType,                 // Required, can be "start", "update" or "end"
+    "content-state": JSON.stringify({   // Dynamic data to be passed to the Live Activity, must be stringified
+    "activity-id": "live_activity_id",  // Required, it must be a String, you should use a something like match.id
     "teamAName": "Team A",
     "teamBName": "Team B",
     "teamAScore": 0,
@@ -742,15 +729,15 @@ FCM example payload :
     },
     "payload": {
       "aps": {
-        "timestamp": 1749113280, // Required, Must be in seconds since epoch
-        "dismissal-date": 1749113280 // Only for "end" event, must be in seconds since epoch
-        "event": "start", // Required, "start", "update", "end"
-        "content-state": { // Dynamic data to be passed to the Live Activity
+        "timestamp": 1749113280,      // Required, Must be in seconds since epoch
+        "dismissal-date": 1749113280  // Only for "end" event, must be in seconds since epoch
+        "event": "start",             // Required, "start", "update", "end"
+        "content-state": {            // Dynamic data to be passed to the Live Activity
           "teamAScore": 0,
           "teamBScore": 0,
         },
         "attributes-type": "AdventureAttributes",
-        "attributes": { // Static data to be passed to the Live Activity
+        "attributes": {               // Static data to be passed to the Live Activity
           "teamAName": "Team A",
           "teamBName": "Team B",
         },
@@ -767,7 +754,7 @@ FCM example payload :
               "Power Panda"
             ]
           },
-          "sound": "chime.aiff" // or "" to disable sound
+          "sound": "chime.aiff"        // or "" to disable sound
         }
       }
     }
@@ -783,7 +770,7 @@ these notifications.
 ## 📘 Documentation
 
 | Name                            | Description                                                                                                                                 | Returned value                                                                                             |
-|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `.init()`                       | Initialize the Plugin by providing an App Group Id (see above)                                                                              | `Future` When the plugin is ready to create/update an activity                                             |
 | `.createActivity()`             | Create an iOS live activity                                                                                                                 | `String` The activity identifier                                                                           |
 | `.createOrUpdateActivity()`     | Create or updates an (existing) live activity based on the provided `UUID` via `customId`                                                   | `String` The activity identifier                                                                           |
@@ -809,6 +796,7 @@ these notifications.
 
 > Yes you need to implement your activity in Swift but no worries, there is a
 > lot of cool tutorials:
+>
 > - [https://canopas.com/integrating-live-activity-and-dynamic-island-in-i-os-a-complete-guide](https://canopas.com/integrating-live-activity-and-dynamic-island-in-i-os-a-complete-guide)
 > - [https://blorenzop.medium.com/live-activities-swift-6e95ee15863e](https://blorenzop.medium.com/live-activities-swift-6e95ee15863e)
 > - [https://medium.com/kinandcartacreated/how-to-build-ios-live-activity-d1b2f238819e](https://medium.com/kinandcartacreated/how-to-build-ios-live-activity-d1b2f238819e)
@@ -826,23 +814,38 @@ these notifications.
 > It can be related to multiple issues, please be sure to:
 >
 > - App Groups Capability: Set up the `App Groups` capability for **BOTH** the
+
     `Runner` and your `extension` targets.
+
 > - Same App Group: Use the **SAME** app group for both the `Runner` and
+
     `extension` targets.
+
 > - Push Notification Capability: Verify that the `Push Notification` capability
+
     is enabled for the `Runner` target.
+
 > - ActivityAttributes Definition: In your extension’s
+
     `ExtensionNameLiveActivity.swift` file, ensure you create an
     ActivityAttributes named **EXACTLY** `LiveActivitiesAppAttributes`.
+
 > - Asset Size Limit: Images in live activities **must be under or equal 4 KB**.
+
     Use the resize factor argument to reduce image size if necessary.
+
 > - Supports Live Activities: Be sure to set the `NSSupportsLiveActivities`
+
     property to `true` in `Info.plist` files for **BOTH** `Runner` and your
     `extension`.
+
 > - iOS Version Requirement: The device must run **iOS 16.1 or later**.
 > - Device Activity Check: Confirm that the `areActivitiesEnabled()` method
+
     returns true on your device.
+
 > - Minimum Deployment Target: Confirm that the `extensions` deployment target
+
     is not set lower than your devices.
 
 ### Is Android supported?
@@ -859,6 +862,7 @@ Contributions are welcome. Contribute by creating a PR or an issue 🎉.
 ## 🎯 Roadmap
 
 - [ ] Inject a Widget inside the notification with Flutter Engine?
+- [x] Android support. 
 - [x] Migrate to Swift Package Manager.
 - [x] Support push token.
 - [x] Pass media between extension & Flutter app.
