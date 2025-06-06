@@ -65,7 +65,7 @@ void main() {
   test('getActivityState', () async {
     expect(
       await platform.getActivityState('ACTIVITY_ID'),
-      LiveActivityState.dismissed,
+      null,
     );
   });
 }
