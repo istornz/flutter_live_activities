@@ -425,12 +425,6 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             break
         }
       }
-        await activity.end(dismissalPolicy: .immediate)
-      }
-      // end customId activity
-        if (activityIds.contains{ $0.uppercased() == activity.attributes.id.uuidString}) {
-        await activity.end(dismissalPolicy: .immediate)
-      }
     }
   }
   
