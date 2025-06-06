@@ -23,7 +23,7 @@ class LiveActivityFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val liveActivityManager = LiveActivityManagerHolder.instance!!
 

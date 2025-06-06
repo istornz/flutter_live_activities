@@ -54,7 +54,7 @@ open class LiveActivityManager(private val context: Context) {
     }
 
     fun initialize(data: Map<String, Any>) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val liveActivityChannelName =
             data["liveActivityChannelName"] as? String ?: "Live Activities"
@@ -72,7 +72,7 @@ open class LiveActivityManager(private val context: Context) {
         id: String,
         timestamp: Long, data: Map<String, Any>
     ): String? {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return null;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return null;
 
         val activityId = getNotificationIdFromString(id)
 
@@ -107,7 +107,7 @@ open class LiveActivityManager(private val context: Context) {
         timestamp: Long,
         data: Map<String, Any>
     ) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val activityId = getNotificationIdFromString(id)
 
@@ -148,7 +148,7 @@ open class LiveActivityManager(private val context: Context) {
         id: String,
         data: Map<String, Any>
     ) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val activityId = getNotificationIdFromString(id)
 
@@ -160,7 +160,7 @@ open class LiveActivityManager(private val context: Context) {
     }
 
     fun endAllActivities(data: Map<String, Any>) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -170,13 +170,13 @@ open class LiveActivityManager(private val context: Context) {
     }
 
     fun getAllActivitiesIds(data: Map<String, Any>): List<Int> {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return emptyList()
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return emptyList()
 
         return liveActivitiesMap.keys.toList()
     }
 
     fun areActivitiesEnabled(data: Map<String, Any>): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return false;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false;
 
         return true
     }
