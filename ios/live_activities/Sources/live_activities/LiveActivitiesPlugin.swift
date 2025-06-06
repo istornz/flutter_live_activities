@@ -419,7 +419,12 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   @available(iOS 16.1, *)
   private func endActivitiesWithId(activityIds: [String]) async {
     for activity in Activity<LiveActivitiesAppAttributes>.activities {
-      if (activityIds.contains { $0 == activity.id }) {
+      for id in activityIds {
+        if id == activity.id || id.uppercased() == activity.attributes.id.uuidString {
+            await activity.end(dismissalPolicy: .immediate)
+            break
+        }
+      }
         await activity.end(dismissalPolicy: .immediate)
       }
       // end customId activity
