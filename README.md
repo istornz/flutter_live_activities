@@ -847,10 +847,9 @@ these notifications.
 
 ### Is Android supported?
 
-> Currently, no, but the plugin does not crash when run on Android. This means
-> you can safely install it in a hybrid app.
+> Yes but it's less mature than iOS for the moment. Android support is in beta.
 >
-> Simply call `areActivitiesEnabled()` before creating your activity to ensure
+> You can call `areActivitiesEnabled()` before creating your activity to ensure
 > it can be displayed on the user's device. 😊
 
 ## 👥 Contributions
