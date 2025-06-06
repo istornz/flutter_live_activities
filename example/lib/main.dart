@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:live_activities/live_activities.dart';
@@ -6,6 +7,7 @@ import 'package:live_activities/models/live_activity_file.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:live_activities_example/models/football_game_live_activity_model.dart';
 import 'package:live_activities_example/widgets/score_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,34 +55,36 @@ class _HomeState extends State<Home> {
     _liveActivitiesPlugin.init(
         appGroupId: 'group.dimitridessus.liveactivities', urlScheme: 'la');
 
-    _liveActivitiesPlugin.activityUpdateStream.listen((event) {
-      print('Activity update: $event');
-    });
-
-    urlSchemeSubscription =
-        _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
-      setState(() {
-        if (schemeData.path == '/stats') {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Stats 📊'),
-                content: Text(
-                  'Now playing final world cup between $teamAName and $teamBName\n\n$teamAName score: $teamAScore\n$teamBName score: $teamBScore',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Close'),
-                  ),
-                ],
-              );
-            },
-          );
-        }
+    if (Platform.isIOS) {
+      _liveActivitiesPlugin.activityUpdateStream.listen((event) {
+        print('Activity update: $event');
       });
-    });
+
+      urlSchemeSubscription =
+          _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
+        setState(() {
+          if (schemeData.path == '/stats') {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Stats 📊'),
+                  content: Text(
+                    'Now playing final world cup between $teamAName and $teamBName\n\n$teamAName score: $teamAScore\n$teamBName score: $teamBScore',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Close'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        });
+      });
+    }
   }
 
   @override
@@ -150,20 +154,28 @@ class _HomeState extends State<Home> {
               if (_latestActivityId == null)
                 TextButton(
                   onPressed: () async {
+                    await _liveActivitiesPlugin.endAllActivities();
+                    await Permission.notification.request();
+                    teamAScore = 0;
+                    teamBScore = 0;
                     _footballGameLiveActivityModel =
                         FootballGameLiveActivityModel(
                       matchName: 'World cup ⚽️',
                       teamAName: 'PSG',
                       teamAState: 'Home',
-                      ruleFile:
-                          LiveActivityFileFromAsset('assets/files/rules.txt'),
-                      teamALogo: LiveActivityFileFromAsset.image(
-                        'assets/images/psg.png',
-                      ),
-                      teamBLogo: LiveActivityFileFromAsset.image(
-                          'assets/images/chelsea.png',
-                          imageOptions:
-                              LiveActivityImageFileOptions(resizeFactor: 0.2)),
+                      ruleFile: Platform.isIOS
+                          ? LiveActivityFileFromAsset('assets/files/rules.txt')
+                          : null,
+                      teamALogo: Platform.isIOS
+                          ? LiveActivityFileFromAsset.image(
+                              'assets/images/psg.png')
+                          : null,
+                      teamBLogo: Platform.isIOS
+                          ? LiveActivityFileFromAsset.image(
+                              'assets/images/chelsea.png',
+                              imageOptions: LiveActivityImageFileOptions(
+                                  resizeFactor: 0.2))
+                          : null,
                       teamBName: 'Chelsea',
                       teamBState: 'Guest',
                       matchStartDate: DateTime.now(),
@@ -177,8 +189,10 @@ class _HomeState extends State<Home> {
 
                     final activityId =
                         await _liveActivitiesPlugin.createActivity(
+                      DateTime.now().millisecondsSinceEpoch.toString(),
                       _footballGameLiveActivityModel!.toMap(),
                     );
+                    print("ActivityID: $activityId");
                     setState(() => _latestActivityId = activityId);
                   },
                   child: const Column(

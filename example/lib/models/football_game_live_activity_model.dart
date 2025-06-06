@@ -1,6 +1,7 @@
 import 'package:live_activities/models/live_activity_file.dart';
 
 class FootballGameLiveActivityModel {
+  final String? activityId;
   final DateTime? matchStartDate;
   final DateTime? matchEndDate;
   final String? matchName;
@@ -8,15 +9,16 @@ class FootballGameLiveActivityModel {
 
   final String? teamAName;
   final String? teamAState;
-  final int? teamAScore;
+  final int teamAScore;
   final LiveActivityFileFromAsset? teamALogo;
 
   final String? teamBName;
   final String? teamBState;
-  final int? teamBScore;
+  final int teamBScore;
   final LiveActivityFileFromAsset? teamBLogo;
 
-  FootballGameLiveActivityModel({
+  const FootballGameLiveActivityModel({
+    this.activityId,
     this.teamAName,
     this.matchName,
     this.teamAState,
@@ -33,6 +35,7 @@ class FootballGameLiveActivityModel {
 
   Map<String, dynamic> toMap() {
     final map = {
+      'activityId': activityId,
       'matchName': matchName,
       'ruleFile': ruleFile,
       'teamAName': teamAName,
@@ -51,6 +54,7 @@ class FootballGameLiveActivityModel {
   }
 
   FootballGameLiveActivityModel copyWith({
+    String? activityId,
     DateTime? matchStartDate,
     DateTime? matchEndDate,
     LiveActivityFileFromAsset? ruleFile,
@@ -65,6 +69,7 @@ class FootballGameLiveActivityModel {
     LiveActivityFileFromAsset? teamBLogo,
   }) {
     return FootballGameLiveActivityModel(
+      activityId: activityId ?? this.activityId,
       ruleFile: ruleFile ?? this.ruleFile,
       matchStartDate: matchStartDate ?? this.matchStartDate,
       matchEndDate: matchEndDate ?? this.matchEndDate,

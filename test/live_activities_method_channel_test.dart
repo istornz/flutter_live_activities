@@ -35,7 +35,7 @@ void main() {
   });
 
   test('createActivity', () async {
-    expect(await platform.createActivity({}), 'ACTIVITY_ID');
+    expect(await platform.createActivity('ACTIVITY_ID', {}), 'ACTIVITY_ID');
   });
 
   test('updateActivity', () async {

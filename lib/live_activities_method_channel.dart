@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:live_activities/live_activities_platform_interface.dart';
 import 'package:live_activities/models/activity_update.dart';
 import 'package:live_activities/models/alert_config.dart';
@@ -38,6 +36,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<String?> createActivity(
+    String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
@@ -46,6 +45,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     final staleInMinutes =
         (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
     return methodChannel.invokeMethod<String>('createActivity', {
+      'activityId': activityId,
       'data': data,
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
       'staleIn': staleInMinutes,
@@ -64,7 +64,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future createOrUpdateActivity(
-    String customId,
+    String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
@@ -72,7 +72,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     final staleInMinutes =
         (staleIn?.inMinutes ?? 0) >= 1 ? staleIn?.inMinutes : null;
     return methodChannel.invokeMethod('createOrUpdateActivity', {
-      'customId': customId,
+      'activityId': activityId,
       'data': data,
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
       'staleIn': staleInMinutes,
@@ -110,10 +110,6 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<bool> areActivitiesEnabled() async {
-    if (!Platform.isIOS) {
-      return false;
-    }
-
     final result =
         await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
     return result ?? false;
@@ -121,7 +117,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<bool> allowsPushStart() async {
-    if (!Platform.isIOS) {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
       return false;
     }
 
@@ -131,6 +127,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Stream<UrlSchemeData> urlSchemeStream() {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return Stream.empty();
+    }
+
     return urlSchemeChannel.receiveBroadcastStream('urlSchemeStream').map(
           (dynamic event) =>
               UrlSchemeData.fromMap(Map<String, dynamic>.from(event)),
@@ -139,6 +139,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<LiveActivityState?> getActivityState(String activityId) async {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return null;
+    }
+
     final result = await methodChannel.invokeMethod<String?>(
       'getActivityState',
       {
@@ -150,6 +154,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
 
   @override
   Future<String?> getPushToken(String activityId) async {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return null;
+    }
+
     final result = await methodChannel.invokeMethod<String?>(
       'getPushToken',
       {
@@ -160,15 +168,27 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
-  Stream<ActivityUpdate> get activityUpdateStream => activityStatusChannel
-      .receiveBroadcastStream('activityUpdateStream')
-      .distinct()
-      .map((event) => ActivityUpdate.fromMap(Map<String, dynamic>.from(event)));
+  Stream<ActivityUpdate> get activityUpdateStream {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return Stream.empty();
+    }
+
+    return activityStatusChannel
+        .receiveBroadcastStream('activityUpdateStream')
+        .distinct()
+        .map((event) =>
+            ActivityUpdate.fromMap(Map<String, dynamic>.from(event)));
+  }
 
   @override
-  Stream<String> get pushToStartTokenUpdateStream =>
-      pushToStartTokenUpdatesChannel
-          .receiveBroadcastStream('pushToStartTokenUpdateStream')
-          .distinct()
-          .cast<String>();
+  Stream<String> get pushToStartTokenUpdateStream {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return Stream.empty();
+    }
+
+    return pushToStartTokenUpdatesChannel
+        .receiveBroadcastStream('pushToStartTokenUpdateStream')
+        .distinct()
+        .cast<String>();
+  }
 }
