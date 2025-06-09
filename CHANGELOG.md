@@ -1,8 +1,9 @@
-## 2.4.0 add live activity for android
+## 2.4.0 - Live activity is now available for Android too!
 * ✨ Add support for Android Live Activities (thanks to @EArminjon 👍).
+* 🐛 Custom ID activities fail to end correctly (thanks to @charleyzhu 👍).
 * 📝 Update README.md for local and remote Live activities.
   
-**BREAKING CHANGES**
+** ℹ️ BREAKING CHANGES ℹ️ **
 
 - On both platforms, activityID is now a required parameter for `createActivity` and `createOrUpdateActivity()`.
 - Bump **iOS** minimum version to **13**.
