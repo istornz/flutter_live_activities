@@ -38,6 +38,8 @@ open class LiveActivityManager(private val context: Context) {
             ).apply {
                 setSound(null, null)
                 enableVibration(false)
+                setShowBadge(false)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             }
 
             val notificationManager =
@@ -154,8 +156,8 @@ open class LiveActivityManager(private val context: Context) {
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(activityId)
 
+        notificationManager.cancel(activityId)
         liveActivitiesMap.remove(activityId)
     }
 
@@ -164,9 +166,11 @@ open class LiveActivityManager(private val context: Context) {
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancelAll()
 
-        liveActivitiesMap.clear()
+        for (activityId in liveActivitiesMap.keys.toList()) {
+            notificationManager.cancel(activityId)
+            liveActivitiesMap.remove(activityId)
+        }
     }
 
     fun getAllActivitiesIds(data: Map<String, Any>): List<Int> {
