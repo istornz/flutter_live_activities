@@ -346,10 +346,11 @@ class CustomLiveActivityManager(context: Context) :
 
         return notification
             .setSmallIcon(R.drawable.ic_notification)
-            .setOngoing(true).setContentTitle("$team1Name vs $team2Name")
+            .setOngoing(true)
+            .setContentTitle("$team1Name vs $team2Name")
             .setContentIntent(pendingIntent)
             .setContentText("$team1Score : $team2Score")
-            .setStyle(Notification.BigTextStyle())
+            .setStyle(Notification.DecoratedCustomViewStyle())
             .setCustomContentView(remoteViews) // Collapsed view
             .setCustomBigContentView(remoteViews) // Expanded view
             .setPriority(Notification.PRIORITY_LOW)

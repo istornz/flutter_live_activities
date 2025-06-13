@@ -3,7 +3,7 @@
 * 🐛 Custom ID activities fail to end correctly (thanks to @charleyzhu 👍).
 * 📝 Update README.md for local and remote Live activities.
   
-** ℹ️ BREAKING CHANGES ℹ️ **
+**ℹ️ BREAKING CHANGES ℹ️**
 
 - On both platforms, activityID is now a required parameter for `createActivity` and `createOrUpdateActivity()`.
 - Bump **iOS** minimum version to **13**.
