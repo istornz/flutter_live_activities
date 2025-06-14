@@ -419,9 +419,12 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   private func endActivitiesWithId(activityIds: [String]) async {
     for activity in Activity<LiveActivitiesAppAttributes>.activities {
       for id in activityIds {
-        if id == activity.id || id.uppercased() == activity.attributes.id.uuidString {
-            await activity.end(dismissalPolicy: .immediate)
-            break
+        let customIdUuid = uuid5(name: id)
+        if id == activity.id ||
+            id.uppercased() == activity.attributes.id.uuidString ||
+            customIdUuid == activity.attributes.id {
+          await activity.end(dismissalPolicy: .immediate)
+          break
         }
       }
     }
