@@ -1,3 +1,7 @@
+## 2.4.1
+* 🐛 Check for customId in endActivitiesWithId (thanks to @dkobia 👍).
+* 🐛 Bugfix avoid remove all notifications (thanks to @EArminjon 👍).
+
 ## 2.4.0 - Live activity is now available for Android too!
 * ✨ Add support for Android Live Activities (thanks to @EArminjon 👍).
 * 🐛 Custom ID activities fail to end correctly (thanks to @charleyzhu 👍).
