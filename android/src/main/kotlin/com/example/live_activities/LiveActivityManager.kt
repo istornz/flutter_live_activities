@@ -12,7 +12,7 @@ import java.security.MessageDigest
 
 open class LiveActivityManager(private val context: Context) {
     private val liveActivitiesMap = mutableMapOf<Int, Long>()
-    private lateinit var channelName: String
+    private var channelName: String = "Live Activities"
 
     open suspend fun buildNotification(
         notification: Notification.Builder,
