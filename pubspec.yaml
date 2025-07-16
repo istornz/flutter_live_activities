@@ -24,7 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
-  flutter_app_group_directory: ^1.1.0
+  flutter_app_group_directory:
+    git: https://github.com/aumio-GmbH/flutter_app_group_directory
   path_provider: ^2.1.5
   image: ^4.5.4
 
