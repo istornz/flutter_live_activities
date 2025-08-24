@@ -8,15 +8,15 @@ class FootballGameLiveActivityModel {
 
   final String? teamAName;
   final String? teamAState;
-  final int? teamAScore;
+  final int teamAScore;
   final LiveActivityFileFromAsset? teamALogo;
 
   final String? teamBName;
   final String? teamBState;
-  final int? teamBScore;
+  final int teamBScore;
   final LiveActivityFileFromAsset? teamBLogo;
 
-  FootballGameLiveActivityModel({
+  const FootballGameLiveActivityModel({
     this.teamAName,
     this.matchName,
     this.teamAState,
@@ -51,6 +51,7 @@ class FootballGameLiveActivityModel {
   }
 
   FootballGameLiveActivityModel copyWith({
+    String? activityId,
     DateTime? matchStartDate,
     DateTime? matchEndDate,
     LiveActivityFileFromAsset? ruleFile,

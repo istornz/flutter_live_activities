@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_activities/live_activities_method_channel.dart';
-import 'package:live_activities/models/live_activity_state.dart';
 
 void main() {
   MethodChannelLiveActivities platform = MethodChannelLiveActivities();
@@ -35,7 +34,7 @@ void main() {
   });
 
   test('createActivity', () async {
-    expect(await platform.createActivity({}), 'ACTIVITY_ID');
+    expect(await platform.createActivity('ACTIVITY_ID', {}), 'ACTIVITY_ID');
   });
 
   test('updateActivity', () async {
@@ -65,7 +64,7 @@ void main() {
   test('getActivityState', () async {
     expect(
       await platform.getActivityState('ACTIVITY_ID'),
-      LiveActivityState.dismissed,
+      null,
     );
   });
 }

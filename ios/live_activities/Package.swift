@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "live_activities",
     platforms: [
-        .iOS("12.0")
+        .iOS("13.0")
     ],
     products: [
         .library(name: "live-activities", targets: ["live_activities"])

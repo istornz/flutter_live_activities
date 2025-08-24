@@ -18,6 +18,7 @@ class MockLiveActivitiesPlatform
 
   @override
   Future<String?> createActivity(
+    String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,

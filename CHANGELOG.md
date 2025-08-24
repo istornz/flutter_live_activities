@@ -1,3 +1,21 @@
+## 2.4.1
+* 🐛 Check for customId in endActivitiesWithId (thanks to @dkobia 👍).
+* 🐛 Bugfix avoid remove all notifications (thanks to @EArminjon 👍).
+
+## 2.4.0 - Live activity is now available for Android too!
+* ✨ Add support for Android Live Activities (thanks to @EArminjon 👍).
+* 🐛 Custom ID activities fail to end correctly (thanks to @charleyzhu 👍).
+* 📝 Update README.md for local and remote Live activities.
+  
+**ℹ️ BREAKING CHANGES ℹ️**
+
+- On both platforms, activityID is now a required parameter for `createActivity` and `createOrUpdateActivity()`.
+- Bump **iOS** minimum version to **13**.
+
+## 2.3.2
+* ✨ Ability to get the "pushToStartToken" (thanks to @Clon1998 👍).
+* ⬆️ Upgrade dependencies.
+
 ## 2.3.1
 * 🐛 `LiveActivityFileFromMemory` can't share image with AppGroup (thanks to @EArminjon 👍).
 * 📝 Added minor version check when not being able to see the Live Activity (thanks to @dasanten 👍).

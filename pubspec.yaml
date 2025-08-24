@@ -1,6 +1,6 @@
 name: live_activities
-description: A Flutter plugin to use iOS 16.1+ Live Activities & iPhone 14 Pro Dynamic Island features
-version: 2.3.1
+description: Support iOS Live Activities, Android RemoteViews and iPhone's Dynamic Island.
+version: 2.4.1
 homepage: https://dimitridessus.fr/
 repository: https://github.com/istornz/live_activities
 
@@ -26,12 +26,12 @@ dependencies:
   plugin_platform_interface: ^2.1.8
   flutter_app_group_directory: ^1.1.0
   path_provider: ^2.1.5
-  image: ^4.5.3
+  image: ^4.5.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   plugin:

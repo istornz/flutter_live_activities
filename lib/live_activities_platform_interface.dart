@@ -34,6 +34,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   }
 
   Future<String?> createActivity(
+    String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
@@ -47,7 +48,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   }
 
   Future createOrUpdateActivity(
-    String customId,
+    String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
     Duration? staleIn,
@@ -101,6 +102,6 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   Stream<ActivityUpdate> get activityUpdateStream =>
       throw UnimplementedError('pushTokenUpdates has not been implemented');
 
-  Stream<String> get pushToStartTokenUpdateStream =>
-      throw UnimplementedError('pushToStartTokenUpdateStream has not been implemented');
+  Stream<String> get pushToStartTokenUpdateStream => throw UnimplementedError(
+      'pushToStartTokenUpdateStream has not been implemented');
 }
