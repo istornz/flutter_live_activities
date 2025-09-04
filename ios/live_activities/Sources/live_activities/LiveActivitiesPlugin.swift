@@ -86,12 +86,17 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   }
   
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    if (call.method == "areActivitiesEnabled") {
+    if (call.method == "areActivitiesSupported") {
       guard #available(iOS 16.1, *), !ProcessInfo.processInfo.isiOSAppOnMac else {
           result(false)
           return
       }
       
+      result(true)
+      return
+    }
+
+    if (call.method == "areActivitiesEnabled") {
       result(ActivityAuthorizationInfo().areActivitiesEnabled)
       return
     }

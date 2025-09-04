@@ -77,6 +77,11 @@ class LiveActivitiesPlugin : FlutterPlugin, MethodCallHandler {
                     result.success(ids)
                 }
 
+                "areActivitiesSupported" -> {
+                    val supported = liveActivityManager.areActivitiesSupported(data)
+                    result.success(supported)
+                }
+
                 "areActivitiesEnabled" -> {
                     val enabled = liveActivityManager.areActivitiesEnabled(data)
                     result.success(enabled)

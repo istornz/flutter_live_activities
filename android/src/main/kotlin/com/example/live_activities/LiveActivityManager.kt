@@ -179,9 +179,13 @@ open class LiveActivityManager(private val context: Context) {
         return liveActivitiesMap.keys.toList()
     }
 
-    fun areActivitiesEnabled(data: Map<String, Any>): Boolean {
+    fun areActivitiesSupported(data: Map<String, Any>): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false;
 
         return true
+    }
+
+    fun areActivitiesEnabled(data: Map<String, Any>): Boolean {
+        return NotificationManagerCompat.from(context).areNotificationsEnabled()
     }
 }

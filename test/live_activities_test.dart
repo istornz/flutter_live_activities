@@ -32,6 +32,11 @@ class MockLiveActivitiesPlatform
   }
 
   @override
+  Future<bool> areActivitiesSupported() {
+    return Future.value(true);
+  }
+
+  @override
   Future<bool> areActivitiesEnabled() {
     return Future.value(true);
   }
@@ -146,6 +151,10 @@ void main() {
     expect(await liveActivitiesPlugin.getAllActivities(), {
       'ACTIVITY_ID': LiveActivityState.active,
     });
+  });
+
+  test('areActivitiesSupported', () async {
+    expect(await liveActivitiesPlugin.areActivitiesSupported(), true);
   });
 
   test('areActivitiesEnabled', () async {

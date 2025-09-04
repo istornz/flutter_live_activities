@@ -111,7 +111,16 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.getAllActivities();
   }
 
-  /// Check if iOS 16.1+ live activities are enabled.
+  /// Check if live activities are supported on this platform/OS version.
+  /// Returns true if the device/OS supports live activities, false otherwise.
+  Future<bool> areActivitiesSupported() {
+    return LiveActivitiesPlatform.instance.areActivitiesSupported();
+  }
+
+  /// Check if live activities are enabled by the user in their device settings.
+  /// On iOS: Checks if the user has enabled Live Activities in Settings > Face ID & Passcode > Live Activities
+  /// On Android: Checks if notifications are enabled for the app
+  /// Note: This method only checks user settings, not platform support. Use areActivitiesSupported() first.
   Future<bool> areActivitiesEnabled() {
     return LiveActivitiesPlatform.instance.areActivitiesEnabled();
   }

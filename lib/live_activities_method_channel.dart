@@ -109,6 +109,13 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
+  Future<bool> areActivitiesSupported() async {
+    final result =
+        await methodChannel.invokeMethod<bool>('areActivitiesSupported');
+    return result ?? false;
+  }
+
+  @override
   Future<bool> areActivitiesEnabled() async {
     final result =
         await methodChannel.invokeMethod<bool>('areActivitiesEnabled');
