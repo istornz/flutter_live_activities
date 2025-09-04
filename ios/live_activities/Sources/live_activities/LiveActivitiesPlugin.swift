@@ -85,23 +85,20 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
   }
   
-  private func areActivitiesSupported() -> Bool {
-    guard #available(iOS 16.1, *), !ProcessInfo.processInfo.isiOSAppOnMac else {
-        return false
-    }
-    return true
-  }
-
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if (call.method == "areActivitiesSupported") {
-      result(areActivitiesSupported())
+       guard #available(iOS 16.1, *), !ProcessInfo.processInfo.isiOSAppOnMac else {
+          result(false)
+          return
+      }
+      result(true)
       return
     }
 
     if (call.method == "areActivitiesEnabled") {
-      if !areActivitiesSupported() {
-        result(false)
-        return
+      guard #available(iOS 16.1, *), !ProcessInfo.processInfo.isiOSAppOnMac else {
+          result(false)
+          return
       }
       
       result(ActivityAuthorizationInfo().areActivitiesEnabled)
