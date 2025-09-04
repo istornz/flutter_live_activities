@@ -179,10 +179,13 @@ open class LiveActivityManager(private val context: Context) {
         return liveActivitiesMap.keys.toList()
     }
 
-    fun areActivitiesSupported(data: Map<String, Any>): Boolean {
+    private fun areActivitiesSupported(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false;
-
         return true
+    }
+
+    fun areActivitiesSupported(data: Map<String, Any>): Boolean {
+        return areActivitiesSupported()
     }
 
     fun areActivitiesEnabled(data: Map<String, Any>): Boolean {
