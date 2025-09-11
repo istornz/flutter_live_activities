@@ -1,6 +1,6 @@
 name: live_activities
 description: Support iOS Live Activities, Android RemoteViews and iPhone's Dynamic Island.
-version: 2.4.1
+version: 2.4.2
 homepage: https://dimitridessus.fr/
 repository: https://github.com/istornz/live_activities
 
