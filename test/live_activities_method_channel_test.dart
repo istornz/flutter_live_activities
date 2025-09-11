@@ -57,6 +57,10 @@ void main() {
     expect(await platform.getAllActivitiesIds(), ['ACTIVITY_ID']);
   });
 
+  test('areActivitiesSupported', () async {
+    expect(await platform.areActivitiesSupported(), false);
+  });
+
   test('areActivitiesEnabled', () async {
     expect(await platform.areActivitiesEnabled(), false);
   });

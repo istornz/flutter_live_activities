@@ -12,7 +12,7 @@ import java.security.MessageDigest
 
 open class LiveActivityManager(private val context: Context) {
     private val liveActivitiesMap = mutableMapOf<Int, Long>()
-    private lateinit var channelName: String
+    private var channelName: String = "Live Activities"
 
     open suspend fun buildNotification(
         notification: Notification.Builder,
@@ -179,9 +179,13 @@ open class LiveActivityManager(private val context: Context) {
         return liveActivitiesMap.keys.toList()
     }
 
+    fun areActivitiesSupported(data: Map<String, Any>): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false;
+        return true
+    }
+
     fun areActivitiesEnabled(data: Map<String, Any>): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false;
-
-        return true
+        return NotificationManagerCompat.from(context).areNotificationsEnabled()
     }
 }

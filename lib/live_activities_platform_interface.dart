@@ -73,6 +73,13 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     throw UnimplementedError('getAllActivities() has not been implemented.');
   }
 
+  /// Check if live activities are supported on this platform/OS version.
+  Future<bool> areActivitiesSupported() {
+    throw UnimplementedError(
+        'areActivitiesSupported() has not been implemented.');
+  }
+
+  /// Check if live activities are enabled by the user in their device settings.
   Future<bool> areActivitiesEnabled() {
     throw UnimplementedError(
         'areActivitiesEnabled() has not been implemented.');

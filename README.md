@@ -863,7 +863,7 @@ Contributions are welcome. Contribute by creating a PR or an issue 🎉.
 ## 🎯 Roadmap
 
 - [ ] Inject a Widget inside the notification with Flutter Engine?
-- [x] Android support. 
+- [x] Android support.
 - [x] Migrate to Swift Package Manager.
 - [x] Support push token.
 - [x] Pass media between extension & Flutter app.
