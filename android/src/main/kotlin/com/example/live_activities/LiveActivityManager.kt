@@ -167,10 +167,15 @@ open class LiveActivityManager(private val context: Context) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        for (activityId in liveActivitiesMap.keys.toList()) {
-            notificationManager.cancel(activityId)
-            liveActivitiesMap.remove(activityId)
-        }
+        notificationManager.getActiveNotifications()
+            .filter { statusBarNotification ->
+                statusBarNotification.notification.channelId == channelName
+            }
+            .forEach { statusBarNotification ->
+                notificationManager.cancel(statusBarNotification.id)
+            }
+
+        liveActivitiesMap.clear()
     }
 
     fun getAllActivitiesIds(data: Map<String, Any>): List<Int> {
