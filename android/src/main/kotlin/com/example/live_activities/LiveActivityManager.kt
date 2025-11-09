@@ -70,12 +70,12 @@ open class LiveActivityManager(private val context: Context) {
     }
 
     suspend fun createActivity(
-        id: String,
+        activityTag: String,
         timestamp: Long, data: Map<String, Any>
     ): String? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return null;
 
-        val activityId = getNotificationIdFromString(id)
+        val notificationId = getNotificationIdFromString(activityTag)
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -88,8 +88,8 @@ open class LiveActivityManager(private val context: Context) {
             builder.extras.putLong("activity_timestamp", timestamp)
 
             notificationManager.notify(
-                id,
-                activityId,
+                activityTag,
+                notificationId,
                 buildNotification(builder, "create", data)
             )
         } else {
@@ -100,30 +100,33 @@ open class LiveActivityManager(private val context: Context) {
             return null
         }
 
-        return id
+        return activityTag
     }
 
     suspend fun updateActivity(
-        id: String,
+        activityTag: String,
         timestamp: Long,
         data: Map<String, Any>
     ) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
-        val activityId = getNotificationIdFromString(id)
+        val notificationId = getNotificationIdFromString(activityTag)
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Check if existing notification has a newer or equal timestamp
         val existingNotification = notificationManager.getActiveNotifications()
-            .firstOrNull { it.tag == id && it.notification.channelId == channelName }
+            .firstOrNull {
+                it.tag == activityTag &&
+                it.notification.channelId == channelName
+            }
 
         val existingTimestamp = existingNotification?.notification?.extras?.getLong("activity_timestamp") ?: 0L
         if (existingTimestamp >= timestamp) {
             Log.w(
                 "LiveActivityManager",
-                "Attempted to update activity with ID $id but the timestamp is not newer than the existing one."
+                "Attempted to update activity with ID $activityTag but the timestamp is not newer than the existing one."
             )
             return
         }
@@ -136,8 +139,8 @@ open class LiveActivityManager(private val context: Context) {
             builder.extras.putLong("activity_timestamp", timestamp)
 
             notificationManager.notify(
-                id,
-                activityId,
+                activityTag,
+                notificationId,
                 buildNotification(builder, "update", data)
             )
         } else {
@@ -150,17 +153,17 @@ open class LiveActivityManager(private val context: Context) {
     }
 
     fun endActivity(
-        id: String,
+        activityTag: String,
         data: Map<String, Any>
     ) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
-        val activityId = getNotificationIdFromString(id)
+        val notificationId = getNotificationIdFromString(activityTag)
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        notificationManager.cancel(id, activityId)
+        notificationManager.cancel(activityTag, notificationId)
     }
 
     fun endAllActivities(data: Map<String, Any>) {
