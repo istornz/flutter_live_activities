@@ -11,7 +11,9 @@ import java.math.BigInteger
 import java.security.MessageDigest
 
 open class LiveActivityManager(private val context: Context) {
-    private val liveActivitiesMap = mutableMapOf<Int, Long>()
+    data class ActivityInfo(val originalStringId: String, val timestamp: Long)
+
+    private val liveActivitiesMap = mutableMapOf<Int, ActivityInfo>()
     private var channelName: String = "Live Activities"
 
     open suspend fun buildNotification(
@@ -100,7 +102,7 @@ open class LiveActivityManager(private val context: Context) {
             return null
         }
 
-        liveActivitiesMap[activityId] = timestamp
+        liveActivitiesMap[activityId] = ActivityInfo(id, timestamp)
         return id
     }
 
@@ -113,7 +115,7 @@ open class LiveActivityManager(private val context: Context) {
 
         val activityId = getNotificationIdFromString(id)
 
-        if (liveActivitiesMap.containsKey(activityId) && liveActivitiesMap[activityId] ?: 0L >= timestamp) {
+        if (liveActivitiesMap.containsKey(activityId) && liveActivitiesMap[activityId]?.timestamp ?: 0L >= timestamp) {
             Log.w(
                 "LiveActivityManager",
                 "Attempted to update activity with ID $id but the timestamp is not newer than the existing one."
@@ -143,7 +145,7 @@ open class LiveActivityManager(private val context: Context) {
             return
         }
 
-        liveActivitiesMap[activityId] = timestamp
+        liveActivitiesMap[activityId] = ActivityInfo(id, timestamp)
     }
 
     fun endActivity(
@@ -178,10 +180,10 @@ open class LiveActivityManager(private val context: Context) {
         liveActivitiesMap.clear()
     }
 
-    fun getAllActivitiesIds(data: Map<String, Any>): List<Int> {
+    fun getAllActivitiesIds(data: Map<String, Any>): List<String> {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return emptyList()
 
-        return liveActivitiesMap.keys.toList()
+        return liveActivitiesMap.values.map { it.originalStringId }
     }
 
     fun areActivitiesSupported(data: Map<String, Any>): Boolean {
