@@ -29,6 +29,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
   Future init(
     String appGroupId, {
     String? urlScheme,
+    bool requireNotificationPermission = true,
   }) {
     throw UnimplementedError('init() has not been implemented.');
   }

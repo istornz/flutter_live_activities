@@ -612,6 +612,7 @@ Link(destination: URL(string: "la://my.app/order?=123")!) { // Replace "la" with
 _liveActivitiesPlugin.init(
   appGroupId: 'your.group.id', // replace here with your custom app group id
   urlScheme: 'str' // replace here with your custom app scheme
+  requireNotificationPermission: true // if set to false, not request notification permission for iOS
 );
 ```
 

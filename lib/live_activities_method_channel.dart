@@ -27,10 +27,15 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       const EventChannel('live_activities/push_to_start_token_updates');
 
   @override
-  Future init(String appGroupId, {String? urlScheme}) async {
+  Future init(
+    String appGroupId, {
+    String? urlScheme,
+    bool requireNotificationPermission = true,
+  }) async {
     await methodChannel.invokeMethod('init', {
       'appGroupId': appGroupId,
       'urlScheme': urlScheme,
+      'requireNotificationPermission': requireNotificationPermission
     });
   }
 

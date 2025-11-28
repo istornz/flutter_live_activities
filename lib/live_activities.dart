@@ -14,11 +14,17 @@ class LiveActivities {
   /// Be sure to set the *SAME* App Group in both targets.
   /// [urlScheme] is optional and is the scheme sub-component of the URL.
   /// [appGroupId] is the App Group identifier.
-  Future init({required String appGroupId, String? urlScheme}) {
+  /// If [requireNotificationPermission] is set to false, the plugin will not request notification permission for iOS.
+  Future init({
+    required String appGroupId,
+    String? urlScheme,
+    bool requireNotificationPermission = true,
+  }) {
     _appGroupsFileService.init(appGroupId: appGroupId);
     return LiveActivitiesPlatform.instance.init(
       appGroupId,
       urlScheme: urlScheme,
+      requireNotificationPermission: requireNotificationPermission,
     );
   }
 
