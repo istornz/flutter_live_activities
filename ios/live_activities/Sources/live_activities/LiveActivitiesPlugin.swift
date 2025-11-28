@@ -21,7 +21,7 @@ class FlutterAlertConfig {
   }
 }
 
-public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
+public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler, FlutterSceneLifeCycleDelegate {
   private var urlSchemeSink: FlutterEventSink?
   private var appGroupId: String?
   private var urlScheme: String?
@@ -44,6 +44,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     activityStatusChannel.setStreamHandler(instance)
     pushToStartTokenUpdatesChannel.setStreamHandler(instance)
     registrar.addApplicationDelegate(instance)
+    registrar.addSceneDelegate(instance)
   }
 
   public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
