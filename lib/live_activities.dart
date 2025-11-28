@@ -58,13 +58,19 @@ class LiveActivities {
   /// You can get an activity id by calling [createActivity].
   /// Data is a map of key/value pairs that will be transmitted to your iOS extension widget.
   /// Map is limited to String keys and values for now.
-  Future updateActivity(String activityId, Map<String, dynamic> data,
-      [AlertConfig? alertConfig]) async {
+  Future updateActivity(
+    String activityId,
+    Map<String, dynamic> data, [
+    AlertConfig? alertConfig,
+  ]) async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await _appGroupsFileService.sendFilesToAppGroups(data);
     }
-    return LiveActivitiesPlatform.instance
-        .updateActivity(activityId, data, alertConfig);
+    return LiveActivitiesPlatform.instance.updateActivity(
+      activityId,
+      data,
+      alertConfig,
+    );
   }
 
   Future createOrUpdateActivity(
@@ -77,8 +83,11 @@ class LiveActivities {
       await _appGroupsFileService.sendFilesToAppGroups(data);
     }
     return LiveActivitiesPlatform.instance.createOrUpdateActivity(
-        activityId, data,
-        removeWhenAppIsKilled: removeWhenAppIsKilled, staleIn: staleIn);
+      activityId,
+      data,
+      removeWhenAppIsKilled: removeWhenAppIsKilled,
+      staleIn: staleIn,
+    );
   }
 
   /// End an iOS 16.1+ live activity.

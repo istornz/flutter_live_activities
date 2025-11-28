@@ -21,8 +21,8 @@ class UrlSchemeData {
       path: map['path'],
       queryParameters: map['queryItems'] != null
           ? (map['queryItems'] as List)
-              .map((e) => Map<String, String>.from(e))
-              .toList()
+                .map((e) => Map<String, String>.from(e))
+                .toList()
           : [],
     );
   }

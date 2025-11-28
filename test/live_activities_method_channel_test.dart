@@ -66,9 +66,6 @@ void main() {
   });
 
   test('getActivityState', () async {
-    expect(
-      await platform.getActivityState('ACTIVITY_ID'),
-      null,
-    );
+    expect(await platform.getActivityState('ACTIVITY_ID'), null);
   });
 }

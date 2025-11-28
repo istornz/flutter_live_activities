@@ -84,8 +84,6 @@ class AppGroupsFileService {
   Future<Directory> _liveActivitiesFilesDirectory() async {
     final appGroupDirectory =
         await FlutterAppGroupDirectory.getAppGroupDirectory(_appGroupId!);
-    return Directory(
-      '${appGroupDirectory!.path}/$kFileFolderName',
-    );
+    return Directory('${appGroupDirectory!.path}/$kFileFolderName');
   }
 }

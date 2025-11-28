@@ -33,8 +33,11 @@ class ImageFileService {
     final imageHeight = image.height;
     final targetHeight = (imageHeight * targetWidth / imageWidth).round();
 
-    final resizedImage =
-        img.copyResize(image, width: targetWidth, height: targetHeight);
+    final resizedImage = img.copyResize(
+      image,
+      width: targetWidth,
+      height: targetHeight,
+    );
 
     final compressedBytes = img.encodeJpg(resizedImage, quality: 85);
     return File(file.path)..writeAsBytesSync(compressedBytes);

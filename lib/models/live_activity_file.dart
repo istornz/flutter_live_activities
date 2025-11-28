@@ -22,13 +22,9 @@ class LiveActivityFileFromUrl extends LiveActivityFile {
   LiveActivityFileFromUrl._(
     this.url,
     LiveActivityImageFileOptions? imageOptions,
-  ) : super(
-          imageOptions,
-        );
+  ) : super(imageOptions);
 
-  factory LiveActivityFileFromUrl(
-    String url,
-  ) {
+  factory LiveActivityFileFromUrl(String url) {
     return LiveActivityFileFromUrl._(url, null);
   }
 
@@ -52,16 +48,10 @@ class LiveActivityFileFromUrl extends LiveActivityFile {
 class LiveActivityFileFromAsset extends LiveActivityFile {
   final String path;
 
-  LiveActivityFileFromAsset._(
-    this.path,
-    LiveActivityImageFileOptions? options,
-  ) : super(
-          options,
-        );
+  LiveActivityFileFromAsset._(this.path, LiveActivityImageFileOptions? options)
+    : super(options);
 
-  factory LiveActivityFileFromAsset(
-    String path,
-  ) {
+  factory LiveActivityFileFromAsset(String path) {
     return LiveActivityFileFromAsset._(path, null);
   }
 
@@ -69,10 +59,7 @@ class LiveActivityFileFromAsset extends LiveActivityFile {
     String path, {
     LiveActivityImageFileOptions? imageOptions,
   }) {
-    return LiveActivityFileFromAsset._(
-      path,
-      imageOptions,
-    );
+    return LiveActivityFileFromAsset._(path, imageOptions);
   }
 
   @override
@@ -93,14 +80,9 @@ class LiveActivityFileFromMemory extends LiveActivityFile {
     this.data,
     this.imageName,
     LiveActivityImageFileOptions? imageOptions,
-  ) : super(
-          imageOptions,
-        );
+  ) : super(imageOptions);
 
-  factory LiveActivityFileFromMemory(
-    Uint8List data,
-    String imageName,
-  ) {
+  factory LiveActivityFileFromMemory(Uint8List data, String imageName) {
     return LiveActivityFileFromMemory._(data, imageName, null);
   }
 

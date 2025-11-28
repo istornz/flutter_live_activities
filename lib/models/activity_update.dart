@@ -16,7 +16,9 @@ abstract class ActivityUpdate {
     switch (status) {
       case LiveActivityState.active:
         return ActiveActivityUpdate(
-            activityId: activityId, activityToken: map['token'] as String);
+          activityId: activityId,
+          activityToken: map['token'] as String,
+        );
       case LiveActivityState.ended:
       case LiveActivityState.dismissed:
         return EndedActivityUpdate(activityId: activityId);
