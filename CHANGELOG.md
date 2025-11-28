@@ -1,3 +1,11 @@
+## 2.4.3
+- 🏗️ Migrating to UISceneDelegate (Flutter 3.38.x iOS breaking change).
+- 🏗️ Default SDK environment is now 3.10.0 and Flutter SDK >= 3.38.0.
+- 🏗️ Fix compile error Android example project (thanks to @trunghieuvn 👍).
+- ✨🐛 (Android) Store notification IDs on app termination and return string IDs to Dart (thanks to @felixibel 👍).
+- ✨ Add support for `getActivityState()` to detect activity by custom activity id (thanks to @reynirf 👍).
+- ✨ Add option to control iOS notification permission request (thanks to @asmz 👍).
+
 ## 2.4.2
 
 - ✨ New method `areActivitiesSupported()` ➡️ Check if live activities are supported on the current platform/OS version. (thanks to @MortadhaFadhlaoui 👍).
