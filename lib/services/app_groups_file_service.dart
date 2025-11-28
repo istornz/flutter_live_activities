@@ -16,7 +16,7 @@ class AppGroupsFileService {
   final List<String> _assetsCopiedInAppGroups = [];
 
   /// Initialize the service with the app group id
-  init({required String appGroupId}) {
+  void init({required String appGroupId}) {
     _appGroupId = appGroupId;
   }
 
