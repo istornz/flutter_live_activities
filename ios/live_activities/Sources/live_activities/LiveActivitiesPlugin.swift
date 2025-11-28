@@ -350,13 +350,20 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   @available(iOS 16.1, *)
   func getActivityState(activityId: String, result: @escaping FlutterResult) {
     Task {
-      if let matchingActivity = Activity<LiveActivitiesAppAttributes>.activities.first(where: { $0.id == activityId }) {
-        var state = activityStateToString(activityState: matchingActivity.activityState)
-        result(state)
-      } else {
-        // No matching activity was found
-        result(nil)
+      let customId = uuid5(name: activityId)
+      let matchingActivity = Activity<LiveActivitiesAppAttributes>.activities.first {
+        $0.id == activityId ||
+        $0.attributes.id == customId ||
+        $0.attributes.id.uuidString.uppercased() == activityId.uppercased()
       }
+
+      guard let activity = matchingActivity else {
+        result(nil)
+        return
+      }
+
+      let state = activityStateToString(activityState: activity.activityState)
+      result(state)
     }
   }
   
@@ -428,7 +435,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
 
     result(activitiesState)
   }
-  
+
   @available(iOS 16.1, *)
   private func endActivitiesWithId(activityIds: [String]) async {
     for activity in Activity<LiveActivitiesAppAttributes>.activities {
