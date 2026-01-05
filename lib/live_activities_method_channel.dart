@@ -30,15 +30,10 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   );
 
   @override
-  Future init(
-    String appGroupId, {
-    String? urlScheme,
-    bool requireNotificationPermission = true,
-  }) async {
+  Future init(String appGroupId, {String? urlScheme}) async {
     await methodChannel.invokeMethod('init', {
       'appGroupId': appGroupId,
       'urlScheme': urlScheme,
-      'requireNotificationPermission': requireNotificationPermission,
     });
   }
 

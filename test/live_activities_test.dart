@@ -12,11 +12,7 @@ class MockLiveActivitiesPlatform
     with MockPlatformInterfaceMixin
     implements LiveActivitiesPlatform {
   @override
-  Future init(
-    String appGroupId, {
-    String? urlScheme,
-    bool requireNotificationPermission = true,
-  }) {
+  Future init(String appGroupId, {String? urlScheme}) {
     return Future.value();
   }
 

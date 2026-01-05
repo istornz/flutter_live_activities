@@ -25,7 +25,6 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   private var urlSchemeSink: FlutterEventSink?
   private var appGroupId: String?
   private var urlScheme: String?
-  private var requireNotificationPermission: Bool = true
   private var sharedDefault: UserDefaults?
   private var appLifecycleLiveActivityIds = [String]()
   private var activityEventSink: FlutterEventSink?
@@ -135,8 +134,6 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'appGroupId' is valid", details: nil))
           }
 
-          self.requireNotificationPermission = args["requireNotificationPermission"] as? Bool ?? true
-
           break
         case "createActivity":
           initializationGuard(result: result)
@@ -237,16 +234,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
   }
   
   @available(iOS 16.1, *)
-  func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, activityId: String? = nil, result: @escaping FlutterResult) {
-    if self.requireNotificationPermission {
-      let center = UNUserNotificationCenter.current()
-      center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-        if let error = error {
-          result(FlutterError(code: "AUTHORIZATION_ERROR", message: "authorization error", details: error.localizedDescription))
-        }
-      }
-    }
-    
+  func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, staleIn: Int?, activityId: String? = nil, result: @escaping FlutterResult) {    
     let liveDeliveryAttributes: LiveActivitiesAppAttributes
     if let activityId = activityId {
         let uuid = uuid5(name: activityId)

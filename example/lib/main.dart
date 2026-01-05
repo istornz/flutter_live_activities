@@ -7,7 +7,6 @@ import 'package:live_activities/models/live_activity_file.dart';
 import 'package:live_activities/models/url_scheme_data.dart';
 import 'package:live_activities_example/models/football_game_live_activity_model.dart';
 import 'package:live_activities_example/widgets/score_widget.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,7 +52,9 @@ class _HomeState extends State<Home> {
     super.initState();
 
     _liveActivitiesPlugin.init(
-        appGroupId: 'group.dimitridessus.liveactivities', urlScheme: 'la');
+      appGroupId: 'group.dimitridessus.liveactivities',
+      urlScheme: 'la',
+    );
 
     if (Platform.isIOS) {
       _liveActivitiesPlugin.activityUpdateStream.listen((event) {
@@ -155,7 +156,7 @@ class _HomeState extends State<Home> {
                 TextButton(
                   onPressed: () async {
                     await _liveActivitiesPlugin.endAllActivities();
-                    await Permission.notification.request();
+
                     teamAScore = 0;
                     teamBScore = 0;
                     _footballGameLiveActivityModel =
