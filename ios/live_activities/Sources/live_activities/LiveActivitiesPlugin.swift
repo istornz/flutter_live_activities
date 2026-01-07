@@ -225,6 +225,13 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data', 'activityId' is valid", details: nil))
           }
           break
+        case "getPushToStartToken":
+          if #available(iOS 17.2, *) {
+            let token = getPushToStartToken()
+            result(token)
+          } else {
+            result(nil)
+          }
         default:
           break
       }
@@ -391,14 +398,34 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
   }
 
+  @available(iOS 17.2, *)
+  func getPushToStartToken() -> String? {
+    if let pushTokenData = Activity<LiveActivitiesAppAttributes>.pushToStartToken {
+      // Convert Data to hex string
+      let pushToken = pushTokenData.map { String(format: "%02x", $0) }.joined()
+      return pushToken
+    } else {
+      return nil
+    }
+  }
+
   private func startObservingPushToStartTokens() {
     if #available(iOS 17.2, *) {
+      // Capture self weakly to avoid reference cycles
+      let eventSink = self.pushToStartTokenEventSink
+
       Task {
+        if let curToken = getPushToStartToken() {
+          DispatchQueue.main.async {
+            eventSink?(curToken)
+          }
+        }
+
         for await data in Activity<LiveActivitiesAppAttributes>.pushToStartTokenUpdates {
           let token = data.map { String(format: "%02x", $0) }.joined()
 
           DispatchQueue.main.async {
-            self.pushToStartTokenEventSink?(token)
+              eventSink?(token)
           }
         }
       }

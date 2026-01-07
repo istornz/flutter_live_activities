@@ -77,6 +77,11 @@ class MockLiveActivitiesPlatform
   }
 
   @override
+  Future<String> getPushToStartToken() {
+    return Future.value('PUSH_TO_START_TOKEN');
+  }
+
+  @override
   Stream<ActivityUpdate> get activityUpdateStream {
     final map = <String, dynamic>{
       'status': 'active',
@@ -185,6 +190,13 @@ void main() {
 
   test('getPushToken', () async {
     expect(await liveActivitiesPlugin.getPushToken('PUSH_TOKEN'), 'PUSH_TOKEN');
+  });
+
+  test('getPushToStartToken', () async {
+    expect(
+      await liveActivitiesPlugin.getPushToStartToken(),
+      'PUSH_TO_START_TOKEN',
+    );
   });
 
   test('activityUpdateStream', () async {

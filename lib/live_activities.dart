@@ -122,6 +122,10 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.getPushToken(activityId);
   }
 
+  Future<String?> getPushToStartToken() {
+    return LiveActivitiesPlatform.instance.getPushToStartToken();
+  }
+
   /// Get all iOS 16.1+ live activity ids.
   /// You can get an activity id by calling [createActivity].
   Future<List<String>> getAllActivitiesIds() {
