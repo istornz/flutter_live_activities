@@ -466,9 +466,13 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     
     public func applicationWillTerminate(_ application: UIApplication) {
         if #available(iOS 16.1, *) {
+            let semaphore = DispatchSemaphore(value: 0)
             Task {
                 await self.endActivitiesWithId(activityIds: self.appLifecycleLiveActivityIds)
+                semaphore.signal()
             }
+            
+            _ = semaphore.wait(timeout: .now() + 5.0)
         }
     }
     
