@@ -42,6 +42,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
   }) async {
     // If the duration is less than 1 minute then pass a null value instead of using 0 minutes
@@ -52,6 +53,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       'activityId': activityId,
       'data': data,
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
+      'enableRemoteUpdates': iOSEnableRemoteUpdates,
       'staleIn': staleInMinutes,
     });
   }
@@ -74,6 +76,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
   }) async {
     final staleInMinutes = (staleIn?.inMinutes ?? 0) >= 1
@@ -83,6 +86,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       'activityId': activityId,
       'data': data,
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
+      'enableRemoteUpdates': iOSEnableRemoteUpdates,
       'staleIn': staleInMinutes,
     });
   }

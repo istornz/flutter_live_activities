@@ -34,6 +34,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
   }) {
     throw UnimplementedError('createActivity() has not been implemented.');
@@ -51,6 +52,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
   }) {
     throw UnimplementedError(

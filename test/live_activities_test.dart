@@ -21,6 +21,7 @@ class MockLiveActivitiesPlatform
     String activityId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
   }) {
     return Future.value('ACTIVITY_ID');
@@ -105,6 +106,7 @@ class MockLiveActivitiesPlatform
     String customId,
     Map<String, dynamic> data, {
     bool removeWhenAppIsKilled = false,
+    bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
   }) {
     return Future.value();
