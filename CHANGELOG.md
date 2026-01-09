@@ -1,3 +1,21 @@
+## 2.4.4
+- ✨ Implement Android notification request by the plugin
+- ✨ Add an option to disable iOS remote push update.
+
+Eg.
+```dart
+createActivity(
+  ...
+  iOSEnableRemoteUpdates: false, // default is true
+);
+createOrUpdateActivity(
+  ...
+  iOSEnableRemoteUpdates: false, // default is true
+);
+```
+
+- 🐛 Disable iOS push notification request as not needed for live activities.
+
 ## 2.4.3
 - 🏗️ Migrating to UISceneDelegate (Flutter 3.38.x iOS breaking change).
 - 🏗️ Default SDK environment is now 3.10.0 and Flutter SDK >= 3.38.0.

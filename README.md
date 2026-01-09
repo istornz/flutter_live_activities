@@ -700,6 +700,20 @@ _liveActivitiesPlugin.pushToStartTokenUpdateStream.listen((String token) {
 });
 ```
 
+> NOTE: You can disable remote updates over push by setting `iOSEnableRemoteUpdates` to
+> `false` when creating or updating an activity. This will prevent the activity
+> from being updated via push notifications.
+```dart
+createActivity(
+  ...
+  iOSEnableRemoteUpdates: false, // default is true
+);
+createOrUpdateActivity(
+  ...
+  iOSEnableRemoteUpdates: false, // default is true
+);
+```
+
 ## Server Implementation
 
 On your server, you'll need to send a push notification with the following
