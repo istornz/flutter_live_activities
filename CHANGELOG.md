@@ -1,3 +1,6 @@
+## 2.4.5
+- 🐛 Fix `removeWhenAppIsKilled` in release mode.
+
 ## 2.4.4
 - ✨ Implement Android notification request by the plugin
 - ✨ Add an option to disable iOS remote push update.
