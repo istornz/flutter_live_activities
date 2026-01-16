@@ -63,7 +63,6 @@ open class LiveActivityManager(private val context: Context) {
             data["liveActivityChannelDescription"] as? String
                 ?: "Live Activities Notifications"
 
-
         createNotificationChannel(
             liveActivityChannelName, liveActivityChannelDescription
         )
@@ -71,7 +70,8 @@ open class LiveActivityManager(private val context: Context) {
 
     suspend fun createActivity(
         activityTag: String,
-        timestamp: Long, data: Map<String, Any>
+        timestamp: Long,
+        data: Map<String, Any>
     ): String? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return null;
 
@@ -101,6 +101,32 @@ open class LiveActivityManager(private val context: Context) {
         }
 
         return activityTag
+    }
+
+    suspend fun createOrUpdateActivity(
+        activityTag: String,
+        timestamp: Long,
+        data: Map<String, Any>
+    ): String? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return null
+
+        val notificationId = getNotificationIdFromString(activityTag)
+
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val existingNotification = notificationManager.getActiveNotifications()
+            .firstOrNull {
+                it.tag == activityTag &&
+                it.notification.channelId == channelName
+            }
+
+        if (existingNotification != null) {
+            updateActivity(activityTag, timestamp, data)
+            return activityTag
+        } else {
+            return createActivity(activityTag, timestamp, data)
+        }
     }
 
     suspend fun updateActivity(

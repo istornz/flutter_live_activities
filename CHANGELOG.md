@@ -1,3 +1,6 @@
+## 2.4.6
+- 🐛 Implement `createOrUpdateActivity` for Android.
+
 ## 2.4.5
 - 🐛 Fix `removeWhenAppIsKilled` in release mode.
 

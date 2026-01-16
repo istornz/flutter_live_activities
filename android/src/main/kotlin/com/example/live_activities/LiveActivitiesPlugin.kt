@@ -50,6 +50,20 @@ class LiveActivitiesPlugin : FlutterPlugin, MethodCallHandler {
                     }
                 }
 
+                "createOrUpdateActivity" -> {
+                    val timestamp = System.currentTimeMillis()
+                    val id = args["activityId"] as String
+
+                    pluginScope.launch {
+                        val notificationId = liveActivityManager.createOrUpdateActivity(
+                            id,
+                            timestamp,
+                            data
+                        )
+                        result.success(notificationId)
+                    }
+                }
+
                 "updateActivity" -> {
                     val timestamp = System.currentTimeMillis()
                     val id = args["activityId"] as String
