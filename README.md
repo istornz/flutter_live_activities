@@ -183,7 +183,7 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.embedding.engine.FlutterEngine
 
-import com.example.live_activities.LiveActivityManagerHolder
+import com.istornz.live_activities.LiveActivityManagerHolder
 
 class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -210,7 +210,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
-import com.example.live_activities.LiveActivityManager
+import com.istornz.live_activities.LiveActivityManager
 
 class CustomLiveActivityManager(context: Context) :
     LiveActivityManager(context) {

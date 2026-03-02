@@ -1,4 +1,4 @@
-group = "com.example.live_activities"
+group = "com.istornz.live_activities"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -25,7 +25,7 @@ apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
 android {
-    namespace = "com.example.live_activities"
+    namespace = "com.istornz.live_activities"
 
     compileSdk = 35
 

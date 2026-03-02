@@ -1,4 +1,4 @@
-package com.example.live_activities
+package com.istornz.live_activities
 
 import android.content.Context
 import io.flutter.embedding.engine.plugins.FlutterPlugin

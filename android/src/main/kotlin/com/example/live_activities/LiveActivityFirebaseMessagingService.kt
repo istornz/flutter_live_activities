@@ -1,4 +1,4 @@
-package com.example.live_activities
+package com.istornz.live_activities
 
 import android.os.Build
 import android.util.Log

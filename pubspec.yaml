@@ -40,5 +40,5 @@ flutter:
       ios:
         pluginClass: LiveActivitiesPlugin
       android:
-        package: com.example.live_activities
+        package: com.istornz.live_activities
         pluginClass: LiveActivitiesPlugin

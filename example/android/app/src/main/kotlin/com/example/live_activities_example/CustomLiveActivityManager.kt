@@ -1,4 +1,4 @@
-package com.example.live_activities_example
+package com.istornz.live_activities_example
 
 
 import android.app.Notification
@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
-import com.example.live_activities.LiveActivityManager
+import com.istornz.live_activities.LiveActivityManager
 
 class CustomLiveActivityManager(context: Context) :
     LiveActivityManager(context) {
