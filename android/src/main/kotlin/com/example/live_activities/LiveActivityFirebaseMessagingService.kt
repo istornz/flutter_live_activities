@@ -23,7 +23,11 @@ class LiveActivityFirebaseMessagingService : FirebaseMessagingService() {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
-        val liveActivityManager = LiveActivityManagerHolder.instance!!
+        val liveActivityManager = LiveActivityManagerHolder.instance
+        if (liveActivityManager == null) {
+            Log.e("LiveActivityFirebaseMessagingService", "LiveActivityManagerHolder.instance is null — ignoring push")
+            return
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
