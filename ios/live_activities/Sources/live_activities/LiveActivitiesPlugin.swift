@@ -80,10 +80,12 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         return nil
     }
     
-    private func initializationGuard(result: @escaping FlutterResult) {
+    private func initializationGuard(result: @escaping FlutterResult) -> Bool {
         if self.appGroupId == nil || self.sharedDefault == nil {
             result(FlutterError(code: "NEED_INIT", message: "you need to run 'init()' first with app group id to create live activity", details: nil))
+            return false
         }
+        return true
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -126,9 +128,10 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                 
                 self.urlScheme = args["urlScheme"] as? String;
                 
-                if let appGroupId = args["appGroupId"] as? String {
+                if let appGroupId = args["appGroupId"] as? String,
+                   let sharedDefault = UserDefaults(suiteName: appGroupId) {
                     self.appGroupId = appGroupId
-                    sharedDefault = UserDefaults(suiteName: self.appGroupId)!
+                    self.sharedDefault = sharedDefault
                     result(nil)
                 } else {
                     result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'appGroupId' is valid", details: nil))
@@ -136,7 +139,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                 
                 break
             case "createActivity":
-                initializationGuard(result: result)
+                guard initializationGuard(result: result) else {
+                    return
+                }
                 guard let args = call.arguments as? [String: Any] else {
                     result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
                     return
@@ -152,7 +157,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                 }
                 break
             case "updateActivity":
-                initializationGuard(result: result)
+                guard initializationGuard(result: result) else {
+                    return
+                }
                 guard let args = call.arguments as? [String: Any] else {
                     result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
                     return
@@ -212,7 +219,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                 endAllActivities(result: result)
                 break
             case "createOrUpdateActivity":
-                initializationGuard(result: result)
+                guard initializationGuard(result: result) else {
+                    return
+                }
                 guard let args = call.arguments as? [String: Any] else {
                     result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
                     return
@@ -237,6 +246,12 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     
     @available(iOS 16.1, *)
     func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, enableRemoteUpdates: Bool, staleIn: Int?, activityId: String? = nil, result: @escaping FlutterResult) {
+        guard let appGroupId = self.appGroupId,
+              let sharedDefault = self.sharedDefault else {
+            result(FlutterError(code: "NEED_INIT", message: "you need to run 'init()' first with app group id to create live activity", details: nil))
+            return
+        }
+
         let liveDeliveryAttributes: LiveActivitiesAppAttributes
         if let activityId = activityId {
             let uuid = uuid5(name: activityId)
@@ -244,12 +259,12 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         } else {
             liveDeliveryAttributes = LiveActivitiesAppAttributes()
         }
-        let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId!)
+        let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId)
         var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
         let prefix = liveDeliveryAttributes.id
         
         for item in data {
-            sharedDefault!.set(item.value, forKey: "\(prefix)_\(item.key)")
+            sharedDefault.set(item.value, forKey: "\(prefix)_\(item.key)")
         }
         
         if #available(iOS 16.2, *){
@@ -287,6 +302,12 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     @available(iOS 16.1, *)
     func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, result: @escaping FlutterResult) {
         Task {
+            guard let appGroupId = self.appGroupId,
+                  let sharedDefault = self.sharedDefault else {
+                result(FlutterError(code: "NEED_INIT", message: "you need to run 'init()' first with app group id to create live activity", details: nil))
+                return
+            }
+
             let activities = await MainActor.run { Activity<LiveActivitiesAppAttributes>.activities }
             guard let activity = activities.first(where: { $0.id == activityId }) else {
                 result(FlutterError(code: "ACTIVITY_ERROR", message: "Activity not found", details: nil))
@@ -298,14 +319,14 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             await MainActor.run {
                 for (key, value) in data {
                     if let value = value, !(value is NSNull) {
-                        sharedDefault?.set(value, forKey: "\(prefix)_\(key)")
+                        sharedDefault.set(value, forKey: "\(prefix)_\(key)")
                     } else {
-                        sharedDefault?.removeObject(forKey: "\(prefix)_\(key)")
+                        sharedDefault.removeObject(forKey: "\(prefix)_\(key)")
                     }
                 }
             }
             
-            let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: self.appGroupId!)
+            let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId)
             await activity.update(using: updatedStatus, alertConfiguration: alertConfig?.getAlertConfig())
             
             result(nil)
