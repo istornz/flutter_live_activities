@@ -1,3 +1,7 @@
+## 2.4.8
+- 🐛 Fix example app which was not working anymore.
+- ✨ Bump minimal Flutter SDK version to 3.41.0.
+
 ## 2.4.7
 
 - 🐛 Fix UIScene iOS adoption.
