@@ -29,6 +29,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     private var appLifecycleLiveActivityIds = [String]()
     private var activityEventSink: FlutterEventSink?
     private var pushToStartTokenEventSink: FlutterEventSink?
+    @MainActor private var monitoredActivityIds = Set<String>()
+    @MainActor private var tokenObservedActivityIds = Set<String>()
+    @MainActor private var observingActivityLifecycle = false
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "live_activities", binaryMessenger: registrar.messenger())
@@ -58,6 +61,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                 urlSchemeSink = events
             } else if (args == "activityUpdateStream") {
                 activityEventSink = events
+                startObservingActivities()
             } else if (args == "pushToStartTokenUpdateStream") {
                 pushToStartTokenEventSink = events
                 startObservingPushToStartTokens()
@@ -294,7 +298,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             if removeWhenAppIsKilled {
                 appLifecycleLiveActivityIds.append(deliveryActivity!.id)
             }
-            monitorLiveActivity(deliveryActivity!)
+            Task { @MainActor in
+                self.attachObserversIfNeeded(deliveryActivity!)
+            }
             result(deliveryActivity!.id)
         }
     }
@@ -427,6 +433,43 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             }
         }
     }
+
+    private func startObservingActivities() {
+        guard #available(iOS 16.1, *) else {
+            return
+        }
+
+        Task {
+            let existingActivities = await MainActor.run { Activity<LiveActivitiesAppAttributes>.activities }
+            await MainActor.run {
+                for activity in existingActivities {
+                    self.attachObserversIfNeeded(activity)
+                }
+            }
+        }
+
+        if #available(iOS 17.2, *) {
+            Task {
+                let shouldStart = await MainActor.run { () -> Bool in
+                    if self.observingActivityLifecycle {
+                        return false
+                    }
+                    self.observingActivityLifecycle = true
+                    return true
+                }
+
+                guard shouldStart else {
+                    return
+                }
+
+                for await activity in Activity<LiveActivitiesAppAttributes>.activityUpdates {
+                    await MainActor.run {
+                        self.attachObserversIfNeeded(activity)
+                    }
+                }
+            }
+        }
+    }
     
     @available(iOS 16.1, *)
     func getAllActivitiesIds(result: @escaping FlutterResult) {
@@ -519,7 +562,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             for await state in activity.activityStateUpdates {
                 switch state {
                 case .active:
-                    monitorTokenChanges(activity)
+                    await MainActor.run {
+                        self.attachTokenObserverIfNeeded(activity)
+                    }
                 case .dismissed, .ended:
                     DispatchQueue.main.async {
                         var response: Dictionary<String, Any> = Dictionary()
@@ -560,6 +605,28 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                 }
             }
         }
+    }
+
+    @available(iOS 16.1, *)
+    @MainActor private func attachObserversIfNeeded(_ activity: Activity<LiveActivitiesAppAttributes>) {
+        if !monitoredActivityIds.contains(activity.id) {
+            monitoredActivityIds.insert(activity.id)
+            monitorLiveActivity(activity)
+        }
+
+        if activity.activityState == .active {
+            attachTokenObserverIfNeeded(activity)
+        }
+    }
+
+    @available(iOS 16.1, *)
+    @MainActor private func attachTokenObserverIfNeeded<T: ActivityAttributes>(_ activity: Activity<T>) {
+        if tokenObservedActivityIds.contains(activity.id) {
+            return
+        }
+
+        tokenObservedActivityIds.insert(activity.id)
+        monitorTokenChanges(activity)
     }
     
     @available(iOS 16.1, *)
