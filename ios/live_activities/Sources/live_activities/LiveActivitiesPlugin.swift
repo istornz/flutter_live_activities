@@ -467,6 +467,8 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
       var appGroupId: String
       var status: String = "Order Placed"
       var stage: Int = 1
+      var location: String
+      var pickupTime: String
     }
     
     var id = UUID()
