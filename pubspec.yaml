@@ -1,12 +1,12 @@
 name: live_activities
 description: Support iOS Live Activities, Android RemoteViews and iPhone's Dynamic Island.
-version: 2.4.9
+version: 2.5.0
 homepage: https://dimitridessus.fr/
 repository: https://github.com/istornz/live_activities
 
 environment:
-  sdk: ^3.11.0
-  flutter: ">=3.41.0"
+  sdk: ^3.12.0
+  flutter: ">=3.44.0"
 
 screenshots:
   - description: 'Display a live activity on the iPhone 14 Pro+ dynamic island.'

@@ -1,3 +1,7 @@
+## 2.5.0
+- ✨ Migrate the Android plugin to Flutter's built-in Kotlin support for Android Gradle Plugin (AGP) 9.0+ compatibility.
+- ✨ Bump minimal Flutter SDK version to 3.44.0 (Dart 3.12.0).
+
 ## 2.4.9
 - 🐛 Improve initialization logic.
 
