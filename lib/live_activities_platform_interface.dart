@@ -67,6 +67,11 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     throw UnimplementedError('endActivity() has not been implemented.');
   }
 
+  /// System-side scheduled dismissal: end now with `dismissalPolicy: .after`.
+  Future scheduleEnd(String activityId, DateTime at) {
+    throw UnimplementedError('scheduleEnd() has not been implemented.');
+  }
+
   Future<List<String>> getAllActivitiesIds() {
     throw UnimplementedError('getAllActivitiesIds() has not been implemented.');
   }

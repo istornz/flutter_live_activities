@@ -122,6 +122,21 @@ class LiveActivities {
     return LiveActivitiesPlatform.instance.endActivity(activityId, activityTag);
   }
 
+  /// Ends the activity now with ActivityKit `dismissalPolicy: .after(at)` so
+  /// the SYSTEM removes it from the Lock Screen at [at] — even if the app is
+  /// killed and no push arrives.
+  ///
+  /// Trade-offs (ActivityKit ended-state semantics):
+  /// - the activity leaves the Dynamic Island immediately;
+  /// - it can no longer be updated (self-ticking `Text(.timer)` views keep
+  ///   counting on the Lock Screen card);
+  /// - iOS caps the post-end display window at 4 hours.
+  ///
+  /// A later [endActivity] on the same id force-dismisses the lingering card.
+  Future scheduleEnd(String activityId, {required DateTime at}) {
+    return LiveActivitiesPlatform.instance.scheduleEnd(activityId, at);
+  }
+
   /// Get the activity state.
   /// If the activity is not found, `null` is returned.
   ///

@@ -34,6 +34,11 @@ class MockLiveActivitiesPlatform
   }
 
   @override
+  Future scheduleEnd(String activityId, DateTime at) {
+    return Future.value();
+  }
+
+  @override
   Future<bool> areActivitiesSupported() {
     return Future.value(true);
   }

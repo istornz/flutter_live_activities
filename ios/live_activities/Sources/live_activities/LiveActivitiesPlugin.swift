@@ -27,6 +27,11 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     private var urlScheme: String?
     private var sharedDefault: UserDefaults?
     private var appLifecycleLiveActivityIds = [String]()
+    // Activities ended with a scheduled dismissal date leave Activity.activities
+    // immediately but stay visible on the Lock Screen until the date. Retain them
+    // (type-erased — stored properties can't carry @available) so a later
+    // endActivity can still force-dismiss the card.
+    private var scheduledDismissalActivities: [String: Any] = [:]
     private var activityEventSink: FlutterEventSink?
     private var pushToStartTokenEventSink: FlutterEventSink?
     @MainActor private var monitoredActivityIds = Set<String>()
@@ -190,6 +195,18 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                     endActivity(activityId: activityId, result: result)
                 } else {
                     result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' is valid", details: nil))
+                }
+                break
+            case "scheduleEnd":
+                guard let args = call.arguments as? [String: Any] else {
+                    result(FlutterError(code: "WRONG_ARGS", message: "Unknown data type in argument", details: nil))
+                    return
+                }
+                if let activityId = args["activityId"] as? String,
+                   let endTimestamp = (args["endTimestamp"] as? NSNumber)?.doubleValue {
+                    scheduleEnd(activityId: activityId, endTimestampMs: endTimestamp, result: result)
+                } else {
+                    result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId' and 'endTimestamp' are valid", details: nil))
                 }
                 break
             case "getActivityState":
@@ -408,7 +425,32 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             result(nil)
         }
     }
-    
+
+    // Ends the activity now with ActivityKit's `dismissalPolicy: .after(date)`
+    // so the SYSTEM removes it from the Lock Screen at `date` even if the app is
+    // killed and no push arrives. The activity keeps showing its last content
+    // (self-ticking Text(.timer) views keep counting), but it can no longer be
+    // updated and — per ActivityKit ended-state semantics — leaves the Dynamic
+    // Island. Note: iOS caps the post-end display window at 4 hours.
+    @available(iOS 16.1, *)
+    func scheduleEnd(activityId: String, endTimestampMs: Double, result: @escaping FlutterResult) {
+        Task {
+            let dismissalDate = Date(timeIntervalSince1970: endTimestampMs / 1000.0)
+            for activity in Activity<LiveActivitiesAppAttributes>.activities {
+                let customIdUuid = uuid5(name: activityId)
+                if activityId == activity.id ||
+                    activityId.uppercased() == activity.attributes.id.uuidString ||
+                    customIdUuid == activity.attributes.id {
+                    // Retain so endActivity can still force-dismiss the ended card.
+                    scheduledDismissalActivities[activityId] = activity
+                    await activity.end(dismissalPolicy: .after(dismissalDate))
+                    break
+                }
+            }
+            result(nil)
+        }
+    }
+
     @available(iOS 16.1, *)
     func endAllActivities(result: @escaping FlutterResult) {
         Task {
@@ -502,6 +544,15 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                     await activity.end(dismissalPolicy: .immediate)
                     break
                 }
+            }
+        }
+        // Activities ended via scheduleEnd are no longer in Activity.activities
+        // but may still be visible until their dismissal date — re-end the
+        // retained reference to clear them now (e.g. the user unmuted early).
+        for id in activityIds {
+            if let activity = scheduledDismissalActivities.removeValue(forKey: id)
+                as? Activity<LiveActivitiesAppAttributes> {
+                await activity.end(dismissalPolicy: .immediate)
             }
         }
     }

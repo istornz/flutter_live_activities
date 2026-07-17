@@ -106,6 +106,14 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
   }
 
   @override
+  Future scheduleEnd(String activityId, DateTime at) async {
+    return methodChannel.invokeMethod('scheduleEnd', {
+      'activityId': activityId,
+      'endTimestamp': at.millisecondsSinceEpoch,
+    });
+  }
+
+  @override
   Future endAllActivities() async {
     return methodChannel.invokeMethod('endAllActivities');
   }
