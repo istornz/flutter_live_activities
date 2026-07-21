@@ -280,7 +280,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         } else {
             liveDeliveryAttributes = LiveActivitiesAppAttributes()
         }
-        let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId)
+        let initialContentState = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId, updateId: Date().timeIntervalSince1970)
         var deliveryActivity: Activity<LiveActivitiesAppAttributes>?
         let prefix = liveDeliveryAttributes.id
         
@@ -349,7 +349,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                 }
             }
             
-            let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId)
+            let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId, updateId: Date().timeIntervalSince1970)
             await activity.update(using: updatedStatus, alertConfiguration: alertConfig?.getAlertConfig())
             
             result(nil)
@@ -602,14 +602,20 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         
         public struct ContentState: Codable, Hashable {
             var appGroupId: String?
+            // Changes on every update so ActivityKit sees a state change and
+            // re-renders locked/AOD surfaces (the real payload rides App Group
+            // UserDefaults, which ActivityKit cannot diff).
+            var updateId: Double?
 
-            init(appGroupId: String? = nil) {
+            init(appGroupId: String? = nil, updateId: Double? = nil) {
                 self.appGroupId = appGroupId
+                self.updateId = updateId
             }
 
             init(from decoder: Decoder) throws {
                 let container = try decoder.container(keyedBy: DynamicCodingKeys.self)
                 appGroupId = try container.decodeIfPresent(String.self, forKey: DynamicCodingKeys("appGroupId"))
+                updateId = try container.decodeIfPresent(Double.self, forKey: DynamicCodingKeys("updateId"))
             }
         }
         
