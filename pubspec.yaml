@@ -9,15 +9,15 @@ environment:
   flutter: ">=3.44.0"
 
 screenshots:
-  - description: 'Display a live activity on the iPhone 14 Pro+ dynamic island.'
+  - description: "Display a live activity on the iPhone 14 Pro+ dynamic island."
     path: images/showcase/static/dynamic_island.webp
-  - description: 'Display a live activity on the lockscreen.'
+  - description: "Display a live activity on the lockscreen."
     path: images/showcase/static/lockscreen_live_activity.webp
-  - description: 'Create a new live activity with the live_activities plugin.'
+  - description: "Create a new live activity with the live_activities plugin."
     path: images/showcase/animations/create_live_activity.webp
-  - description: 'Update a live activity with the live_activities plugin.'
+  - description: "Update a live activity with the live_activities plugin."
     path: images/showcase/animations/update_live_activity.webp
-  - description: 'live_activities plugin logo.'
+  - description: "live_activities plugin logo."
     path: images/logo.webp
 
 dependencies:
@@ -26,7 +26,7 @@ dependencies:
   plugin_platform_interface: ^2.1.8
   flutter_app_group_directory: ^1.1.0
   path_provider: ^2.1.5
-  permission_handler: ^12.0.1
+  permission_handler: ^13.0.1
   image: ^4.5.4
 
 dev_dependencies:
