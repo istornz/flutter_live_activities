@@ -181,7 +181,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                     
                     let alertConfig = (alertTitle == nil || alertBody == nil) ? nil : FlutterAlertConfig(title: alertTitle!, body: alertBody!, sound: alertSound);
                     
-                    updateActivity(activityId: activityId, data: data, alertConfig: alertConfig, result: result)
+                    let staleIn = args["staleIn"] as? Int? ?? nil
+                    
+                    updateActivity(activityId: activityId, data: data, alertConfig: alertConfig, staleIn: staleIn, result: result)
                 } else {
                     result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId', 'data' are valid", details: nil))
                 }
@@ -323,7 +325,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
     
     @available(iOS 16.1, *)
-    func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, result: @escaping FlutterResult) {
+    func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, staleIn: Int?, result: @escaping FlutterResult) {
         Task {
             guard let appGroupId = self.appGroupId,
                   let sharedDefault = self.sharedDefault else {
@@ -350,7 +352,14 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             }
             
             let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId, updateId: Date().timeIntervalSince1970)
-            await activity.update(using: updatedStatus, alertConfiguration: alertConfig?.getAlertConfig())
+            if #available(iOS 16.2, *) {
+                let activityContent = ActivityContent(
+                    state: updatedStatus,
+                    staleDate: staleIn != nil ? Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now) : activity.content.staleDate)
+                await activity.update(activityContent, alertConfiguration: alertConfig?.getAlertConfig())
+            } else {
+                await activity.update(using: updatedStatus, alertConfiguration: alertConfig?.getAlertConfig())
+            }
             
             result(nil)
         }
@@ -375,7 +384,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             }
             
             if let activityId = existingActivity?.id {
-                updateActivity(activityId: activityId, data: data, alertConfig: nil, result: result)
+                updateActivity(activityId: activityId, data: data, alertConfig: nil, staleIn: staleIn, result: result)
             } else {
                 createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, enableRemoteUpdates: enableRemoteUpdates, staleIn: staleIn, activityId: activityId, result: result)
             }

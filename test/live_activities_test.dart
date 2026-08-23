@@ -99,6 +99,7 @@ class MockLiveActivitiesPlatform
     String? activityTag,
     Map<String, dynamic> data, [
     AlertConfig? alertConfig,
+    Duration? staleIn,
   ]) {
     return Future.value();
   }

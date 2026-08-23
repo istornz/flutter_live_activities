@@ -66,12 +66,17 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     String? activityTag,
     Map<String, dynamic> data, [
     AlertConfig? alertConfig,
+    Duration? staleIn,
   ]) async {
+    final staleInMinutes = (staleIn?.inMinutes ?? 0) >= 1
+        ? staleIn?.inMinutes
+        : null;
     return methodChannel.invokeMethod('updateActivity', {
       'activityId': activityId,
       'activityTag': activityTag,
       'data': data,
       'alertConfig': alertConfig?.toMap(),
+      'staleIn': staleInMinutes,
     });
   }
 

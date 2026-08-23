@@ -46,6 +46,7 @@ abstract class LiveActivitiesPlatform extends PlatformInterface {
     String? activityTag,
     Map<String, dynamic> data, [
     AlertConfig? alertConfig,
+    Duration? staleIn,
   ]) {
     throw UnimplementedError('updateActivity() has not been implemented.');
   }
