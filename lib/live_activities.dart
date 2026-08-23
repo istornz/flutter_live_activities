@@ -53,6 +53,11 @@ class LiveActivities {
   /// [iOSEnableRemoteUpdates] indicates if the live activity should allow remote updates via push notifications.
   /// Default is true. If set to false, the live activity will not receive remote updates.
   /// If set to true, Push Notifications capability must be enabled in your Xcode project.
+  ///
+  /// [relevanceScore] orders this activity among the other live activities of your app: the one
+  /// with the highest score is shown in the Dynamic Island, and the score also determines the
+  /// order on the Lock Screen. The parameter only affects the live activity on iOS 16.2+ and
+  /// does nothing on iOS 16.1
   Future<String?> createActivity(
     String activityId,
     Map<String, dynamic> data, {
@@ -60,6 +65,7 @@ class LiveActivities {
     bool removeWhenAppIsKilled = false,
     bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
+    double? relevanceScore,
   }) async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await _appGroupsFileService.sendFilesToAppGroups(data);
@@ -71,6 +77,7 @@ class LiveActivities {
       removeWhenAppIsKilled: removeWhenAppIsKilled,
       iOSEnableRemoteUpdates: iOSEnableRemoteUpdates,
       staleIn: staleIn,
+      relevanceScore: relevanceScore,
     );
   }
 
@@ -82,12 +89,19 @@ class LiveActivities {
   /// [staleIn] indicates if a StaleDate should be added to the activity. If the value is null or the Duration
   /// is less than 1 minute then the stale date of the activity stays untouched. The parameter only affects
   /// the live activity on iOS 16.2+ and does nothing on iOS 16.1
+  ///
+  /// [relevanceScore] orders this activity among the other live activities of your app: the one
+  /// with the highest score is shown in the Dynamic Island, and the score also determines the
+  /// order on the Lock Screen. If the value is null then the relevance score of the activity
+  /// stays untouched. The parameter only affects the live activity on iOS 16.2+ and does
+  /// nothing on iOS 16.1
   Future updateActivity(
     String activityId,
     Map<String, dynamic> data, {
     String? activityTag,
     AlertConfig? alertConfig,
     Duration? staleIn,
+    double? relevanceScore,
   }) async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await _appGroupsFileService.sendFilesToAppGroups(data);
@@ -98,6 +112,7 @@ class LiveActivities {
       data,
       alertConfig,
       staleIn,
+      relevanceScore,
     );
   }
 
@@ -108,6 +123,7 @@ class LiveActivities {
     bool removeWhenAppIsKilled = false,
     bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
+    double? relevanceScore,
   }) async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       await _appGroupsFileService.sendFilesToAppGroups(data);
@@ -119,6 +135,7 @@ class LiveActivities {
       removeWhenAppIsKilled: removeWhenAppIsKilled,
       iOSEnableRemoteUpdates: iOSEnableRemoteUpdates,
       staleIn: staleIn,
+      relevanceScore: relevanceScore,
     );
   }
 

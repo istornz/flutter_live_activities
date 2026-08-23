@@ -160,7 +160,8 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                     let removeWhenAppIsKilled = args["removeWhenAppIsKilled"] as? Bool ?? false
                     let enableRemoteUpdates = args["enableRemoteUpdates"] as? Bool ?? true
                     let staleIn = args["staleIn"] as? Int? ?? nil
-                    createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, enableRemoteUpdates: enableRemoteUpdates, staleIn: staleIn, activityId: activityId, result: result)
+                    let relevanceScore = args["relevanceScore"] as? Double
+                    createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, enableRemoteUpdates: enableRemoteUpdates, staleIn: staleIn, relevanceScore: relevanceScore, activityId: activityId, result: result)
                 } else {
                     result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data' is valid", details: nil))
                 }
@@ -182,8 +183,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                     let alertConfig = (alertTitle == nil || alertBody == nil) ? nil : FlutterAlertConfig(title: alertTitle!, body: alertBody!, sound: alertSound);
                     
                     let staleIn = args["staleIn"] as? Int? ?? nil
+                    let relevanceScore = args["relevanceScore"] as? Double
                     
-                    updateActivity(activityId: activityId, data: data, alertConfig: alertConfig, staleIn: staleIn, result: result)
+                    updateActivity(activityId: activityId, data: data, alertConfig: alertConfig, staleIn: staleIn, relevanceScore: relevanceScore, result: result)
                 } else {
                     result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'activityId', 'data' are valid", details: nil))
                 }
@@ -254,7 +256,8 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                     let removeWhenAppIsKilled = args["removeWhenAppIsKilled"] as? Bool ?? false
                     let enableRemoteUpdates = args["enableRemoteUpdates"] as? Bool ?? true
                     let staleIn = args["staleIn"] as? Int? ?? nil
-                    createOrUpdateActivity(data: data, activityId: activityId, removeWhenAppIsKilled: removeWhenAppIsKilled, enableRemoteUpdates: enableRemoteUpdates, staleIn: staleIn, result: result,)
+                    let relevanceScore = args["relevanceScore"] as? Double
+                    createOrUpdateActivity(data: data, activityId: activityId, removeWhenAppIsKilled: removeWhenAppIsKilled, enableRemoteUpdates: enableRemoteUpdates, staleIn: staleIn, relevanceScore: relevanceScore, result: result,)
                 } else {
                     result(FlutterError(code: "WRONG_ARGS", message: "argument are not valid, check if 'data', 'activityId' is valid", details: nil))
                 }
@@ -268,7 +271,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
     
     @available(iOS 16.1, *)
-    func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, enableRemoteUpdates: Bool, staleIn: Int?, activityId: String? = nil, result: @escaping FlutterResult) {
+    func createActivity(data: [String: Any], removeWhenAppIsKilled: Bool, enableRemoteUpdates: Bool, staleIn: Int?, relevanceScore: Double?, activityId: String? = nil, result: @escaping FlutterResult) {
         guard let appGroupId = self.appGroupId,
               let sharedDefault = self.sharedDefault else {
             result(FlutterError(code: "NEED_INIT", message: "you need to run 'init()' first with app group id to create live activity", details: nil))
@@ -293,7 +296,8 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         if #available(iOS 16.2, *){
             let activityContent = ActivityContent(
                 state: initialContentState,
-                staleDate: staleIn != nil ? Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now) : nil)
+                staleDate: staleIn != nil ? Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now) : nil,
+                relevanceScore: relevanceScore ?? 0.0)
             do {
                 deliveryActivity = try Activity.request(
                     attributes: liveDeliveryAttributes,
@@ -325,7 +329,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
     
     @available(iOS 16.1, *)
-    func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, staleIn: Int?, result: @escaping FlutterResult) {
+    func updateActivity(activityId: String, data: [String: Any?], alertConfig: FlutterAlertConfig?, staleIn: Int?, relevanceScore: Double?, result: @escaping FlutterResult) {
         Task {
             guard let appGroupId = self.appGroupId,
                   let sharedDefault = self.sharedDefault else {
@@ -353,9 +357,11 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             
             let updatedStatus = LiveActivitiesAppAttributes.LiveDeliveryData(appGroupId: appGroupId, updateId: Date().timeIntervalSince1970)
             if #available(iOS 16.2, *) {
+                let currentContent = activity.content
                 let activityContent = ActivityContent(
                     state: updatedStatus,
-                    staleDate: staleIn != nil ? Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now) : activity.content.staleDate)
+                    staleDate: staleIn != nil ? Calendar.current.date(byAdding: .minute, value: staleIn!, to: Date.now) : currentContent.staleDate,
+                    relevanceScore: relevanceScore ?? currentContent.relevanceScore)
                 await activity.update(activityContent, alertConfiguration: alertConfig?.getAlertConfig())
             } else {
                 await activity.update(using: updatedStatus, alertConfiguration: alertConfig?.getAlertConfig())
@@ -366,7 +372,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
     
     @available(iOS 16.1, *)
-    func createOrUpdateActivity(data: [String: Any], activityId: String, removeWhenAppIsKilled: Bool, enableRemoteUpdates: Bool, staleIn: Int?, result: @escaping FlutterResult) {
+    func createOrUpdateActivity(data: [String: Any], activityId: String, removeWhenAppIsKilled: Bool, enableRemoteUpdates: Bool, staleIn: Int?, relevanceScore: Double?, result: @escaping FlutterResult) {
         Task {
             let uuid = uuid5(name: activityId)
             
@@ -384,9 +390,9 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             }
             
             if let activityId = existingActivity?.id {
-                updateActivity(activityId: activityId, data: data, alertConfig: nil, staleIn: staleIn, result: result)
+                updateActivity(activityId: activityId, data: data, alertConfig: nil, staleIn: staleIn, relevanceScore: relevanceScore, result: result)
             } else {
-                createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, enableRemoteUpdates: enableRemoteUpdates, staleIn: staleIn, activityId: activityId, result: result)
+                createActivity(data: data, removeWhenAppIsKilled: removeWhenAppIsKilled, enableRemoteUpdates: enableRemoteUpdates, staleIn: staleIn, relevanceScore: relevanceScore, activityId: activityId, result: result)
             }
         }
     }

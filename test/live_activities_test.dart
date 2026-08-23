@@ -24,6 +24,7 @@ class MockLiveActivitiesPlatform
     bool removeWhenAppIsKilled = false,
     bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
+    double? relevanceScore,
   }) {
     return Future.value('ACTIVITY_ID');
   }
@@ -100,6 +101,7 @@ class MockLiveActivitiesPlatform
     Map<String, dynamic> data, [
     AlertConfig? alertConfig,
     Duration? staleIn,
+    double? relevanceScore,
   ]) {
     return Future.value();
   }
@@ -117,6 +119,7 @@ class MockLiveActivitiesPlatform
     bool removeWhenAppIsKilled = false,
     bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
+    double? relevanceScore,
   }) {
     return Future.value();
   }
