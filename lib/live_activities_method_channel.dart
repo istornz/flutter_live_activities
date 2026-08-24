@@ -45,6 +45,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     bool removeWhenAppIsKilled = false,
     bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
+    double? relevanceScore,
   }) async {
     // If the duration is less than 1 minute then pass a null value instead of using 0 minutes
     final staleInMinutes = (staleIn?.inMinutes ?? 0) >= 1
@@ -57,6 +58,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
       'enableRemoteUpdates': iOSEnableRemoteUpdates,
       'staleIn': staleInMinutes,
+      'relevanceScore': relevanceScore,
     });
   }
 
@@ -66,12 +68,19 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     String? activityTag,
     Map<String, dynamic> data, [
     AlertConfig? alertConfig,
+    Duration? staleIn,
+    double? relevanceScore,
   ]) async {
+    final staleInMinutes = (staleIn?.inMinutes ?? 0) >= 1
+        ? staleIn?.inMinutes
+        : null;
     return methodChannel.invokeMethod('updateActivity', {
       'activityId': activityId,
       'activityTag': activityTag,
       'data': data,
       'alertConfig': alertConfig?.toMap(),
+      'staleIn': staleInMinutes,
+      'relevanceScore': relevanceScore,
     });
   }
 
@@ -83,6 +92,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
     bool removeWhenAppIsKilled = false,
     bool iOSEnableRemoteUpdates = true,
     Duration? staleIn,
+    double? relevanceScore,
   }) async {
     final staleInMinutes = (staleIn?.inMinutes ?? 0) >= 1
         ? staleIn?.inMinutes
@@ -94,6 +104,7 @@ class MethodChannelLiveActivities extends LiveActivitiesPlatform {
       'removeWhenAppIsKilled': removeWhenAppIsKilled,
       'enableRemoteUpdates': iOSEnableRemoteUpdates,
       'staleIn': staleInMinutes,
+      'relevanceScore': relevanceScore,
     });
   }
 
