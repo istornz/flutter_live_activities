@@ -625,6 +625,37 @@ _liveActivitiesPlugin.urlSchemeStream().listen((schemeData) {
 });
 ```
 
+## Order multiple Live Activities with a relevance score 🥇
+
+> ⚠️ iOS only (16.2+). The parameter is ignored on iOS 16.1 and has no effect on
+> Android.
+
+If your app runs several Live Activities at the same time, you can set a
+`relevanceScore` to control their order: the activity with the highest score is
+shown in the **Dynamic Island**, and the score also determines the order on the
+**Lock Screen**. Activities with the same score are ordered by their start date.
+
+```dart
+_liveActivitiesPlugin.createActivity(
+  activityModel,
+  relevanceScore: 100,
+);
+```
+
+`relevanceScore` is available on `createActivity()`, `createOrUpdateActivity()`
+and `updateActivity()`. It defaults to `0` when creating an activity, so you
+only need to set it if you show more than one activity at a time. When updating
+an activity, leaving it `null` keeps the score the activity already has:
+
+```dart
+// The finished match drops behind the running ones.
+_liveActivitiesPlugin.updateActivity(
+  activityId,
+  activityModel,
+  relevanceScore: 0,
+);
+```
+
 ## Update Live Activity with push notification 🎯
 
 You can update live activity directly in your app using the `updateActivity()`
