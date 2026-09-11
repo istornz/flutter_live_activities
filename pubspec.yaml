@@ -1,6 +1,6 @@
 name: live_activities
 description: Support iOS Live Activities, Android RemoteViews and iPhone's Dynamic Island.
-version: 2.5.1
+version: 2.6.0
 homepage: https://dimitridessus.fr/
 repository: https://github.com/istornz/live_activities
 
@@ -25,9 +25,9 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
   flutter_app_group_directory: ^1.1.0
-  path_provider: ^2.1.5
-  permission_handler: ^13.0.1
-  image: ^4.5.4
+  path_provider: ^2.1.6
+  permission_handler: ^13.0.2
+  image: ^4.9.2
 
 dev_dependencies:
   flutter_test:

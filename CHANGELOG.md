@@ -1,3 +1,10 @@
+## 2.6.0
+- ✨ iOS Relevance Score (thanls to @ManuelRauber 👍).
+- 🐛 Fix (iOS): Include a changing `updateId` in `ContentState` so locked surfaces re-render on update (thanks to @senorrelentless 👍).
+- ✨ Updated permission_handler (thanks to @lauritsbrok 👍).
+- ✨ Add support for Flutter 3.47+.
+- ✨ Upgrade dependencies (image and path_provider).
+
 ## 2.5.1
 - ✨ Add scheduleEnd to dismiss a Live Activity at a future date (thanks to @jenow 👍).
 
