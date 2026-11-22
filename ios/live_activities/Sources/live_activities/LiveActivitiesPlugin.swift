@@ -601,7 +601,7 @@ public class LiveActivitiesPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
     
     public func applicationWillTerminate(_ application: UIApplication) {
-        if #available(iOS 16.1, *) {
+        if #available(iOS 16.1, *), !ProcessInfo.processInfo.isiOSAppOnMac {
             let semaphore = DispatchSemaphore(value: 0)
             Task {
                 await self.endActivitiesWithId(activityIds: self.appLifecycleLiveActivityIds)
