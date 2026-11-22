@@ -1,3 +1,6 @@
+## 2.6.1
+- 🐛 Fix (iOS): Skip ending activities on app termination when the iOS app runs on Mac, which crashed on quit (thanks to @IsmailAshour 👍).
+
 ## 2.6.0
 - ✨ iOS Relevance Score (thanls to @ManuelRauber 👍).
 - 🐛 Fix (iOS): Include a changing `updateId` in `ContentState` so locked surfaces re-render on update (thanks to @senorrelentless 👍).
